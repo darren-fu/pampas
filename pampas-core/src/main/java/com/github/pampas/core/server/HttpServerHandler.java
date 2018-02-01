@@ -18,8 +18,7 @@
 
 package com.github.pampas.core.server;
 
-import com.github.pampas.core.CollectionTools;
-import com.github.pampas.core.http.HttpClient;
+import com.github.df.pampas.common.exec.PampasExecutor;
 import com.github.pampas.core.tracer.OpenTracingContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -32,10 +31,6 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMap;
-import io.opentracing.propagation.TextMapExtractAdapter;
-import io.opentracing.propagation.TextMapInjectAdapter;
-import jdk.nashorn.internal.codegen.MapCreator;
-import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,10 +51,10 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private final static ExecutorService workerThreadService = newBlockingExecutorsUseCallerRun(Runtime.getRuntime().availableProcessors() * 2);
 
     private String result = "";
-    private HttpClient client;
 
-    public HttpServerHandler(HttpClient httpClient) {
-        this.client = httpClient;
+    private PampasExecutor executor;
+
+    public HttpServerHandler() {
     }
 
 
@@ -83,6 +78,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 });
     }
 
+
     /*
      * 收到消息时，返回信息
      */
@@ -97,33 +93,16 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         FullHttpRequest httpRequest = (FullHttpRequest) msg;
-        log.info("http request:{}", httpRequest);
-//        System.out.println(((FullHttpRequest) msg).content().readableBytes());
+        if (log.isTraceEnabled()) {
+            log.trace("http request:{}", httpRequest);
+        }
 
         Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.getUri());
         Span span = spanBuilder.start();
         span.setTag("method", httpRequest.getMethod().name());
-        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new TextMap() {
-
-            @Override
-            public Iterator<Map.Entry<String, String>> iterator() {
-                log.debug("获取TextMap遍历器");
-                return httpRequest.headers().iterator();
-            }
-
-            @Override
-            public void put(String key, String value) {
-                log.debug("Tracer设置跟踪数据,key:{},value:{}", key, value);
-                httpRequest.headers().set(key, value);
-            }
-        });
-        span.log(System.currentTimeMillis(), "span_start");
-        span.log(System.currentTimeMillis(), CollectionTools.toMap("handler", "netty"));
-
+        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
 
         //span.finish();
-
-
         try {
             String path = httpRequest.getUri();          //获取路径
             System.out.println("path:" + path);
@@ -136,10 +115,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 send(ctx, result, HttpResponseStatus.BAD_REQUEST);
                 return;
             }
-            client.exec(ctx, httpRequest, tracer, span);
-//            AsyncTool.doRelease(ctx, httpRequest);
+
+            executor.execute(null, null);
         } catch (Exception e) {
-            System.out.println("@@@server1-处理请求失败!");
             e.printStackTrace();
         } finally {
         }
@@ -183,5 +161,27 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("@@@server1-连接inactive" + ctx.name());
         super.channelInactive(ctx);
+    }
+
+
+    private static class InjectTextMap implements TextMap {
+        FullHttpRequest httpRequest;
+
+        InjectTextMap(FullHttpRequest httpRequest) {
+            this.httpRequest = httpRequest;
+        }
+
+
+        @Override
+        public Iterator<Map.Entry<String, String>> iterator() {
+            throw new UnsupportedOperationException("iterator not support while inject");
+        }
+
+        @Override
+        public void put(String key, String value) {
+            log.debug("Tracer设置跟踪数据,key:{},value:{}", key, value);
+            httpRequest.headers().set(key, value);
+        }
+
     }
 }

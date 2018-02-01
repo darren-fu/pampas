@@ -18,9 +18,8 @@
 
 package com.github.pampas.core.server;
 
-import com.github.pampas.core.handler.GatewayExceptionHandler;
+import com.github.pampas.core.handler.FinalExceptionHandler;
 import com.github.pampas.core.handler.HeartbeatHandler;
-import com.github.pampas.core.http.HttpClient;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -37,8 +36,6 @@ import io.netty.util.concurrent.RejectedExecutionHandlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ThreadFactory;
-
 /**
  * 网关服务启动类
  *
@@ -54,7 +51,7 @@ public class GatewayServer extends AbstractServer {
 
     static LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
 
-    static GatewayExceptionHandler exceptionHandler = new GatewayExceptionHandler();
+    static FinalExceptionHandler exceptionHandler = new FinalExceptionHandler();
 
     static final EventExecutorGroup businessExecutors = new DefaultEventExecutorGroup(16,
             new DefaultThreadFactory("http-group", false, Thread.NORM_PRIORITY),
@@ -65,7 +62,6 @@ public class GatewayServer extends AbstractServer {
     @Override
 
     public ChannelInitializer<SocketChannel> newChannelInitializer() {
-        HttpClient client = new HttpClient();
 
         return new ChannelInitializer<SocketChannel>() {
             @Override
@@ -77,7 +73,7 @@ public class GatewayServer extends AbstractServer {
                         .addLast("http-aggregator", new HttpObjectAggregator(65536))
                         .addLast("encoder", new HttpResponseEncoder())
                         .addLast("chunk", new ChunkedWriteHandler())
-                        .addLast(businessExecutors, "business-handler", new HttpServerHandler(client))
+                        .addLast(businessExecutors, "business-handler", new HttpServerHandler())
                         .addLast(new HeartbeatHandler())
                         .addLast(exceptionHandler);
 
