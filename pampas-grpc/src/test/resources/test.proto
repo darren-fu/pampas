@@ -1,0 +1,24 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+
+option java_multiple_files = false;
+option java_package = "df.open.grpc.hello";
+option java_outer_classname = "HelloServiceProto";
+//package test;
+
+message HelloReq {
+    string key = 1;
+};
+message HelloResp {
+    string key = 1;
+};
+
+service HelloService {
+    rpc sayHello (HelloReq) returns (HelloResp) {
+        option (google.api.http) = {
+            post: "/v1/example/hello"
+            body: "*"
+        };
+    };
+};
+
