@@ -19,7 +19,7 @@
 package com.github.pampas.core.server;
 
 import com.github.df.pampas.common.exec.PampasExecutor;
-import com.github.pampas.core.tracer.OpenTracingContext;
+import com.github.df.pampas.common.tracer.OpenTracingContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;

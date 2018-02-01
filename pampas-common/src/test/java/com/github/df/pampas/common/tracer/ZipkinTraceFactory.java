@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.pampas.core.tracer;
+package com.github.df.pampas.common.tracer;
 
 import brave.Tracing;
 import brave.opentracing.BraveTracer;

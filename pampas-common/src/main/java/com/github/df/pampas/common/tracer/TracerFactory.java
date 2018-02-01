@@ -15,7 +15,7 @@
  *  *    limitations under the License.
  *
  */
-package com.github.pampas.core.tracer;
+package com.github.df.pampas.common.tracer;
 
 import io.opentracing.NoopTracerFactory;
 import io.opentracing.Tracer;

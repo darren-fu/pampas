@@ -18,10 +18,9 @@
 
 package com.github.pampas.core;
 
+import com.github.df.pampas.common.tracer.OpenTracingContext;
 import com.github.pampas.core.http2.GatewayServer2;
 import com.github.pampas.core.server.GatewayServer;
-import com.github.pampas.core.tracer.OpenTracingContext;
-import com.github.pampas.core.tracer.ZipkinTraceFactory;
 
 
 //500 (Internal Server Error/内部服务器错误)
@@ -40,8 +39,7 @@ import com.github.pampas.core.tracer.ZipkinTraceFactory;
 public class Application {
     public static void main(String[] args) throws InterruptedException {
 
-
-        OpenTracingContext.setTracerFactory(new ZipkinTraceFactory());
+//        OpenTracingContext.setTracerFactory(new ZipkinTraceFactory());
         GatewayServer server1 = new GatewayServer("server1", 9000);
         GatewayServer2 server2 = new GatewayServer2("server2", 9001);
         server1.start();

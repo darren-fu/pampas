@@ -18,10 +18,9 @@
 
 package com.github.pampas.core.http2;
 
-import com.github.pampas.core.tracer.OpenTracingContext;
+import com.github.df.pampas.common.tracer.OpenTracingContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
@@ -83,7 +82,7 @@ public class HttpServerHandler2 extends ChannelInboundHandlerAdapter {
                 System.out.println("XXXXXXXXXXXXXXXXX");
             }
         });
-        if(spanCtx!= null){
+        if (spanCtx != null) {
             spanBuilder.asChildOf(spanCtx);
         }
         Span span = spanBuilder.start();

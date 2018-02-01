@@ -16,23 +16,13 @@
  *
  */
 
-package com.github.pampas.core.tracer;
-
-import io.opentracing.Tracer;
+package com.github.df.pampas.common.tracer;
 
 /**
- * Created by darrenfu on 18-1-23.
+ * Created by darrenfu on 18-2-1.
  *
  * @author: darrenfu
- * @date: 18-1-23
+ * @date: 18-2-1
  */
-public class SkywalkingTraceFactory implements TracerFactory {
-    @Override
-    public Tracer getTracer() {
-
-//        Tracer tracer = new SkywalkingTracer();
-
-        return null;
-    }
-
+public class TracerTest {
 }
