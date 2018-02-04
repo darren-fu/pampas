@@ -29,12 +29,12 @@ import java.util.concurrent.Future;
  * @author: darrenfu
  * @date: 18-1-24
  */
-public interface PampasExecutor<Req extends RequestInfo, Rsp extends ResponseInfo> {
+public interface PampasExecutor<Q extends Object, R extends Object> {
 
 
-    Future<Rsp> execute(Req r, Callback<Req, Rsp> callback);
+    Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback);
 
-//    Future<Rsp> execute(Req r, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
+//    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
 
 
 }

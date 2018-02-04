@@ -26,10 +26,22 @@ package com.github.df.pampas.common.exec.payload;
  * @date: 18-1-29
  */
 public interface ResponseInfo<T> {
-
+    ResponseInfo<String> OK_RESP = new OKResponseInfo();
 
     long getId();
 
     T getResponseData();
+
+    class OKResponseInfo implements ResponseInfo<String> {
+        @Override
+        public long getId() {
+            return 0;
+        }
+
+        @Override
+        public String getResponseData() {
+            return "OK";
+        }
+    }
 
 }

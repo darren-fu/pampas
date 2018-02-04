@@ -19,6 +19,8 @@
 package com.github.df.pampas.http;
 
 import com.github.df.pampas.common.exec.Caller;
+import com.github.df.pampas.common.exec.payload.RequestInfo;
+import com.github.df.pampas.common.exec.payload.ResponseInfo;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,20 +42,21 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-1-24
  */
-public class HttpCaller implements Caller<HttpRequestInfo, Response> {
+public class HttpCaller implements Caller<FullHttpRequest, Response> {
     private static final Logger log = LoggerFactory.getLogger(HttpCaller.class);
 
     private AsyncHttpClient client;
 
+
     @Override
-    public Response call(HttpRequestInfo req) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + " not support sync execute method");
+    public ResponseInfo<Response> call(RequestInfo<FullHttpRequest> req) {
+        return null;
     }
 
     @Override
-    public CompletableFuture<Response> asyncCall(HttpRequestInfo req) {
+    public CompletableFuture<ResponseInfo<Response>> asyncCall(RequestInfo<FullHttpRequest> req) {
         ChannelHandlerContext ctx = req.getChannelHandlerContext();
-        FullHttpRequest httpRequest = req.getRequestData();
+        FullHttpRequest httpRequest = (FullHttpRequest) req.getRequestData();
         try {
 
 
@@ -123,4 +126,6 @@ public class HttpCaller implements Caller<HttpRequestInfo, Response> {
             ctx.writeAndFlush(resp).addListener(ChannelFutureListener.CLOSE);
         }
     }
+
+
 }

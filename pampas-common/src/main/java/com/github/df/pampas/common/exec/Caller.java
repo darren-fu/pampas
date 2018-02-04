@@ -19,6 +19,7 @@
 package com.github.df.pampas.common.exec;
 
 import com.github.df.pampas.common.exec.payload.RequestInfo;
+import com.github.df.pampas.common.exec.payload.ResponseInfo;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -28,10 +29,26 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-1-26
  */
-public interface Caller<Req extends RequestInfo, Rsp extends Object> {
+public interface Caller<Q extends Object, R extends Object> {
 
-    Rsp call(Req req);
+    EchoCaller ECHO_CALLER = new EchoCaller();
 
-    CompletableFuture<Rsp> asyncCall(Req req);
+    ResponseInfo<R> call(RequestInfo<Q> req);
 
+    CompletableFuture<ResponseInfo<R>> asyncCall(RequestInfo<Q> req);
+
+
+    class EchoCaller implements Caller<Object, String> {
+
+        @Override
+        public ResponseInfo<String> call(RequestInfo<Object> req) {
+            return ResponseInfo.OK_RESP;
+        }
+
+
+        @Override
+        public CompletableFuture<ResponseInfo<String>> asyncCall(RequestInfo<Object> req) {
+            return CompletableFuture.supplyAsync(() -> ResponseInfo.OK_RESP);
+        }
+    }
 }

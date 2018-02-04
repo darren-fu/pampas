@@ -53,7 +53,7 @@ public class GatewayServer extends AbstractServer {
 
     static FinalExceptionHandler exceptionHandler = new FinalExceptionHandler();
 
-    static final EventExecutorGroup businessExecutors = new DefaultEventExecutorGroup(16,
+    static final EventExecutorGroup businessExecutors = new DefaultEventExecutorGroup(20,
             new DefaultThreadFactory("http-group", false, Thread.NORM_PRIORITY),
             100,
             RejectedExecutionHandlers.reject());

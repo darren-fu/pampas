@@ -18,23 +18,25 @@
 
 package com.github.df.pampas.common.exec;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-
 /**
- * Created by darrenfu on 18-1-24.
+ * Created by darrenfu on 18-2-2.
  *
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18-2-2
  */
-public interface Callback<Q extends Object, R extends Object> {
+public class EchoPampasExecutor extends AbstractPampasExecutor<Object, String> {
 
-    ResponseInfo<R> onSuccess(RequestInfo<Q> req, ResponseInfo<R> resp);
+    @Override
+    protected void doAfter(String name) {
+        System.out.println("do_after:" + Thread.currentThread().getName());
+    }
 
-    ResponseInfo<R> onException(RequestInfo<Q> req, Throwable throwable);
+    @Override
+    protected Caller<Object, String> getCaller() {
+        return Caller.ECHO_CALLER;
+    }
+
+
 
 
 }

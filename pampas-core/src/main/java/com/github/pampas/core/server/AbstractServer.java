@@ -62,15 +62,16 @@ public abstract class AbstractServer {
         bootstrap = new ServerBootstrap();
 
         bootstrap.group(boss, worker).channel(NioServerSocketChannel.class)
+                // 启用Pool Bytebuf,http request的content将使用堆外pooled direct bytebuf,其它信息(header)仍然是堆内
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                 .option(ChannelOption.SO_BACKLOG, config.soBacklog)
-                .option(ChannelOption.SO_KEEPALIVE, config.soKeepAlive)
-                .option(ChannelOption.TCP_NODELAY, config.tcpNoDelay)
+                .childOption(ChannelOption.SO_KEEPALIVE, config.soKeepAlive)
+                .childOption(ChannelOption.TCP_NODELAY, config.tcpNoDelay)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_RCVBUF, 24 * 1024)
-                .option(ChannelOption.SO_SNDBUF, 24 * 1024)
+                .childOption(ChannelOption.SO_SNDBUF, 24 * 1024)
                 //ChannelOut boundBuffer 高水位线 低水位线
                 .option(ChannelOption.WRITE_BUFFER_HIGH_WATER_MARK, 64 * 1024)
                 .option(ChannelOption.WRITE_BUFFER_LOW_WATER_MARK, 32 * 1024)

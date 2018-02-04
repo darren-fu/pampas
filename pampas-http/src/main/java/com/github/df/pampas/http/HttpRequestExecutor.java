@@ -16,25 +16,36 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
+package com.github.df.pampas.http;
 
+import com.github.df.pampas.common.exec.AbstractPampasExecutor;
+import com.github.df.pampas.common.exec.Caller;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.FullHttpRequest;
+import org.asynchttpclient.Response;
 
 /**
- * Created by darrenfu on 18-1-24.
+ * Created by darrenfu on 18-2-2.
  *
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18-2-2
  */
-public interface Callback<Q extends Object, R extends Object> {
+public class HttpRequestExecutor extends AbstractPampasExecutor<FullHttpRequest,Response> {
+    HttpCaller caller = new HttpCaller();
 
-    ResponseInfo<R> onSuccess(RequestInfo<Q> req, ResponseInfo<R> resp);
+    public HttpRequestExecutor() {
+//        super.caller
+    }
 
-    ResponseInfo<R> onException(RequestInfo<Q> req, Throwable throwable);
 
+    @Override
+    protected void doAfter(String name) {
+        System.out.println("HttpRequestExecutor:" + Thread.currentThread().getName());
+    }
 
+    @Override
+    protected Caller<FullHttpRequest, Response> getCaller() {
+        return new HttpCaller();
+    }
 }
