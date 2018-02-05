@@ -16,8 +16,9 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
+package com.github.pampas.core.echo;
 
+import com.github.df.pampas.common.exec.AbstractPampasExecutor;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
 

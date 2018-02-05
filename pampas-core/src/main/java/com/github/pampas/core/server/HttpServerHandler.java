@@ -19,7 +19,7 @@
 package com.github.pampas.core.server;
 
 import com.github.df.pampas.common.exec.PampasExecutor;
-import com.github.df.pampas.common.exec.payload.HttpRequestInfo;
+import com.github.df.pampas.common.exec.payload.DefaultRequestInfo;
 import com.github.df.pampas.common.tracer.OpenTracingContext;
 import com.github.df.pampas.http.HttpRequestExecutor;
 import io.netty.buffer.ByteBuf;
@@ -118,7 +118,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 send(ctx, result, HttpResponseStatus.BAD_REQUEST);
                 return;
             }
-            HttpRequestInfo requestInfo = new HttpRequestInfo();
+            DefaultRequestInfo requestInfo = new DefaultRequestInfo();
             requestInfo.setRequestData(httpRequest);
             requestInfo.setChannelHandlerContext(ctx);
             this.executor.execute(requestInfo, null);

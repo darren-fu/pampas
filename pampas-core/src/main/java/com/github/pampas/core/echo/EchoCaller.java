@@ -16,26 +16,22 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
+package com.github.pampas.core.echo;
 
+import com.github.df.pampas.common.exec.Caller;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * 请求Caller
- *
- * @author: darrenfu
- * @date: 18-1-26
- */
-public interface Caller<Q extends Object, R extends Object> {
+public class EchoCaller implements Caller<Object, String> {
 
-    EchoCaller ECHO_CALLER = new EchoCaller();
+        @Override
+        public String call(RequestInfo<Object> req) {
+            return "OK";
+        }
 
-    R call(RequestInfo<Q> req);
-
-    CompletableFuture<R> asyncCall(RequestInfo<Q> req);
-
-
-
-}
+        @Override
+        public CompletableFuture<String> asyncCall(RequestInfo<Object> req) {
+            return CompletableFuture.supplyAsync(() -> "OK");
+        }
+    }

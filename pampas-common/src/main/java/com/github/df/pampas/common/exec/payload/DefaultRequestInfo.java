@@ -33,7 +33,7 @@ import java.lang.reflect.Type;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public class HttpRequestInfo implements RequestInfo<FullHttpRequest> {
+public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Setter
     private ChannelHandlerContext channelHandlerContext;
