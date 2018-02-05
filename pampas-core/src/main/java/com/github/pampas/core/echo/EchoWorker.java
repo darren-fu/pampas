@@ -16,25 +16,32 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
+package com.github.pampas.core.echo;
 
+import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Created by darrenfu on 18-1-24.
+ * 最简单的worker
+ * Created by darrenfu on 18-2-2.
  *
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18-2-2
  */
-public interface PampasExecutor<Q extends Object, R extends Object> {
+public class EchoWorker extends AbstractWorker<Object, String> {
 
+    @Override
+    protected void doAfter(String name) {
+        System.out.println("do_after:" + Thread.currentThread().getName());
+    }
 
-    Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback);
-
-//    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
+    @Override
+    public CompletableFuture<ResponseInfo<String>> doExecute(RequestInfo<Object> req) {
+        return null;
+    }
 
 
 }

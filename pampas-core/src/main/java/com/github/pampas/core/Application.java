@@ -18,8 +18,7 @@
 
 package com.github.pampas.core;
 
-import com.github.df.pampas.common.tracer.OpenTracingContext;
-import com.github.pampas.core.http2.GatewayServer2;
+import com.github.pampas.core.test.GatewayServer2;
 import com.github.pampas.core.server.GatewayServer;
 
 

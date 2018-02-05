@@ -20,12 +20,15 @@ package com.github.df.pampas.common.exec.payload;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.Setter;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by darrenfu on 18-2-2.
@@ -40,6 +43,20 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Setter
     private FullHttpRequest requestData;
+
+    private String uri;
+
+    private String path;
+
+    private Map<String, String> parameters;
+
+
+    public DefaultRequestInfo(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
+        this.channelHandlerContext = ctx;
+        this.requestData = fullHttpRequest;
+        unpack(this.requestData.getUri());
+    }
+
 
     @Override
     public long getId() {
@@ -68,22 +85,28 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Override
     public FullHttpRequest getRequestData() {
+        this.requestData.content();
         return this.requestData;
     }
 
     @Override
     public String getUri() {
-        return null;
+        return this.requestData.getUri();
     }
 
     @Override
     public String getPath() {
-        return null;
+        return this.path;
+    }
+
+    @Override
+    public Map<String, String> getParameters() {
+        return this.parameters;
     }
 
     @Override
     public String getHttpMethod() {
-        return null;
+        return this.requestData.getMethod().name();
     }
 
     @Override
@@ -96,18 +119,37 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
         return null;
     }
 
-    @Override
-    public Type getReturnType() {
-        return null;
-    }
-
-    @Override
-    public Object[] getArgs() {
-        return new Object[0];
-    }
 
     @Override
     public boolean isKeepalive() {
-        return false;
+        return HttpHeaders.isKeepAlive(requestData);
+    }
+
+
+    private void unpack(String uri) {
+        this.uri = uri;
+        int i = uri.indexOf("?"); // seperator between body and parameters
+        if (i >= 1) {
+            this.parameters = new HashMap<String, String>();
+
+            String[] parts = uri.substring(i + 1).split("\\&");
+
+            for (String part : parts) {
+                part = part.trim();
+                if (part.length() > 0) {
+                    int j = part.indexOf('=');
+                    if (j >= 0) {
+                        parameters.put(part.substring(0, j), part.substring(j + 1));
+                    } else {
+                        parameters.put(part, part);
+                    }
+                }
+            }
+            this.path = uri.substring(0, i);
+        } else {
+            this.parameters = Collections.EMPTY_MAP;
+            this.path = uri;
+
+        }
     }
 }

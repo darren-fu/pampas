@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.pampas.core.http2;
+package com.github.pampas.core.test;
 
 import com.github.df.pampas.common.tracer.OpenTracingContext;
 import io.netty.buffer.ByteBuf;

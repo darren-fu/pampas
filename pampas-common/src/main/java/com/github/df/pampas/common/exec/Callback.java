@@ -25,6 +25,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
+ * 回调
  * Created by darrenfu on 18-1-24.
  *
  * @author: darrenfu

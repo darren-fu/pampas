@@ -18,7 +18,7 @@
 
 package com.github.df.pampas.http;
 
-import com.github.df.pampas.common.exec.AbstractPampasExecutor;
+import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.DefaultResponseInfo;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
@@ -37,16 +37,16 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public class HttpRequestExecutor extends AbstractPampasExecutor<FullHttpRequest, FullHttpResponse> {
+public class HttpRequestWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
     HttpCaller caller = new HttpCaller();
 
-    public HttpRequestExecutor() {
+    public HttpRequestWorker() {
     }
 
 
     @Override
     protected void doAfter(String name) {
-        System.out.println("HttpRequestExecutor:" + Thread.currentThread().getName());
+        System.out.println("HttpRequestWorker:" + Thread.currentThread().getName());
     }
 
     @Override

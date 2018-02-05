@@ -23,15 +23,18 @@ import com.github.df.pampas.common.exec.payload.RequestInfo;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 直接返回的caller
+ */
 public class EchoCaller implements Caller<Object, String> {
 
-        @Override
-        public String call(RequestInfo<Object> req) {
-            return "OK";
-        }
-
-        @Override
-        public CompletableFuture<String> asyncCall(RequestInfo<Object> req) {
-            return CompletableFuture.supplyAsync(() -> "OK");
-        }
+    @Override
+    public String call(RequestInfo<Object> req) {
+        return "OK";
     }
+
+    @Override
+    public CompletableFuture<String> asyncCall(RequestInfo<Object> req) {
+        return CompletableFuture.supplyAsync(() -> "OK");
+    }
+}

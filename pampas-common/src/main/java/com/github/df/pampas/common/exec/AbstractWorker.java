@@ -21,10 +21,9 @@ package com.github.df.pampas.common.exec;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
 import com.github.df.pampas.common.tools.ResponseTools;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.EventExecutor;
 import org.slf4j.Logger;
@@ -34,13 +33,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 /**
+ * 请求执行器抽象类
  * Created by darrenfu on 18-2-2.
  *
  * @author: darrenfu
  * @date: 18-2-2
  */
-public abstract class AbstractPampasExecutor<Q extends Object, R extends Object> implements PampasExecutor<Q, R> {
-    private static final Logger log = LoggerFactory.getLogger(AbstractPampasExecutor.class);
+public abstract class AbstractWorker<Q extends Object, R extends Object> implements Worker<Q, R> {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractWorker.class);
 
     protected abstract void doAfter(String threadName);
 
@@ -49,8 +50,10 @@ public abstract class AbstractPampasExecutor<Q extends Object, R extends Object>
 
     @Override
     public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback) {
-        CompletableFuture<ResponseInfo<R>> future = doExecute(req);
 
+        System.out.println("req.getUri(): " + req.getUri());
+        CompletableFuture<ResponseInfo<R>> future = doExecute(req);
+        ;
         String netty_threadName = Thread.currentThread().getName();
         future.thenApply(rsp -> {
             try {
@@ -58,7 +61,7 @@ public abstract class AbstractPampasExecutor<Q extends Object, R extends Object>
                 if (rsp.success()) {
                     sendResp(req.getChannelHandlerContext(), responseInfo.responseData(), req.isKeepalive());
                 } else {
-                    log.error("Abstract Executor response failed", rsp.exception());
+                    log.error("Abstract Worker response failed", rsp.exception());
                     HttpResponse httpResponse = ResponseTools.buildResponse(rsp.exception().getMessage());
                     sendResp(req.getChannelHandlerContext(), httpResponse, req.isKeepalive());
                 }
@@ -67,14 +70,14 @@ public abstract class AbstractPampasExecutor<Q extends Object, R extends Object>
                 executor.submit(() -> doAfter(netty_threadName));
                 return responseInfo;
             } catch (Exception ex) {
-                log.error("Abstract Executor thenApply error", ex);
+                log.error("Abstract Worker thenApply error", ex);
                 ex.printStackTrace();
                 return rsp;
             } finally {
                 ReferenceCountUtil.release(req);
             }
         }).exceptionally(ex -> {
-            log.error("Abstract Executor error", ex);
+            log.error("Abstract Worker error", ex);
             try {
                 return callback == null ? ResponseInfo.OK_RESP : callback.onException(req, ex);
             } finally {

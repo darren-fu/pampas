@@ -16,24 +16,15 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
-
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-
-import java.util.concurrent.CompletableFuture;
+package com.github.df.pampas.common.tools;
 
 /**
- * 请求者
+ * Created by darrenfu on 18-2-5.
  *
  * @author: darrenfu
- * @date: 18-1-26
+ * @date: 18-2-5
  */
-public interface Caller<Q extends Object, R extends Object> {
-
-
-    R call(RequestInfo<Q> req);
-
-    CompletableFuture<R> asyncCall(RequestInfo<Q> req);
+public class RequestTools {
 
 
 }

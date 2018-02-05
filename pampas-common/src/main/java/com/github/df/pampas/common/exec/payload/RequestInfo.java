@@ -23,7 +23,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * Created by darrenfu on 18-1-24.
@@ -81,6 +81,9 @@ public interface RequestInfo<T> {
      */
     String getPath();
 
+
+    Map<String, String> getParameters();
+
     /**
      * RestyCommand的请求方式（GET/POST）
      *
@@ -101,20 +104,6 @@ public interface RequestInfo<T> {
      * @return the service method
      */
     Method getServiceMethod();
-
-    /**
-     * 获取RestyCommand的返回类型
-     *
-     * @return the return type
-     */
-    Type getReturnType();
-
-    /**
-     * 获取RestyCommand的请求参数
-     *
-     * @return the object [ ]
-     */
-    Object[] getArgs();
 
 
     boolean isKeepalive();

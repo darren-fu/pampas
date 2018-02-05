@@ -18,10 +18,10 @@
 
 package com.github.pampas.core.server;
 
-import com.github.df.pampas.common.exec.PampasExecutor;
+import com.github.df.pampas.common.exec.Worker;
 import com.github.df.pampas.common.exec.payload.DefaultRequestInfo;
 import com.github.df.pampas.common.tracer.OpenTracingContext;
-import com.github.df.pampas.http.HttpRequestExecutor;
+import com.github.df.pampas.http.HttpRequestWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -54,11 +54,11 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private String result = "";
 
-    private PampasExecutor executor;
+    private Worker worker;
 
     public HttpServerHandler() {
-//        this.executor = new EchoPampasExecutor();
-        this.executor = new HttpRequestExecutor();
+//        this.worker = new EchoWorker();
+        this.worker = new HttpRequestWorker();
     }
 
 
@@ -118,10 +118,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 send(ctx, result, HttpResponseStatus.BAD_REQUEST);
                 return;
             }
-            DefaultRequestInfo requestInfo = new DefaultRequestInfo();
-            requestInfo.setRequestData(httpRequest);
-            requestInfo.setChannelHandlerContext(ctx);
-            this.executor.execute(requestInfo, null);
+            DefaultRequestInfo requestInfo = new DefaultRequestInfo(ctx, httpRequest);
+            this.worker.execute(requestInfo, null);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
