@@ -18,10 +18,8 @@
 
 package com.github.pampas.core.server;
 
-import com.github.df.pampas.common.exec.EchoPampasExecutor;
 import com.github.df.pampas.common.exec.PampasExecutor;
 import com.github.df.pampas.common.exec.payload.HttpRequestInfo;
-import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.tracer.OpenTracingContext;
 import com.github.df.pampas.http.HttpRequestExecutor;
 import io.netty.buffer.ByteBuf;
@@ -31,7 +29,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
-import io.netty.util.concurrent.EventExecutor;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
@@ -60,7 +57,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private PampasExecutor executor;
 
     public HttpServerHandler() {
-        this.executor = new EchoPampasExecutor();
+//        this.executor = new EchoPampasExecutor();
+        this.executor = new HttpRequestExecutor();
     }
 
 

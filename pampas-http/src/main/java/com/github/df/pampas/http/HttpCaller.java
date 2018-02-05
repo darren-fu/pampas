@@ -20,14 +20,15 @@ package com.github.df.pampas.http;
 
 import com.github.df.pampas.common.exec.Caller;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.util.ReferenceCountUtil;
-import org.asynchttpclient.*;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaders;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.BoundRequestBuilder;
+import org.asynchttpclient.ListenableFuture;
+import org.asynchttpclient.Response;
 import org.asynchttpclient.uri.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,19 +48,16 @@ public class HttpCaller implements Caller<FullHttpRequest, Response> {
 
     private AsyncHttpClient client;
 
-
     @Override
-    public ResponseInfo<Response> call(RequestInfo<FullHttpRequest> req) {
+    public Response call(RequestInfo<FullHttpRequest> req) {
         return null;
     }
 
     @Override
-    public CompletableFuture<ResponseInfo<Response>> asyncCall(RequestInfo<FullHttpRequest> req) {
-        ChannelHandlerContext ctx = req.getChannelHandlerContext();
+    public CompletableFuture<Response> asyncCall(RequestInfo<FullHttpRequest> req) {
         FullHttpRequest httpRequest = (FullHttpRequest) req.getRequestData();
+        req.getUri();
         try {
-
-
             final AsyncHttpClient httpClient = this.client;
             BoundRequestBuilder requestBuilder = new BoundRequestBuilder(httpClient,
                     httpRequest.getMethod().name(),
@@ -74,48 +72,15 @@ public class HttpCaller implements Caller<FullHttpRequest, Response> {
                 ByteBuffer readOnlyBuffer = httpRequest.content().nioBuffer().asReadOnlyBuffer();
                 requestBuilder.setBody(readOnlyBuffer);
             }
-
-
-            /**
-             * listenableFuture.toCompletableFuture
-             */
-            ListenableFuture<Response> listenableFuture = requestBuilder.execute(new AsyncCompletionHandler<Response>() {
-                @Override
-                public Response onCompleted(Response response) throws Exception {
-                    FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(httpRequest.getProtocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
-                            //response.getResponseBodyAsByteBuffer是HeapByteBuf
-                            // zero-copy 设置FullHttpResponse的body
-                            Unpooled.wrappedBuffer(response.getResponseBodyAsByteBuffer()));
-                    fullHttpResponse.headers().set(response.getHeaders());
-
-                    sendResp(ctx, fullHttpResponse, HttpHeaders.isKeepAlive(httpRequest));
-
-                    ReferenceCountUtil.release(req);
-                    return response;
-                }
-
-                @Override
-                public void onThrowable(Throwable t) {
-                    System.out.println("httpclient-exception:" + t.getMessage());
-                    System.out.println("httpclient--" + req.hashCode());
-                    System.out.println("httpclient--" + req.getUri());
-//                    System.out.println("httpclient--" + getBody(req));
-//                    send(ctx, t.getMessage(), HttpResponseStatus.BAD_REQUEST);
-
-                    ReferenceCountUtil.release(req);
-
-                }
-
-            });
-
+            ListenableFuture<Response> listenableFuture = requestBuilder.execute();
+            return listenableFuture.toCompletableFuture();
 
         } catch (Exception ex) {
             System.out.println("exXXXXXXXXXXXXX");
-            ex.printStackTrace();
+            CompletableFuture<Response> exceptionFuture = CompletableFuture.completedFuture(null);
+            exceptionFuture.completeExceptionally(ex);
+            return exceptionFuture;
         }
-
-
-        return null;
     }
 
 

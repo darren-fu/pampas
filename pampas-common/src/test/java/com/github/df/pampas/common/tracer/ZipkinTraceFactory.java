@@ -46,10 +46,10 @@ public class ZipkinTraceFactory implements TracerFactory {
 
         Reporter spanReporter = AsyncReporter.create(sender);
         // If you want to support baggage, indicate the fields you'd like to
-        // whitelist, in this case "country-code" and "user-getId". On the wire,
+        // whitelist, in this case "country-code" and "user-id". On the wire,
         // they will be prefixed like "baggage-country-code"
         Propagation.Factory propagationFactory = ExtraFieldPropagation.newFactoryBuilder(B3Propagation.FACTORY)
-                .addPrefixedFields("baggage-", Arrays.asList("country-code", "user-getId"))
+                .addPrefixedFields("baggage-", Arrays.asList("country-code", "user-id"))
                 .build();
         Tracing braveTracing = Tracing.newBuilder()
                 .localServiceName("gateway")

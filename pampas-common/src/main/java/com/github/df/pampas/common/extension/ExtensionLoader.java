@@ -225,6 +225,8 @@ public class ExtensionLoader<T> {
                 }
             }
         }
+//        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(Activation.class).sequence()));
+        System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         Collections.sort(exts, new ActivationComparator<T>());
         return exts;
     }

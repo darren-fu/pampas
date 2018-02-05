@@ -16,30 +16,47 @@
  *
  */
 
-package com.github.df.pampas.common.exec;
+package com.github.df.pampas.common.exec.payload;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
-
-import java.util.concurrent.CompletableFuture;
+import lombok.Setter;
 
 /**
- * Created by darrenfu on 18-2-2.
+ * Created by darrenfu on 18-2-5.
  *
  * @author: darrenfu
- * @date: 18-2-2
+ * @date: 18-2-5
  */
-public class EchoPampasExecutor extends AbstractPampasExecutor<Object, String> {
+public class DefaultResponseInfo<T> implements ResponseInfo<T> {
+
+    @Setter
+    private long id;
+
+    @Setter
+    private boolean success;
+
+    @Setter
+    private T responseData;
+
+    @Setter
+    private Throwable exception;
 
     @Override
-    protected void doAfter(String name) {
-        System.out.println("do_after:" + Thread.currentThread().getName());
+    public long id() {
+        return id;
     }
 
     @Override
-    public CompletableFuture<ResponseInfo<String>> doExecute(RequestInfo<Object> req) {
-        return null;
+    public boolean success() {
+        return success;
     }
 
+    @Override
+    public T responseData() {
+        return responseData;
+    }
 
+    @Override
+    public Throwable exception() {
+        return exception;
+    }
 }

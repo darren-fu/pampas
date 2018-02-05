@@ -117,4 +117,7 @@ public interface RequestInfo<T> {
     Object[] getArgs();
 
 
+    boolean isKeepalive();
+
+
 }

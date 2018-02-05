@@ -43,7 +43,7 @@ public class Application {
         GatewayServer server1 = new GatewayServer("server1", 9000);
         GatewayServer2 server2 = new GatewayServer2("server2", 9001);
         server1.start();
-        server2.start();
+//        server2.start();
 
     }
 }

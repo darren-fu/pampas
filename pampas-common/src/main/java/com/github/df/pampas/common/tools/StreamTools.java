@@ -135,7 +135,7 @@ public class StreamTools {
 
     /**
      * 根据指定Key分组
-     * 如果存在一个描述人的类Person(getId, name, area)，给定3个人(1, "Tom", "南京")，(2, "Cate", "南京")，(3, "Lily", "北京")
+     * 如果存在一个描述人的类Person(id, name, area)，给定3个人(1, "Tom", "南京")，(2, "Cate", "南京")，(3, "Lily", "北京")
      * 那么希望给这三个人根据地域（area）进行分组，只需调用方法
      * groupBy(Arrays.asList(person1, person2, person3), Person::getArea)
      * 返回值为Map:{"南京" : [person1, person2], "北京" : [person3]}

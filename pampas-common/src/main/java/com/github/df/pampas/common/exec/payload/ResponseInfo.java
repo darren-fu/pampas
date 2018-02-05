@@ -28,19 +28,56 @@ package com.github.df.pampas.common.exec.payload;
 public interface ResponseInfo<T> {
     ResponseInfo<String> OK_RESP = new OKResponseInfo();
 
-    long getId();
+    long id();
 
-    T getResponseData();
+    boolean success();
+
+    T responseData();
+
+    Throwable exception();
+
 
     class OKResponseInfo implements ResponseInfo<String> {
         @Override
-        public long getId() {
+        public long id() {
             return 0;
         }
 
         @Override
-        public String getResponseData() {
+        public boolean success() {
+            return true;
+        }
+
+        @Override
+        public String responseData() {
             return "OK";
+        }
+
+        @Override
+        public Throwable exception() {
+            return null;
+        }
+    }
+
+    class ExceptionResponse implements ResponseInfo<Throwable>{
+        @Override
+        public long id() {
+            return 0;
+        }
+
+        @Override
+        public boolean success() {
+            return false;
+        }
+
+        @Override
+        public Throwable responseData() {
+            return null;
+        }
+
+        @Override
+        public Throwable exception() {
+            return null;
         }
     }
 

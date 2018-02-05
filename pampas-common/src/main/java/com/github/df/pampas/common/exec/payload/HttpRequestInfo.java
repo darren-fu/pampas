@@ -105,4 +105,9 @@ public class HttpRequestInfo implements RequestInfo<FullHttpRequest> {
     public Object[] getArgs() {
         return new Object[0];
     }
+
+    @Override
+    public boolean isKeepalive() {
+        return false;
+    }
 }

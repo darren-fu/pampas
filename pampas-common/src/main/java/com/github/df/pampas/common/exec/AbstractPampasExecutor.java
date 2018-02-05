@@ -20,6 +20,7 @@ package com.github.df.pampas.common.exec;
 
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.tools.ResponseTools;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -43,36 +44,37 @@ public abstract class AbstractPampasExecutor<Q extends Object, R extends Object>
 
     protected abstract void doAfter(String threadName);
 
-    protected abstract Caller<Q, R> getCaller();
 
     public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req);
 
     @Override
     public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback) {
-        Q requestData = req.getRequestData();
         CompletableFuture<ResponseInfo<R>> future = doExecute(req);
-
-       
-
 
         String netty_threadName = Thread.currentThread().getName();
         future.thenApply(rsp -> {
             try {
+                ResponseInfo responseInfo = callback == null ? rsp : callback.onSuccess(req, rsp);
+                if (rsp.success()) {
+                    sendResp(req.getChannelHandlerContext(), responseInfo.responseData(), req.isKeepalive());
+                } else {
+                    log.error("Abstract Executor response failed", rsp.exception());
+                    HttpResponse httpResponse = ResponseTools.buildResponse(rsp.exception().getMessage());
+                    sendResp(req.getChannelHandlerContext(), httpResponse, req.isKeepalive());
+                }
+
                 EventExecutor executor = req.getChannelHandlerContext().executor();
                 executor.submit(() -> doAfter(netty_threadName));
-
-                ResponseInfo responseInfo = callback == null ? rsp : callback.onSuccess(req, rsp);
-                FullHttpResponse httpResponse = convert(req, responseInfo);
-                sendResp(req.getChannelHandlerContext(), httpResponse, false);
                 return responseInfo;
             } catch (Exception ex) {
-
+                log.error("Abstract Executor thenApply error", ex);
                 ex.printStackTrace();
                 return rsp;
             } finally {
                 ReferenceCountUtil.release(req);
             }
         }).exceptionally(ex -> {
+            log.error("Abstract Executor error", ex);
             try {
                 return callback == null ? ResponseInfo.OK_RESP : callback.onException(req, ex);
             } finally {
@@ -82,19 +84,7 @@ public abstract class AbstractPampasExecutor<Q extends Object, R extends Object>
         return future;
     }
 
-
-    private FullHttpResponse convert(RequestInfo requestInfo, ResponseInfo responseInfo) {
-        FullHttpRequest requestData = (FullHttpRequest) requestInfo.getRequestData();
-        FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.getProtocolVersion(), HttpResponseStatus.OK,
-                //response.getResponseBodyAsByteBuffer是HeapByteBuf
-                // zero-copy 设置FullHttpResponse的body
-                Unpooled.wrappedBuffer(responseInfo.getResponseData().toString().getBytes()));
-//        fullHttpResponse.headers().set(requestData.headers());
-        fullHttpResponse.headers().set(HttpHeaders.Names.CONTENT_LENGTH, responseInfo.getResponseData().toString().getBytes().length);
-        return fullHttpResponse;
-    }
-
-    private void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
+    protected void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
         if (keepalive) {
             ctx.writeAndFlush(resp);
         } else {
