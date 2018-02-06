@@ -25,7 +25,7 @@ package com.github.df.pampas.common.exec.payload;
  * @author: darrenfu
  * @date: 18-1-29
  */
-public interface ResponseInfo<T> {
+public interface ResponseInfo<T> extends Operation {
     ResponseInfo<String> OK_RESP = new OKResponseInfo();
 
     long id();
@@ -57,9 +57,19 @@ public interface ResponseInfo<T> {
         public Throwable exception() {
             return null;
         }
+
+        @Override
+        public void cancel() {
+
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
     }
 
-    class ExceptionResponse implements ResponseInfo<Throwable>{
+    class ExceptionResponse implements ResponseInfo<Throwable> {
         @Override
         public long id() {
             return 0;
@@ -78,6 +88,16 @@ public interface ResponseInfo<T> {
         @Override
         public Throwable exception() {
             return null;
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
         }
     }
 

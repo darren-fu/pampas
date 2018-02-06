@@ -52,7 +52,7 @@ public class HttpRequestWorker extends AbstractWorker<FullHttpRequest, FullHttpR
     @Override
     public CompletableFuture<ResponseInfo<FullHttpResponse>> doExecute(RequestInfo<FullHttpRequest> req) {
 
-        FullHttpRequest requestData = req.getRequestData();
+        FullHttpRequest requestData = req.requestData();
 
         CompletableFuture<Response> future = caller.asyncCall(req);
         CompletableFuture<ResponseInfo<FullHttpResponse>> responseFuture = future.thenApply(response -> {
@@ -68,7 +68,7 @@ public class HttpRequestWorker extends AbstractWorker<FullHttpRequest, FullHttpR
             DefaultResponseInfo<FullHttpResponse> defaultResponseInfo = new DefaultResponseInfo();
             defaultResponseInfo.setException(ex);
             defaultResponseInfo.setSuccess(false);
-            return (ResponseInfo<FullHttpResponse>) defaultResponseInfo;
+            return defaultResponseInfo;
         });
 
         return responseFuture;

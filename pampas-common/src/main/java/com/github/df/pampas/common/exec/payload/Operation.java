@@ -16,13 +16,27 @@
  *
  */
 
-package com.github.pampas.core.server;
+package com.github.df.pampas.common.exec.payload;
 
 /**
- * Created by darrenfu on 18-1-19.
+ * 操作定义接口
+ * Created by darrenfu on 18-2-6.
  *
  * @author: darrenfu
- * @date: 18-1-19
+ * @date: 18 -2-6
  */
-public class HttpRespEncoder {
+public interface Operation {
+
+    /**
+     * 取消.
+     */
+    void cancel();
+
+    /**
+     * 是否已经取消
+     *
+     * @return the boolean
+     */
+    boolean isCanceled();
+
 }

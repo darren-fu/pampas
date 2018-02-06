@@ -32,10 +32,7 @@ import java.util.concurrent.Future;
  */
 public interface Worker<Q extends Object, R extends Object> {
 
-
-    Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback);
+    Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Filter<Q, R> filter);
 
 //    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
-
-
 }

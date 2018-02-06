@@ -28,6 +28,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pampas-discover</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>pampas-discover-simple</module>
+        <module>pampas-discover-consul</module>
+    </modules>
 
 
     <dependencies>

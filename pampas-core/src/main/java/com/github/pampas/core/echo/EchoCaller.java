@@ -25,6 +25,9 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 直接返回的caller
+ *
+ * @author: darrenfu
+ * @date: 18-2-2
  */
 public class EchoCaller implements Caller<Object, String> {
 

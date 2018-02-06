@@ -16,15 +16,13 @@
  *
  */
 
-package com.github.pampas.core.filter;
+package com.github.pampas.core.base;
 
 /**
- * Created by darrenfu on 18-1-24.
+ * Created by darrenfu on 18-2-6.
  *
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18-2-6
  */
-public interface Filter {
-
-
+public class FilterContext {
 }

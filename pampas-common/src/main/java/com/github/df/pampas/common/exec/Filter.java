@@ -20,22 +20,48 @@ package com.github.df.pampas.common.exec;
 
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 回调
  * Created by darrenfu on 18-1-24.
  *
+ * @param <Q> the type parameter
+ * @param <R> the type parameter
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18 -1-24
  */
-public interface Callback<Q extends Object, R extends Object> {
+public interface Filter<Q extends Object, R extends Object> {
 
+    /**
+     * 过滤器是否应该执行
+     *
+     * @param req the req
+     * @return the boolean
+     */
+    boolean shouldFilter(RequestInfo<Q> req);
+
+    /**
+     * 请求执行前运行.
+     *
+     * @param req the req
+     */
+    void before(RequestInfo<Q> req);
+
+    /**
+     * 响应成功时执行
+     *
+     * @param req  the req
+     * @param resp the resp
+     * @return the response info
+     */
     ResponseInfo<R> onSuccess(RequestInfo<Q> req, ResponseInfo<R> resp);
 
+    /**
+     * 响应异常时执行
+     *
+     * @param req       the req
+     * @param throwable the throwable
+     * @return the response info
+     */
     ResponseInfo<R> onException(RequestInfo<Q> req, Throwable throwable);
-
-
 }

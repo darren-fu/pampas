@@ -20,10 +20,7 @@ package com.github.df.pampas.http;
 
 import com.github.df.pampas.common.exec.Caller;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
@@ -55,8 +52,7 @@ public class HttpCaller implements Caller<FullHttpRequest, Response> {
 
     @Override
     public CompletableFuture<Response> asyncCall(RequestInfo<FullHttpRequest> req) {
-        FullHttpRequest httpRequest = (FullHttpRequest) req.getRequestData();
-        req.getUri();
+        FullHttpRequest httpRequest = req.requestData();
         try {
             final AsyncHttpClient httpClient = this.client;
             BoundRequestBuilder requestBuilder = new BoundRequestBuilder(httpClient,
@@ -76,21 +72,10 @@ public class HttpCaller implements Caller<FullHttpRequest, Response> {
             return listenableFuture.toCompletableFuture();
 
         } catch (Exception ex) {
-            System.out.println("exXXXXXXXXXXXXX");
             CompletableFuture<Response> exceptionFuture = CompletableFuture.completedFuture(null);
             exceptionFuture.completeExceptionally(ex);
             return exceptionFuture;
         }
     }
-
-
-    private void sendResp(ChannelHandlerContext ctx, FullHttpResponse resp, boolean keepalive) {
-        if (keepalive) {
-            ctx.writeAndFlush(resp);
-        } else {
-            ctx.writeAndFlush(resp).addListener(ChannelFutureListener.CLOSE);
-        }
-    }
-
 
 }

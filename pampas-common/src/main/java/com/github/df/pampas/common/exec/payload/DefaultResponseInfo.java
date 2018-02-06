@@ -59,4 +59,14 @@ public class DefaultResponseInfo<T> implements ResponseInfo<T> {
     public Throwable exception() {
         return exception;
     }
+
+    @Override
+    public void cancel() {
+
+    }
+
+    @Override
+    public boolean isCanceled() {
+        return false;
+    }
 }

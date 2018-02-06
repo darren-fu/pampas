@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 异常处理器
  * Created by darrenfu on 18-1-20.
  *
  * @author: darrenfu

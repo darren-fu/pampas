@@ -30,10 +30,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface Caller<Q extends Object, R extends Object> {
 
-
     R call(RequestInfo<Q> req);
 
     CompletableFuture<R> asyncCall(RequestInfo<Q> req);
-
-
 }

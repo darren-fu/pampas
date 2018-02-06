@@ -22,7 +22,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -32,39 +31,56 @@ import java.util.Map;
  * @author: darrenfu
  * @date: 18 -1-24
  */
-public interface RequestInfo<T> {
+public interface RequestInfo<T> extends Operation {
 
-    long getId();
+    /**
+     * Id long.
+     *
+     * @return the long
+     */
+    long id();
 
-    long getTimestamp();
+    /**
+     * 请求的key
+     *
+     * @return the string
+     */
+    String key();
+
+    /**
+     * Timestamp long.
+     *
+     * @return the long
+     */
+    long timestamp();
 
     /**
      * Gets channel handler context.
      *
      * @return the channel handler context
      */
-    ChannelHandlerContext getChannelHandlerContext();
+    ChannelHandlerContext channelHandlerContext();
 
     /**
      * Gets tracer.
      *
      * @return the tracer
      */
-    Tracer getTracer();
+    Tracer tracer();
 
     /**
      * Gets span.
      *
      * @return the span
      */
-    Span getSpan();
+    Span span();
 
     /**
      * Gets request.
      *
      * @return the request
      */
-    T getRequestData();
+    T requestData();
 
 
     /**
@@ -72,40 +88,42 @@ public interface RequestInfo<T> {
      *
      * @return the uri
      */
-    String getUri();
+    String uri();
 
     /**
      * RestyCommand的请求路径 （eg. /resty/user/get）
      *
      * @return the path
      */
-    String getPath();
+    String path();
 
-
-    Map<String, String> getParameters();
+    /**
+     * Parameters map.
+     *
+     * @return the map
+     */
+    Map<String, String> parameters();
 
     /**
      * RestyCommand的请求方式（GET/POST）
      *
      * @return the http method
      */
-    String getHttpMethod();
+    String httpMethod();
 
     /**
      * RestyCommand对应的服务名称
      *
      * @return the service name
      */
-    String getServiceName();
+    String serviceName();
+
 
     /**
-     * RestyCommand对应的method
+     * Is keepalive boolean.
      *
-     * @return the service method
+     * @return the boolean
      */
-    Method getServiceMethod();
-
-
     boolean isKeepalive();
 
 

@@ -44,29 +44,28 @@ public abstract class AbstractWorker<Q extends Object, R extends Object> impleme
     private static final Logger log = LoggerFactory.getLogger(AbstractWorker.class);
 
     protected abstract void doAfter(String threadName);
-
-
+    
     public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req);
 
     @Override
-    public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Callback<Q, R> callback) {
+    public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Filter<Q, R> filter) {
 
-        System.out.println("req.getUri(): " + req.getUri());
+        System.out.println("req.uri(): " + req.uri());
         CompletableFuture<ResponseInfo<R>> future = doExecute(req);
-        ;
+
         String netty_threadName = Thread.currentThread().getName();
         future.thenApply(rsp -> {
             try {
-                ResponseInfo responseInfo = callback == null ? rsp : callback.onSuccess(req, rsp);
+                ResponseInfo responseInfo = filter == null ? rsp : filter.onSuccess(req, rsp);
                 if (rsp.success()) {
-                    sendResp(req.getChannelHandlerContext(), responseInfo.responseData(), req.isKeepalive());
+                    sendResp(req.channelHandlerContext(), responseInfo.responseData(), req.isKeepalive());
                 } else {
                     log.error("Abstract Worker response failed", rsp.exception());
                     HttpResponse httpResponse = ResponseTools.buildResponse(rsp.exception().getMessage());
-                    sendResp(req.getChannelHandlerContext(), httpResponse, req.isKeepalive());
+                    sendResp(req.channelHandlerContext(), httpResponse, req.isKeepalive());
                 }
 
-                EventExecutor executor = req.getChannelHandlerContext().executor();
+                EventExecutor executor = req.channelHandlerContext().executor();
                 executor.submit(() -> doAfter(netty_threadName));
                 return responseInfo;
             } catch (Exception ex) {
@@ -79,7 +78,7 @@ public abstract class AbstractWorker<Q extends Object, R extends Object> impleme
         }).exceptionally(ex -> {
             log.error("Abstract Worker error", ex);
             try {
-                return callback == null ? ResponseInfo.OK_RESP : callback.onException(req, ex);
+                return filter == null ? ResponseInfo.OK_RESP : filter.onException(req, ex);
             } finally {
                 ReferenceCountUtil.release(req);
             }

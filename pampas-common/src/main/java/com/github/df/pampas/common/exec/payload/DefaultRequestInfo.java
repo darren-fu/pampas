@@ -25,7 +25,6 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.Setter;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,63 +58,63 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
 
     @Override
-    public long getId() {
+    public long id() {
         return 0;
     }
 
     @Override
-    public long getTimestamp() {
+    public String key() {
+        return null;
+    }
+
+    @Override
+    public long timestamp() {
         return 0;
     }
 
     @Override
-    public ChannelHandlerContext getChannelHandlerContext() {
+    public ChannelHandlerContext channelHandlerContext() {
         return this.channelHandlerContext;
     }
 
     @Override
-    public Tracer getTracer() {
+    public Tracer tracer() {
         return null;
     }
 
     @Override
-    public Span getSpan() {
+    public Span span() {
         return null;
     }
 
     @Override
-    public FullHttpRequest getRequestData() {
+    public FullHttpRequest requestData() {
         this.requestData.content();
         return this.requestData;
     }
 
     @Override
-    public String getUri() {
+    public String uri() {
         return this.requestData.getUri();
     }
 
     @Override
-    public String getPath() {
+    public String path() {
         return this.path;
     }
 
     @Override
-    public Map<String, String> getParameters() {
+    public Map<String, String> parameters() {
         return this.parameters;
     }
 
     @Override
-    public String getHttpMethod() {
+    public String httpMethod() {
         return this.requestData.getMethod().name();
     }
 
     @Override
-    public String getServiceName() {
-        return null;
-    }
-
-    @Override
-    public Method getServiceMethod() {
+    public String serviceName() {
         return null;
     }
 
@@ -151,5 +150,15 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
             this.path = uri;
 
         }
+    }
+
+    @Override
+    public void cancel() {
+
+    }
+
+    @Override
+    public boolean isCanceled() {
+        return false;
     }
 }

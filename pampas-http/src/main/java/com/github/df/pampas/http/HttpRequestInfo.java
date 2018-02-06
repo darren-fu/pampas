@@ -30,7 +30,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 public abstract class HttpRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Override
-    public FullHttpRequest getRequestData() {
+    public FullHttpRequest requestData() {
         return null;
     }
 }
