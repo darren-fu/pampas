@@ -18,6 +18,8 @@
 
 package com.github.df.pampas.common.base;
 
+import java.net.URI;
+
 /**
  * Created by darrenfu on 18-2-1.
  *
@@ -31,6 +33,8 @@ public class PampasConsts {
     public static final String DEFAULT_ROOM = "room";
     public static final String DEFAULT_SERVICE = "default-service";
 
+
+    public static final URI LOCAL_URI = URI.create("HTTP://localhost");
 
     public static class Instance {
         /**

@@ -18,9 +18,14 @@
 
 package com.github.df.pampas.common.tools;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
+
+import static com.github.df.pampas.common.base.PampasConsts.LOCAL_URI;
 
 /**
  * 通用工具
@@ -101,6 +106,25 @@ public class CommonTools {
 
         return new BigDecimal(sb.toString());
 
+    }
+
+
+    /**
+     * String 转换 URI
+     *
+     * @param uri the uri
+     * @return the uri
+     */
+    public static URI toURI(String uri) {
+        if (StringUtils.isBlank(uri)) {
+            return LOCAL_URI;
+        }
+
+        if (uri.indexOf("://") < 0) {
+            uri = "http://" + uri;
+        }
+
+        return URI.create(uri);
     }
 
 }
