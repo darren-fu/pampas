@@ -21,15 +21,20 @@ package com.github.df.pampas.discover.consul;
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.QueryParams;
 import com.ecwid.consul.v1.Response;
-import com.ecwid.consul.v1.agent.model.Service;
+import com.ecwid.consul.v1.catalog.model.CatalogService;
 import com.ecwid.consul.v1.health.model.Check;
+import com.ecwid.consul.v1.health.model.HealthService;
 import com.github.df.pampas.common.discover.ServerContext;
 import com.github.df.pampas.common.discover.ServerInstance;
-import com.github.df.pampas.common.tools.CommonTools;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by darrenfu on 18-2-7.
@@ -38,9 +43,19 @@ import java.util.Map;
  * @date: 18-2-7
  */
 public class ConsulServerContext implements ServerContext {
+    /**
+     * ConsulClient.getCatalogServices longPoll 只会侦测到Service以及Service实例 上线以及下线(register & deregister)
+     * (health的变化不会影响getCatalogServices的结果)
+     */
+
+    private volatile ConcurrentHashMap<String, List<ServerInstance>> instancesMap = new ConcurrentHashMap<>();
 
     private ConsulClient consulClient;
 
+    private long lastCatalogIndex = 0;
+    private long lastHealthIndex = 0;
+
+    private static final ScheduledExecutorService executors = Executors.newSingleThreadScheduledExecutor();
 
     public ConsulServerContext(String host, int port) {
         this.consulClient = new ConsulClient(host, port);
@@ -48,44 +63,80 @@ public class ConsulServerContext implements ServerContext {
 
 
     private void init() {
-        URI uri = URI.create("192.169.20.131:8500");
-        consulClient = new ConsulClient();
+        long waitSeconds = 10;
+
+        // 获取catalogServices 列表
+        Response<Map<String, List<String>>> catalogServices = consulClient.getCatalogServices(new QueryParams(waitSeconds, lastCatalogIndex));
+
+        if (lastCatalogIndex != catalogServices.getConsulIndex()) {
+            for (Map.Entry<String, List<String>> entry : catalogServices.getValue().entrySet()) {
+                instancesMap.putIfAbsent(entry.getKey(), Collections.emptyList());
+            }
+        }
+        lastCatalogIndex = catalogServices.getConsulIndex();
+        for (String serviceName : instancesMap.keySet()) {
+            Response<List<CatalogService>> catalogService = consulClient.getCatalogService(serviceName, QueryParams.DEFAULT);
+
+            for (CatalogService service : catalogService.getValue()) {
+
+                System.out.println("serviceName:" + serviceName + "---service:" + service);
+                System.out.println("service.getServicePort():" + service.getServicePort());
+                System.out.println("service.getServiceAddress():" + service.getServiceAddress());
+                System.out.println("service.getServiceName():" + service.getServiceName());
+                System.out.println("service.getAddress():" + service.getAddress());
+
+                for (String tag : service.getServiceTags()) {
+
+                    System.out.println("tag:" + URLDecoder.decode(tag));
+                }
+                System.out.println("=========================================");
+            }
+
+        }
+
+
+        for (String serviceName : instancesMap.keySet()) {
+            Response<List<HealthService>> healthServices = consulClient.getHealthServices(serviceName, true, QueryParams.DEFAULT);
+            for (HealthService healthService : healthServices.getValue()) {
+                System.out.println("healthService:" + healthService.getService());
+                String host = findHost(healthService);
+
+                Map<String, String> metadata = getMetadata(healthService);
+                Integer port = healthService.getService().getPort();
+//                ServerInstance instance = ServerInstance.build(serviceName, )
+
+            }
+        }
+
     }
+
+    public boolean isPassingChecks(HealthService service) {
+        for (Check check : service.getChecks()) {
+            if (check.getStatus() != Check.CheckStatus.PASSING) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static String findHost(HealthService healthService) {
+        HealthService.Service service = healthService.getService();
+        HealthService.Node node = healthService.getNode();
+
+        if (StringUtils.isNotBlank(service.getAddress())) {
+            return service.getAddress();
+        } else if (StringUtils.isNotBlank(node.getAddress())) {
+            return node.getAddress();
+        }
+        return node.getNode();
+    }
+
 
     public static void main(String[] args) {
-        URI uri = CommonTools.toURI("t://192.169.20.131:8500");
-        System.out.println(uri.getScheme());
-        System.out.println(uri.getPort());
-        System.out.println(uri.getHost());
-
-        ConsulClient consulClient = new ConsulClient("http://192.168.1.248", 8500);
-        Response<Map<String, Service>> agentServices = consulClient.getAgentServices();
-        System.out.println("agentServices:" + agentServices);
-
-        Response<Map<String, List<String>>> catalogServices = consulClient.getCatalogServices(QueryParams.DEFAULT);
-        catalogServices.getValue().keySet().forEach(System.out::println);
-
-
-        Map<String, List<String>> listMap = catalogServices.getValue();
-        for (Map.Entry<String, List<String>> entry : listMap.entrySet()) {
-            System.out.println(entry.getKey());
-            System.out.println(entry.getValue());
-        }
-
-        Response<List<Check>> healthChecksState = consulClient.getHealthChecksState(QueryParams.DEFAULT);
-        for (Check check : healthChecksState.getValue()) {
-            System.out.println("check:" + check.getStatus());
-        }
-
-
-        consulClient.getHealthChecksForService()
-
-
-
-
-
+//        ConsulServerContext serverContext = new ConsulServerContext("192.168.1.248", 8500);
+        ConsulServerContext serverContext = new ConsulServerContext("localhost", 8500);
+        serverContext.init();
     }
-
 
 
     @Override
@@ -119,4 +170,36 @@ public class ConsulServerContext implements ServerContext {
     public List<ServerInstance> addServerList(List<ServerInstance> instanceList) {
         return null;
     }
+
+
+    private static Map<String, String> getMetadata(HealthService healthService) {
+        return getMetadata(healthService.getService().getTags());
+    }
+
+    private static Map<String, String> getMetadata(List<String> tags) {
+        LinkedHashMap<String, String> metadata = new LinkedHashMap<>();
+        if (tags != null) {
+            for (String tag : tags) {
+                String[] parts = StringUtils.split(tag, "=");
+                switch (parts.length) {
+                    case 0:
+                        break;
+                    case 1:
+                        metadata.put(parts[0], parts[0]);
+                        break;
+                    case 2:
+                        metadata.put(parts[0], parts[1]);
+                        break;
+                    default:
+                        String[] end = Arrays.copyOfRange(parts, 1, parts.length);
+                        metadata.put(parts[0], StringUtils.join(end, "="));
+                        break;
+                }
+
+            }
+        }
+
+        return metadata;
+    }
+
 }
