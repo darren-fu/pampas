@@ -52,6 +52,11 @@ public class SimpleServerContext implements ServerContext {
 
 
     @Override
+    public Long lastRefreshedTime() {
+        return 0L;
+    }
+
+    @Override
     public List<String> getAllServiceName() {
         return Collections.list(instanceMap.keys());
     }
@@ -68,7 +73,7 @@ public class SimpleServerContext implements ServerContext {
 
     @Override
     public void refreshServerList(String serviceName) {
-        ///donothing
+        ///do nothing
     }
 
     @Override
@@ -94,4 +99,5 @@ public class SimpleServerContext implements ServerContext {
         instanceMap.values().forEach(v -> list.addAll(v));
         return list;
     }
+
 }

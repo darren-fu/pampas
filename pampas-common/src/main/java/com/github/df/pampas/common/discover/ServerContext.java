@@ -29,6 +29,14 @@ import java.util.List;
 @Spi
 public interface ServerContext {
 
+
+    /**
+     * 刷新服务实例的时间戳
+     *
+     * @return the long
+     */
+    Long lastRefreshedTime();
+
     /**
      * 获取所有service name
      *

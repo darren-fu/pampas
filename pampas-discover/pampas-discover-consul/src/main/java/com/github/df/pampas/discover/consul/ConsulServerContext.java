@@ -26,8 +26,6 @@ import com.ecwid.consul.v1.health.model.Check;
 import com.ecwid.consul.v1.health.model.HealthService;
 import com.github.df.pampas.common.discover.ServerContext;
 import com.github.df.pampas.common.discover.ServerInstance;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URLDecoder;
@@ -52,6 +50,7 @@ public class ConsulServerContext implements ServerContext {
 
     private ConsulClient consulClient;
 
+    private Long lastUpdatedTimestamp = 0L;
     private long lastCatalogIndex = 0;
     private long lastHealthIndex = 0;
 
@@ -140,9 +139,13 @@ public class ConsulServerContext implements ServerContext {
 
 
     @Override
+    public Long lastRefreshedTime() {
+        return this.lastUpdatedTimestamp;
+    }
+
+    @Override
     public List<String> getAllServiceName() {
         Response<Map<String, List<String>>> catalogServices = consulClient.getCatalogServices(QueryParams.DEFAULT);
-
         return null;
     }
 

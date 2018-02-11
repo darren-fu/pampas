@@ -23,6 +23,7 @@ import com.github.df.pampas.common.exec.payload.ResponseInfo;
 import com.github.df.pampas.common.tools.ResponseTools;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.EventExecutor;
@@ -39,12 +40,12 @@ import java.util.concurrent.Future;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public abstract class AbstractWorker<Q extends Object, R extends Object> implements Worker<Q, R> {
+public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> implements Worker<Q, R> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractWorker.class);
 
     protected abstract void doAfter(String threadName);
-    
+
     public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req);
 
     @Override

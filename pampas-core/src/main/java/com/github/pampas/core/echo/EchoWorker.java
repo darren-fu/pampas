@@ -21,6 +21,7 @@ package com.github.pampas.core.echo;
 import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.RequestInfo;
 import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import io.netty.handler.codec.http.FullHttpRequest;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public class EchoWorker extends AbstractWorker<Object, String> {
+public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
 
     @Override
     protected void doAfter(String name) {
@@ -39,7 +40,7 @@ public class EchoWorker extends AbstractWorker<Object, String> {
     }
 
     @Override
-    public CompletableFuture<ResponseInfo<String>> doExecute(RequestInfo<Object> req) {
+    public CompletableFuture<ResponseInfo<String>> doExecute(RequestInfo<FullHttpRequest> req) {
         return null;
     }
 
