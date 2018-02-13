@@ -35,7 +35,7 @@ public interface ServerContext {
      *
      * @return the long
      */
-    Long lastRefreshedTime();
+    long lastRefreshedTime();
 
     /**
      * 获取所有service name

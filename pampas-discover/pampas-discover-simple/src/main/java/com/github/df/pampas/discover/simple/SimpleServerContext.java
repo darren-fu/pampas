@@ -52,7 +52,7 @@ public class SimpleServerContext implements ServerContext {
 
 
     @Override
-    public Long lastRefreshedTime() {
+    public long lastRefreshedTime() {
         return 0L;
     }
 

@@ -139,7 +139,7 @@ public class ConsulServerContext implements ServerContext {
 
 
     @Override
-    public Long lastRefreshedTime() {
+    public long lastRefreshedTime() {
         return this.lastUpdatedTimestamp;
     }
 
