@@ -119,6 +119,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             DefaultRequestInfo requestInfo = new DefaultRequestInfo(ctx, httpRequest);
+            ///todo: Selector URI->ServiceName    map serviceName -> worker
+            requestInfo.setServiceName("demo");
+
             this.worker.execute(requestInfo, null);
         } catch (Exception e) {
             e.printStackTrace();

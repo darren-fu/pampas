@@ -49,6 +49,9 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     private Map<String, String> parameters;
 
+    @Setter
+    private String serviceName;
+
 
     public DefaultRequestInfo(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
         this.channelHandlerContext = ctx;
@@ -115,7 +118,7 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Override
     public String serviceName() {
-        return null;
+        return serviceName;
     }
 
 

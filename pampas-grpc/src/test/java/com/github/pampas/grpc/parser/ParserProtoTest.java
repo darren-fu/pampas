@@ -49,6 +49,8 @@ public class ParserProtoTest {
             serviceElement.rpcs().stream().forEach(System.out::println);
             for (OptionElement optionElement : serviceElement.rpcs().get(0).options()) {
                 System.out.println("optionElement:" + optionElement);
+                System.out.println(optionElement.value());
+                System.out.println(optionElement.value().getClass());
             }
         }
     }

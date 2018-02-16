@@ -30,6 +30,7 @@ import io.netty.util.concurrent.EventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -46,13 +47,18 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
 
     protected abstract void doAfter(String threadName);
 
-    public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req);
+    public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req) throws IOException;
 
     @Override
     public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Filter<Q, R> filter) {
 
         System.out.println("req.uri(): " + req.uri());
-        CompletableFuture<ResponseInfo<R>> future = doExecute(req);
+        CompletableFuture<ResponseInfo<R>> future = null;
+        try {
+            future = doExecute(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String netty_threadName = Thread.currentThread().getName();
         future.thenApply(rsp -> {

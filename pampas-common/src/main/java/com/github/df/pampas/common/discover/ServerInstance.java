@@ -45,6 +45,7 @@ import static com.github.df.pampas.common.base.PampasConsts.Instance.*;
 @Data
 @EqualsAndHashCode(of = {"instanceId", "serviceName", "protocol", "host", "port", "room"})
 public class ServerInstance {
+    
     private static final Logger log = LoggerFactory.getLogger(ServerInstance.class);
 
     /**

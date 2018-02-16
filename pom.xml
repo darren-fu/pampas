@@ -15,6 +15,7 @@
         <module>pampas-discover</module>
         <module>pampas-grpc</module>
         <module>pampas-http</module>
+        <module>pampas-dubbo</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
