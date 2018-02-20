@@ -18,8 +18,8 @@
 
 package com.github.df.pampas.common.exec;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.exec.payload.PampasRequest;
+import com.github.df.pampas.common.exec.payload.PampasResponse;
 
 /**
  * 回调
@@ -38,14 +38,14 @@ public interface Filter<Q extends Object, R extends Object> {
      * @param req the req
      * @return the boolean
      */
-    boolean shouldFilter(RequestInfo<Q> req);
+    boolean shouldFilter(PampasRequest<Q> req);
 
     /**
      * 请求执行前运行.
      *
      * @param req the req
      */
-    void before(RequestInfo<Q> req);
+    void before(PampasRequest<Q> req);
 
     /**
      * 响应成功时执行
@@ -54,7 +54,7 @@ public interface Filter<Q extends Object, R extends Object> {
      * @param resp the resp
      * @return the response info
      */
-    ResponseInfo<R> onSuccess(RequestInfo<Q> req, ResponseInfo<R> resp);
+    PampasResponse<R> onSuccess(PampasRequest<Q> req, PampasResponse<R> resp);
 
     /**
      * 响应异常时执行
@@ -63,5 +63,5 @@ public interface Filter<Q extends Object, R extends Object> {
      * @param throwable the throwable
      * @return the response info
      */
-    ResponseInfo<R> onException(RequestInfo<Q> req, Throwable throwable);
+    PampasResponse<R> onException(PampasRequest<Q> req, Throwable throwable);
 }

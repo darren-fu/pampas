@@ -19,12 +19,17 @@
 package com.github.df.pampas.common.route;
 
 /**
- * API路由选择器
- * RequestURI + Header --#Selector#--> UpstreamURI + Header
  * Created by darrenfu on 18-2-10.
  *
  * @author: darrenfu
  * @date: 18-2-10
  */
-public interface Selector {
+public interface Mapper {
+
+
+    String mappingPath();
+
+    String mappingHead();
+
+
 }

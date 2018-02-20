@@ -19,16 +19,22 @@
 package com.github.df.pampas.grpc;
 
 import com.baidu.jprotobuf.com.squareup.protoparser.*;
+import com.github.df.pampas.common.discover.ServerInstance;
 import com.github.df.pampas.common.exec.AbstractWorker;
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.exec.Caller;
+import com.github.df.pampas.common.exec.payload.PampasRequest;
+import com.github.df.pampas.common.exec.payload.PampasResponse;
 import com.github.df.pampas.grpc.classloader.DynamicMultiClassLoader;
+import com.github.df.pampas.grpc.client.GrpcRequest;
+import com.github.df.pampas.grpc.client.GrpcServiceDefine;
 import com.github.df.pampas.grpc.tools.URLTools;
 import io.grpc.Channel;
 import io.grpc.stub.AbstractStub;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,17 +56,30 @@ import static com.github.df.pampas.grpc.ClientDynamic.channel;
  * @date: 18-2-15
  */
 public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
+    private static final Logger log = LoggerFactory.getLogger(GrpcWorker.class);
+
+    private Caller grpcCaller = new GrpcCaller();
+
     @Override
     protected void doAfter(String threadName) {
 
     }
 
     @Override
-    public CompletableFuture<ResponseInfo<FullHttpResponse>> doExecute(RequestInfo<FullHttpRequest> req) throws IOException {
+    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req) throws IOException {
+        log.debug("{}开始执行", GrpcWorker.class.getSimpleName());
+
         String protilFileName = "test.proto";
         ProtoFile protoFile = this.parserProtoFile(protilFileName);
-        this.listProtoServiceInProtoFile(protoFile);
+        List<GrpcServiceDefine> serviceDefineList = this.listProtoServiceInProtoFile(protoFile);
+        GrpcServiceDefine grpcServiceDefine = findGrpcService(req.path(), StringUtils.lowerCase(req.httpMethod()));
+        GrpcRequest grpcRequest = new GrpcRequest();
+        grpcRequest.setServiceDefine(grpcServiceDefine);
 
+        ServerInstance serverInstance = ServerInstance.build("demo", "grpc", "localhost", 50051);
+
+
+        grpcCaller.asyncCall(grpcRequest, serverInstance);
 
         return null;
     }
@@ -103,7 +122,7 @@ public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse
         GrpcServiceDefine grpcServiceDefine = grpcServiceMap.get(httpMethod + requestUri);
         if (grpcServiceDefine == null) {
             ProtoFile protoFile = this.parserProtoFile("test.proto");
-            List<GrpcServiceDefine> serviceDefineList = listProtoServiceInProtoFile(protoFile);
+            List<GrpcServiceDefine> serviceDefineList = this.listProtoServiceInProtoFile(protoFile);
             serviceDefineList.forEach(v -> grpcServiceMap.put(v.getHttpMethod() + v.getHttpUri(), v));
             grpcServiceDefine = grpcServiceMap.get(httpMethod + requestUri);
         }
@@ -175,24 +194,4 @@ public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse
     }
 
 
-    @Data
-    public static class GrpcServiceDefine {
-        private String serviceName;
-
-        private String javaPkgName;
-        private String javaOuterClassName;
-
-        //-------------
-        private String rpcClass;
-        private String protoClass;
-
-        private String reqPojoClass;
-        private String respPojoClass;
-        private String method;
-
-        private String httpMethod;
-        private String httpUri;
-
-
-    }
 }

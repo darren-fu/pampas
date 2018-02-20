@@ -25,24 +25,27 @@
             <version>${parent.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.darren-fu</groupId>
-            <artifactId>pampas-http</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.github.darren-fu</groupId>-->
+            <!--<artifactId>pampas-asynchttp</artifactId>-->
+            <!--<version>${parent.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>com.github.darren-fu</groupId>-->
+            <!--<artifactId>pampas-grpc</artifactId>-->
+            <!--<version>${parent.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-all</artifactId>-->
+        <!--</dependency>-->
 
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-
-
-
 
         <dependency>
             <groupId>com.netflix.rxjava</groupId>

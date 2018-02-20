@@ -18,13 +18,14 @@
 
 package com.github.df.pampas.common.exec;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.exec.payload.PampasRequest;
+import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.tools.JsonTools;
 import com.github.df.pampas.common.tools.ResponseTools;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.*;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.EventExecutor;
 import org.slf4j.Logger;
@@ -47,13 +48,13 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
 
     protected abstract void doAfter(String threadName);
 
-    public abstract CompletableFuture<ResponseInfo<R>> doExecute(RequestInfo<Q> req) throws IOException;
+    public abstract CompletableFuture<PampasResponse<R>> doExecute(PampasRequest<Q> req) throws IOException;
 
     @Override
-    public Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Filter<Q, R> filter) {
+    public Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter) {
 
-        System.out.println("req.uri(): " + req.uri());
-        CompletableFuture<ResponseInfo<R>> future = null;
+        System.out.println("req.originUri(): " + req.originUri());
+        CompletableFuture<PampasResponse<R>> future = null;
         try {
             future = doExecute(req);
         } catch (Exception e) {
@@ -63,9 +64,10 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
         String netty_threadName = Thread.currentThread().getName();
         future.thenApply(rsp -> {
             try {
-                ResponseInfo responseInfo = filter == null ? rsp : filter.onSuccess(req, rsp);
+                PampasResponse pampasResponse = filter == null ? rsp : filter.onSuccess(req, rsp);
                 if (rsp.success()) {
-                    sendResp(req.channelHandlerContext(), responseInfo.responseData(), req.isKeepalive());
+                    log.debug("成功获取响应:{}", rsp);
+                    sendResp(req.channelHandlerContext(), pampasResponse.responseData(), req.isKeepalive());
                 } else {
                     log.error("Abstract Worker response failed", rsp.exception());
                     HttpResponse httpResponse = ResponseTools.buildResponse(rsp.exception().getMessage());
@@ -74,7 +76,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
 
                 EventExecutor executor = req.channelHandlerContext().executor();
                 executor.submit(() -> doAfter(netty_threadName));
-                return responseInfo;
+                return pampasResponse;
             } catch (Exception ex) {
                 log.error("Abstract Worker thenApply error", ex);
                 ex.printStackTrace();
@@ -85,7 +87,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
         }).exceptionally(ex -> {
             log.error("Abstract Worker error", ex);
             try {
-                return filter == null ? ResponseInfo.OK_RESP : filter.onException(req, ex);
+                return filter == null ? PampasResponse.OK_RESP : filter.onException(req, ex);
             } finally {
                 ReferenceCountUtil.release(req);
             }
@@ -94,10 +96,22 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
     }
 
     protected void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
+        Object objToFlush = resp;
+        if (!(resp instanceof HttpMessage)) {
+            byte[] respBytes = JsonTools.defaultMapper().toJson(resp).getBytes();
+            FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.OK,
+                    Unpooled.wrappedBuffer(respBytes));
+            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_LENGTH, respBytes.length);
+            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+            objToFlush = fullHttpResponse;
+        }
+
+
         if (keepalive) {
-            ctx.writeAndFlush(resp);
+            ctx.writeAndFlush(objToFlush);
         } else {
-            ctx.writeAndFlush(resp).addListener(ChannelFutureListener.CLOSE);
+            ctx.writeAndFlush(objToFlush).addListener(ChannelFutureListener.CLOSE);
         }
     }
 

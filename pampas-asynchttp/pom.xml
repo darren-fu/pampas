@@ -27,7 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pampas-http</artifactId>
+    <artifactId>pampas-asynchttp</artifactId>
 
     <dependencies>
         <dependency>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.asynchttpclient</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>2.0.38</version>
+            <version>2.1.2</version>
         </dependency>
     </dependencies>
 

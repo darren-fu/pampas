@@ -31,7 +31,7 @@ import java.util.Map;
  * @author: darrenfu
  * @date: 18 -1-24
  */
-public interface RequestInfo<T> extends Operation {
+public interface PampasRequest<T> extends Operation {
 
     /**
      * Id long.
@@ -86,9 +86,9 @@ public interface RequestInfo<T> extends Operation {
     /**
      * 相对URI (eg. /resty/user/get?name=darrenfu)
      *
-     * @return the uri
+     * @return the originUri
      */
-    String uri();
+    String originUri();
 
     /**
      * RestyCommand的请求路径 （eg. /resty/user/get）
@@ -96,6 +96,7 @@ public interface RequestInfo<T> extends Operation {
      * @return the path
      */
     String path();
+
 
     /**
      * Parameters map.

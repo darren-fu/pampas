@@ -73,8 +73,7 @@ public abstract class AbstractServer {
                 .option(ChannelOption.SO_RCVBUF, 24 * 1024)
                 .childOption(ChannelOption.SO_SNDBUF, 24 * 1024)
                 //ChannelOut boundBuffer 高水位线 低水位线
-                .option(ChannelOption.WRITE_BUFFER_HIGH_WATER_MARK, 64 * 1024)
-                .option(ChannelOption.WRITE_BUFFER_LOW_WATER_MARK, 32 * 1024)
+                .option(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT)
                 .handler(new LoggingHandler(LogLevel.DEBUG)).childHandler(newChannelInitializer());
     }
 

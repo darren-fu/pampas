@@ -16,20 +16,33 @@
  *
  */
 
-package com.github.df.pampas.common.route;
+package com.github.df.pampas.grpc.client;
+
+import lombok.Data;
 
 /**
- * Created by darrenfu on 18-2-10.
+ * Created by darrenfu on 18-2-19.
  *
  * @author: darrenfu
- * @date: 18-2-10
+ * @date: 18-2-19
  */
-public interface Locatar {
+@Data
+public class GrpcServiceDefine {
+    private String serviceName;
 
+    private String javaPkgName;
+    private String javaOuterClassName;
 
-    String mappingPath();
+    //-------------
+    private String rpcClass;
+    private String protoClass;
 
-    String mappingHead();
+    private String reqPojoClass;
+    private String respPojoClass;
+    private String method;
+
+    private String httpMethod;
+    private String httpUri;
 
 
 }

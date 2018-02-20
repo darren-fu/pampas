@@ -33,7 +33,7 @@ import java.net.URI;
 public class ConsulSupport {
 
     public static ConsulClient getClient() {
-        String property = System.getProperty("pampas.consul.uri");
+        String property = System.getProperty("pampas.consul.originUri");
         if (StringUtils.isNotBlank(property)) {
             URI uri = CommonTools.toURI(property);
 

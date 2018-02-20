@@ -39,8 +39,8 @@ public class ResponseTools {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
                 HttpResponseStatus.BAD_GATEWAY,
                 Unpooled.wrappedBuffer(msg.getBytes()));
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, msg.getBytes().length);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, msg.getBytes().length);
         return response;
     }
 }

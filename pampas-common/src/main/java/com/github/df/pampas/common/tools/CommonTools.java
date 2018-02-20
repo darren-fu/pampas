@@ -112,8 +112,8 @@ public class CommonTools {
     /**
      * String 转换 URI
      *
-     * @param uri the uri
-     * @return the uri
+     * @param uri the originUri
+     * @return the originUri
      */
     public static URI toURI(String uri) {
         if (StringUtils.isBlank(uri)) {

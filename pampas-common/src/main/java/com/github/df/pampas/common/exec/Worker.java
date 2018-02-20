@@ -18,8 +18,8 @@
 
 package com.github.df.pampas.common.exec;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.exec.payload.PampasRequest;
+import com.github.df.pampas.common.exec.payload.PampasResponse;
 
 import java.util.concurrent.Future;
 
@@ -32,7 +32,7 @@ import java.util.concurrent.Future;
  */
 public interface Worker<Q extends Object, R extends Object> {
 
-    Future<ResponseInfo<R>> execute(RequestInfo<Q> req, Filter<Q, R> filter);
+    Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter);
 
 //    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
 }

@@ -67,7 +67,7 @@ public class GatewayServer extends AbstractServer {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline()
-//                        .addLast(loggingHandler)
+                        .addLast(loggingHandler)
                         .addLast(new IdleStateHandler(30, 0, 10))
                         .addLast("decoder", new HttpRequestDecoder())
                         .addLast("http-aggregator", new HttpObjectAggregator(65536))

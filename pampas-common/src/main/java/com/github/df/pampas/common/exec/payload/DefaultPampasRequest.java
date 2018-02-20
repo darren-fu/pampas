@@ -21,6 +21,7 @@ package com.github.df.pampas.common.exec.payload;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpUtil;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.Setter;
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
+public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     @Setter
     private ChannelHandlerContext channelHandlerContext;
@@ -53,10 +54,10 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
     private String serviceName;
 
 
-    public DefaultRequestInfo(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
+    public DefaultPampasRequest(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
         this.channelHandlerContext = ctx;
         this.requestData = fullHttpRequest;
-        unpack(this.requestData.getUri());
+        unpack(this.requestData.uri());
     }
 
 
@@ -97,8 +98,8 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
     }
 
     @Override
-    public String uri() {
-        return this.requestData.getUri();
+    public String originUri() {
+        return this.requestData.uri();
     }
 
     @Override
@@ -113,7 +114,7 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Override
     public String httpMethod() {
-        return this.requestData.getMethod().name();
+        return this.requestData.method().name();
     }
 
     @Override
@@ -124,7 +125,7 @@ public class DefaultRequestInfo implements RequestInfo<FullHttpRequest> {
 
     @Override
     public boolean isKeepalive() {
-        return HttpHeaders.isKeepAlive(requestData);
+        return HttpUtil.isKeepAlive(requestData);
     }
 
 

@@ -16,21 +16,18 @@
  *
  */
 
-package com.github.df.pampas.http;
+package com.github.df.pampas.grpc.client;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import io.netty.handler.codec.http.FullHttpRequest;
+import lombok.Data;
 
 /**
- * Created by darrenfu on 18-1-24.
+ * Created by darrenfu on 18-2-19.
  *
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18-2-19
  */
-public abstract class HttpRequestInfo implements RequestInfo<FullHttpRequest> {
+@Data
+public class GrpcRequest {
 
-    @Override
-    public FullHttpRequest requestData() {
-        return null;
-    }
+    private GrpcServiceDefine serviceDefine;
 }

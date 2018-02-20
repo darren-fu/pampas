@@ -14,8 +14,10 @@
         <module>pampas-storage</module>
         <module>pampas-discover</module>
         <module>pampas-grpc</module>
-        <module>pampas-http</module>
+        <module>pampas-asynchttp</module>
         <module>pampas-dubbo</module>
+        <module>pampas-okhttp</module>
+        <module>pampas-okhttp</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,7 +29,9 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
-                <version>4.0.54.Final</version>
+                <!--<version>4.1.19.Final</version>-->
+                <!--<version>4.1.16.Final</version>-->
+                <version>4.1.17.Final</version>
             </dependency>
 
             <dependency>

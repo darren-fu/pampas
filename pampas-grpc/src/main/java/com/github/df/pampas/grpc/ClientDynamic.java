@@ -19,6 +19,7 @@
 package com.github.df.pampas.grpc;
 
 import com.github.df.pampas.grpc.classloader.DynamicMultiClassLoader;
+import com.github.df.pampas.grpc.tools.URLTools;
 import com.google.common.util.concurrent.ListenableFuture;
 import io.grpc.*;
 import io.grpc.stub.AbstractStub;
@@ -128,14 +129,16 @@ public class ClientDynamic {
 
     @Test
     public void doCallAsync() throws Exception {
-        Class grpc = Loader.load("df.open.grpc.hello.HelloServiceGrpc");
-        Class proto = Loader.load("df.open.grpc.hello.HelloServiceProto");
+        DynamicMultiClassLoader loader = DynamicMultiClassLoader.getLoader(URLTools.toUrl(Consts.JAVA_OUT_DIR));
+
+        Class grpc = loader.load("df.open.grpc.hello.HelloServiceGrpc");
+        Class proto = loader.load("df.open.grpc.hello.HelloServiceProto");
 
         Method newBlockingStub = grpc.getMethod("newBlockingStub", Channel.class);
 
         AbstractStub stub = (AbstractStub) newBlockingStub.invoke(grpc, channel);
         System.out.println(stub);
-        Class<?> reqClz = Class.forName("df.open.grpc.hello.HelloServiceProto$HelloReq", false, Loader.getLoader());
+        Class<?> reqClz = Class.forName("df.open.grpc.hello.HelloServiceProto$HelloReq", false, loader);
         Constructor<?> constructor = reqClz.getDeclaredConstructor();
         constructor.setAccessible(true);
 

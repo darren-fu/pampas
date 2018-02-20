@@ -68,13 +68,13 @@ public class HttpServerHandler2 extends ChannelInboundHandlerAdapter {
 
 
         Tracer tracer = OpenTracingContext.getTracer();
-        Tracer.SpanBuilder spanBuilder = tracer.buildSpan("/server2" + httpRequest.getUri());
+        Tracer.SpanBuilder spanBuilder = tracer.buildSpan("/server2" + httpRequest.uri());
 
         SpanContext spanCtx = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMap() {
             @Override
             public Iterator<Map.Entry<String, String>> iterator() {
                 System.out.println("Trancer iterator...");
-                return httpRequest.headers().iterator();
+                return httpRequest.headers().iteratorAsString();
             }
 
             @Override
@@ -89,9 +89,9 @@ public class HttpServerHandler2 extends ChannelInboundHandlerAdapter {
 
 
         try {
-            String path = httpRequest.getUri();          //获取路径
+            String path = httpRequest.uri();          //获取路径
             String body = getBody(httpRequest);     //获取参数
-            HttpMethod method = httpRequest.getMethod();//获取请求方法
+            HttpMethod method = httpRequest.method();//获取请求方法
             //如果不是这个路径，就直接返回错误
 
 //            Thread.sleep(10000L);
@@ -129,9 +129,9 @@ public class HttpServerHandler2 extends ChannelInboundHandlerAdapter {
      */
     private void send(ChannelHandlerContext ctx, String context, HttpResponseStatus status) {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status, Unpooled.copiedBuffer(context, CharsetUtil.UTF_8));
-//        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, context.getBytes().length);
-        response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+//        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, context.getBytes().length);
+        response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);
         ctx.flush();//.addListener(ChannelFutureListener.CLOSE);
     }

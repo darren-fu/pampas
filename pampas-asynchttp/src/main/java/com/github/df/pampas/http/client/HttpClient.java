@@ -111,7 +111,7 @@ public class HttpClient {
             BoundRequestBuilder requestBuilder = new BoundRequestBuilder(httpClient, "GET", true);
             requestBuilder.setUri(Uri.create("http://localhost:9001/test1"));
             requestBuilder.setHeaders(req.headers());
-            requestBuilder.addHeader(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+            requestBuilder.addHeader(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 
             if (req.content() != null && req.content().isReadable()) {
                 //请求body转换为ByteBuffer，并且设置为只读，ByteBuf复用 堆内存中的数据
@@ -123,7 +123,7 @@ public class HttpClient {
 
             ListenableFuture<Response> listenableFuture = requestBuilder.execute(new AsyncCompletionHandler<Response>() {
                 @Override
-                public State onHeadersReceived(final HttpResponseHeaders headers) throws Exception {
+                public AsyncHandler.State onHeadersReceived(HttpHeaders headers) throws Exception {
                     System.out.println("onHeadersReceived thread:" + Thread.currentThread().getName());
 
                     return super.onHeadersReceived(headers);
@@ -149,10 +149,10 @@ public class HttpClient {
                             Unpooled.wrappedBuffer(bytes)
                     );
                     fullHttpResponse.headers().set(response.getHeaders());
-                    fullHttpResponse.headers().set(HttpHeaders.Names.CONTENT_LENGTH, fullHttpResponse.content().capacity());
-//                    fullHttpResponse.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
-                    fullHttpResponse.headers().set(HttpHeaders.Names.CONTENT_TYPE, response.getContentType());
-                    if (HttpHeaders.isKeepAlive(req)) {
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, fullHttpResponse.content().capacity());
+//                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+                    fullHttpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, response.getContentType());
+                    if (HttpUtil.isKeepAlive(req)) {
                         ctx.write(fullHttpResponse);
                         ctx.flush();
                     } else {
@@ -167,7 +167,7 @@ public class HttpClient {
                 public void onThrowable(Throwable t) {
                     System.out.println("httpclient-exception:" + t.getMessage());
                     System.out.println("httpclient--" + req.hashCode());
-                    System.out.println("httpclient--" + req.getUri());
+                    System.out.println("httpclient--" + req.uri());
 //                    System.out.println("httpclient--" + getBody(req));
                     send(ctx, t.getMessage(), HttpResponseStatus.BAD_REQUEST);
 
@@ -197,7 +197,7 @@ public class HttpClient {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
                 status,
                 Unpooled.copiedBuffer(context, CharsetUtil.UTF_8));
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
@@ -207,7 +207,7 @@ public class HttpClient {
                 //response.getResponseBodyAsByteBuffer是HeapByteBuf
                 // zero-copy 设置FullHttpResponse的body
                 Unpooled.wrappedBuffer(resp.getResponseBodyAsByteBuffer()));
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 

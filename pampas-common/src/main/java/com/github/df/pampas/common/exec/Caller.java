@@ -18,7 +18,7 @@
 
 package com.github.df.pampas.common.exec;
 
-import com.github.df.pampas.common.exec.payload.RequestInfo;
+import com.github.df.pampas.common.discover.ServerInstance;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface Caller<Q extends Object, R extends Object> {
 
-    R call(RequestInfo<Q> req);
+    R call(Q req, ServerInstance serverInstance);
 
-    CompletableFuture<R> asyncCall(RequestInfo<Q> req);
+    CompletableFuture<R> asyncCall(Q req, ServerInstance serverInstance);
 }

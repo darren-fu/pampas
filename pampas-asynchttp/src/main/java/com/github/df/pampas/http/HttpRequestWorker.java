@@ -19,9 +19,9 @@
 package com.github.df.pampas.http;
 
 import com.github.df.pampas.common.exec.AbstractWorker;
-import com.github.df.pampas.common.exec.payload.DefaultResponseInfo;
-import com.github.df.pampas.common.exec.payload.RequestInfo;
-import com.github.df.pampas.common.exec.payload.ResponseInfo;
+import com.github.df.pampas.common.exec.payload.DefaultPampasResponse;
+import com.github.df.pampas.common.exec.payload.PampasRequest;
+import com.github.df.pampas.common.exec.payload.PampasResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -50,22 +50,22 @@ public class HttpRequestWorker extends AbstractWorker<FullHttpRequest, FullHttpR
     }
 
     @Override
-    public CompletableFuture<ResponseInfo<FullHttpResponse>> doExecute(RequestInfo<FullHttpRequest> req) {
+    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req) {
 
         FullHttpRequest requestData = req.requestData();
 
-        CompletableFuture<Response> future = caller.asyncCall(req);
-        CompletableFuture<ResponseInfo<FullHttpResponse>> responseFuture = future.thenApply(response -> {
-            FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.getProtocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
+        CompletableFuture<Response> future = caller.asyncCall(requestData, null);
+        CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {
+            FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.protocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
                     //response.getResponseBodyAsByteBuffer是HeapByteBuf
                     // zero-copy 设置FullHttpResponse的body
                     Unpooled.wrappedBuffer(response.getResponseBodyAsByteBuffer()));
             fullHttpResponse.headers().set(response.getHeaders());
-            DefaultResponseInfo<FullHttpResponse> defaultResponseInfo = new DefaultResponseInfo();
+            DefaultPampasResponse<FullHttpResponse> defaultResponseInfo = new DefaultPampasResponse();
             defaultResponseInfo.setResponseData(fullHttpResponse);
-            return (ResponseInfo<FullHttpResponse>) defaultResponseInfo;
+            return (PampasResponse<FullHttpResponse>) defaultResponseInfo;
         }).exceptionally(ex -> {
-            DefaultResponseInfo<FullHttpResponse> defaultResponseInfo = new DefaultResponseInfo();
+            DefaultPampasResponse<FullHttpResponse> defaultResponseInfo = new DefaultPampasResponse();
             defaultResponseInfo.setException(ex);
             defaultResponseInfo.setSuccess(false);
             return defaultResponseInfo;

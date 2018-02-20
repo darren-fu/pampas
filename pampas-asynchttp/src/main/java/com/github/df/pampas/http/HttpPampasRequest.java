@@ -16,33 +16,21 @@
  *
  */
 
-package com.github.pampas.core.echo;
+package com.github.df.pampas.http;
 
-import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.PampasRequest;
-import com.github.df.pampas.common.exec.payload.PampasResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
- * 最简单的worker
- * Created by darrenfu on 18-2-2.
+ * Created by darrenfu on 18-1-24.
  *
  * @author: darrenfu
- * @date: 18-2-2
+ * @date: 18-1-24
  */
-public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
+public abstract class HttpPampasRequest implements PampasRequest<FullHttpRequest> {
 
     @Override
-    protected void doAfter(String name) {
-        System.out.println("do_after:" + Thread.currentThread().getName());
+    public FullHttpRequest requestData() {
+        return null;
     }
-
-    @Override
-    public CompletableFuture<PampasResponse<String>> doExecute(PampasRequest<FullHttpRequest> req) {
-        return CompletableFuture.completedFuture(PampasResponse.OK_RESP);
-    }
-
-
 }

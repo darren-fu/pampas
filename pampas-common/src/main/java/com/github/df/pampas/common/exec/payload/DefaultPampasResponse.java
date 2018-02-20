@@ -26,7 +26,7 @@ import lombok.Setter;
  * @author: darrenfu
  * @date: 18-2-5
  */
-public class DefaultResponseInfo<T> implements ResponseInfo<T> {
+public class DefaultPampasResponse<T> implements PampasResponse<T> {
 
     @Setter
     private long id;

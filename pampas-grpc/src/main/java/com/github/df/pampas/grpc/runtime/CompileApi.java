@@ -38,15 +38,6 @@ public class CompileApi {
     private String jars = "";
     private String targetDir = "";
 
-    public static void main(String[] args) throws Exception {
-
-        File file = new File("/home/darrenfu/IdeaProjects/pampas/pampas-grpc/df/open/grpc/hello");
-        System.out.println(file.getParent());
-
-
-        CompileApi.compile(Loader.dir);
-    }
-
 
     public static void compile(String filePath) throws Exception {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();

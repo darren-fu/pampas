@@ -18,9 +18,11 @@
 
 package com.github.df.pampas.http;
 
+import com.github.df.pampas.common.discover.ServerInstance;
 import com.github.df.pampas.common.exec.Caller;
-import com.github.df.pampas.common.exec.payload.RequestInfo;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
@@ -46,22 +48,22 @@ public class HttpCaller implements Caller<FullHttpRequest, Response> {
     private AsyncHttpClient client;
 
     @Override
-    public Response call(RequestInfo<FullHttpRequest> req) {
+    public Response call(FullHttpRequest req, ServerInstance serverInstance) {
         return null;
     }
 
     @Override
-    public CompletableFuture<Response> asyncCall(RequestInfo<FullHttpRequest> req) {
-        FullHttpRequest httpRequest = req.requestData();
+    public CompletableFuture<Response> asyncCall(FullHttpRequest req, ServerInstance serverInstance) {
+        final FullHttpRequest httpRequest = req;
         try {
             final AsyncHttpClient httpClient = this.client;
             BoundRequestBuilder requestBuilder = new BoundRequestBuilder(httpClient,
-                    httpRequest.getMethod().name(),
+                    httpRequest.method().name(),
                     true);
             //TODO 路由,Filter
             requestBuilder.setUri(Uri.create("http://localhost:9001/test1"));
             requestBuilder.setHeaders(httpRequest.headers());
-            requestBuilder.addHeader(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+            requestBuilder.addHeader(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 
             if (httpRequest.content() != null && httpRequest.content().isReadable()) {
                 //请求body转换为ByteBuffer，并且设置为只读，ByteBuf复用 堆内存中的数据 zero copy

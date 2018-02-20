@@ -18,8 +18,8 @@
 
 package com.github.pampas.core.echo;
 
+import com.github.df.pampas.common.discover.ServerInstance;
 import com.github.df.pampas.common.exec.Caller;
-import com.github.df.pampas.common.exec.payload.RequestInfo;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -32,12 +32,12 @@ import java.util.concurrent.CompletableFuture;
 public class EchoCaller implements Caller<Object, String> {
 
     @Override
-    public String call(RequestInfo<Object> req) {
+    public String call(Object req, ServerInstance serverInstance) {
         return "OK";
     }
 
     @Override
-    public CompletableFuture<String> asyncCall(RequestInfo<Object> req) {
+    public CompletableFuture<String> asyncCall(Object req, ServerInstance serverInstance) {
         return CompletableFuture.supplyAsync(() -> "OK");
     }
 }

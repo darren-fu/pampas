@@ -19,14 +19,16 @@
 package com.github.df.pampas.common.exec.payload;
 
 
+import lombok.Data;
+
 /**
  * Created by darrenfu on 18-1-29.
  *
  * @author: darrenfu
  * @date: 18-1-29
  */
-public interface ResponseInfo<T> extends Operation {
-    ResponseInfo<String> OK_RESP = new OKResponseInfo();
+public interface PampasResponse<T> extends Operation {
+    PampasResponse<String> OK_RESP = new OKPampasResponse();
 
     long id();
 
@@ -36,8 +38,8 @@ public interface ResponseInfo<T> extends Operation {
 
     Throwable exception();
 
-
-    class OKResponseInfo implements ResponseInfo<String> {
+    @Data
+    class OKPampasResponse implements PampasResponse<String> {
         @Override
         public long id() {
             return 0;
@@ -69,7 +71,7 @@ public interface ResponseInfo<T> extends Operation {
         }
     }
 
-    class ExceptionResponse implements ResponseInfo<Throwable> {
+    class ExceptionPampasResponse implements PampasResponse<Throwable> {
         @Override
         public long id() {
             return 0;

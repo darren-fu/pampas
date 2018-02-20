@@ -16,15 +16,13 @@
  *
  */
 
-package com.github.df.pampas.common.route;
+package com.github.df.pampas.grpc.client;
 
 /**
- * API路由选择器
- * RequestURI + Header --#Selector#--> UpstreamURI + Header
- * Created by darrenfu on 18-2-10.
+ * Created by darrenfu on 18-2-18.
  *
  * @author: darrenfu
- * @date: 18-2-10
+ * @date: 18-2-18
  */
-public interface Selector {
+public class ChannelFactory {
 }

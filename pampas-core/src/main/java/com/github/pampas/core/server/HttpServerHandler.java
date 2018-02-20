@@ -19,9 +19,9 @@
 package com.github.pampas.core.server;
 
 import com.github.df.pampas.common.exec.Worker;
-import com.github.df.pampas.common.exec.payload.DefaultRequestInfo;
+import com.github.df.pampas.common.exec.payload.DefaultPampasRequest;
 import com.github.df.pampas.common.tracer.OpenTracingContext;
-import com.github.df.pampas.http.HttpRequestWorker;
+import com.github.pampas.core.echo.EchoWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -57,8 +57,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private Worker worker;
 
     public HttpServerHandler() {
-//        this.worker = new EchoWorker();
-        this.worker = new HttpRequestWorker();
+        this.worker = new EchoWorker();
+//        this.worker = new HttpRequestWorker();
+//        this.worker = new GrpcWorker();
     }
 
 
@@ -101,16 +102,16 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             log.trace("http request:{}", httpRequest);
         }
 
-        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.getUri());
+        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
         Span span = spanBuilder.start();
-        span.setTag("method", httpRequest.getMethod().name());
+        span.setTag("method", httpRequest.method().name());
         tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
 
         //span.finish();
         try {
-            String path = httpRequest.getUri();          //获取路径
+            String path = httpRequest.uri();          //获取路径
             String body = getBody(httpRequest);     //获取参数
-            HttpMethod method = httpRequest.getMethod();//获取请求方法
+            HttpMethod method = httpRequest.method();//获取请求方法
             //如果不是这个路径，就直接返回错误
             if (!"/test".equalsIgnoreCase(path)) {
                 Thread.sleep(10000L);
@@ -118,7 +119,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 send(ctx, result, HttpResponseStatus.BAD_REQUEST);
                 return;
             }
-            DefaultRequestInfo requestInfo = new DefaultRequestInfo(ctx, httpRequest);
+            DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
             ///todo: Selector URI->ServiceName    map serviceName -> worker
             requestInfo.setServiceName("demo");
 
@@ -149,7 +150,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
      */
     private void send(ChannelHandlerContext ctx, String context, HttpResponseStatus status) {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status, Unpooled.copiedBuffer(context, CharsetUtil.UTF_8));
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 

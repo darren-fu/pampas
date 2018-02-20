@@ -16,33 +16,38 @@
  *
  */
 
-package com.github.pampas.core.echo;
+package com.github.df.pampas.okhttp;
 
-import com.github.df.pampas.common.exec.AbstractWorker;
-import com.github.df.pampas.common.exec.payload.PampasRequest;
-import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.discover.ServerInstance;
+import com.github.df.pampas.common.exec.Caller;
 import io.netty.handler.codec.http.FullHttpRequest;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 最简单的worker
- * Created by darrenfu on 18-2-2.
+ * Created by darrenfu on 18-2-20.
  *
  * @author: darrenfu
- * @date: 18-2-2
+ * @date: 18-2-20
  */
-public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
+public class OkhttpCaller implements Caller<FullHttpRequest, Response> {
+    private final OkHttpClient client = new OkHttpClient();
 
     @Override
-    protected void doAfter(String name) {
-        System.out.println("do_after:" + Thread.currentThread().getName());
+    public Response call(FullHttpRequest req, ServerInstance serverInstance) {
+        return null;
     }
 
     @Override
-    public CompletableFuture<PampasResponse<String>> doExecute(PampasRequest<FullHttpRequest> req) {
-        return CompletableFuture.completedFuture(PampasResponse.OK_RESP);
+    public CompletableFuture<Response> asyncCall(FullHttpRequest req, ServerInstance serverInstance) {
+
+        Request request = new Request.Builder()
+//                .url(fetchUrl)
+                .build();
+//        request.newBuilder()
+        return null;
     }
-
-
 }

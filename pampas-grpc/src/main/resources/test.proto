@@ -16,8 +16,8 @@ message HelloResp {
 service HelloService {
     rpc sayHello (HelloReq) returns (HelloResp) {
         option (google.api.http) = {
-            post: "/v1/example/hello"
-            get: "/v1/example/hello"
+            post: "/test"
+            get: "/test"
             body: "*"
         };
     };
