@@ -31,11 +31,11 @@
             <!--<version>${parent.version}</version>-->
         <!--</dependency>-->
 
-        <!--<dependency>-->
-            <!--<groupId>com.github.darren-fu</groupId>-->
-            <!--<artifactId>pampas-grpc</artifactId>-->
-            <!--<version>${parent.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.github.darren-fu</groupId>
+            <artifactId>pampas-grpc</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>io.netty</groupId>-->
             <!--<artifactId>netty-all</artifactId>-->

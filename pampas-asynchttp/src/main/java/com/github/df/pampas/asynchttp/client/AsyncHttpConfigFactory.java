@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.df.pampas.http.client;
+package com.github.df.pampas.asynchttp.client;
 
 import io.netty.util.HashedWheelTimer;
 import org.asynchttpclient.AsyncHttpClientConfig;
@@ -30,9 +30,11 @@ import static org.asynchttpclient.config.AsyncHttpClientConfigDefaults.*;
  * HttpClient config 工厂类
  * Created by darrenfu on 17-6-19.
  */
-public class HttpConfigFactory {
+public class AsyncHttpConfigFactory {
 
-    static HashedWheelTimer timer = new HashedWheelTimer();
+    public static final AsyncHttpClientConfig DEFAULT_CONFIG = AsyncHttpConfigFactory.createConfig(3000, 30_000);
+
+    private static HashedWheelTimer timer = new HashedWheelTimer();
 
     /**
      * 生成默认的httpclient config
@@ -51,7 +53,6 @@ public class HttpConfigFactory {
 //                .setFollowRedirect(false)
 //                .setIoThreadsCount(ioThreads);
                 .setSoReuseAddress(true)
-
                 .setConnectTimeout(connectTimeout) //连接超时
                 .setRequestTimeout(requestTimeout) //请求请求超时
                 .setReadTimeout(defaultReadTimeout()) //60_000

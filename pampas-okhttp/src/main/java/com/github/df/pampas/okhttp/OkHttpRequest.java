@@ -18,13 +18,8 @@
 
 package com.github.df.pampas.okhttp;
 
-import com.github.df.pampas.common.discover.ServerInstance;
-import com.github.df.pampas.common.exec.Caller;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.util.concurrent.CompletableFuture;
+import io.netty.handler.codec.http.FullHttpRequest;
+import lombok.Data;
 
 /**
  * Created by darrenfu on 18-2-20.
@@ -32,21 +27,8 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-20
  */
-public class OkhttpCaller implements Caller<OkHttpRequest, Response> {
-    private final OkHttpClient client = new OkHttpClient();
-
-    @Override
-    public Response call(OkHttpRequest req, ServerInstance serverInstance) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<Response> asyncCall(OkHttpRequest req, ServerInstance serverInstance) {
-
-        Request request = new Request.Builder()
-//                .url(fetchUrl)
-                .build();
-//        request.newBuilder()
-        return null;
-    }
+@Data
+public class OkHttpRequest {
+    private FullHttpRequest fullHttpRequest;
+    private String requestPath;
 }

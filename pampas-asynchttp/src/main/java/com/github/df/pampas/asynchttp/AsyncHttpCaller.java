@@ -16,14 +16,13 @@
  *
  */
 
-package com.github.df.pampas.http;
+package com.github.df.pampas.asynchttp;
 
 import com.github.df.pampas.common.discover.ServerInstance;
 import com.github.df.pampas.common.exec.Caller;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
-import io.netty.handler.codec.http.HttpHeaders;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.ListenableFuture;
@@ -42,26 +41,32 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-1-24
  */
-public class HttpCaller implements Caller<FullHttpRequest, Response> {
-    private static final Logger log = LoggerFactory.getLogger(HttpCaller.class);
+public class AsyncHttpCaller implements Caller<AsyncHttpRequest, Response> {
+    private static final Logger log = LoggerFactory.getLogger(AsyncHttpCaller.class);
+
+    private String serviceName;
 
     private AsyncHttpClient client;
 
-    @Override
-    public Response call(FullHttpRequest req, ServerInstance serverInstance) {
-        return null;
+    public AsyncHttpCaller(String serviceName, AsyncHttpClient client) {
+        this.serviceName = serviceName;
+        this.client = client;
     }
 
     @Override
-    public CompletableFuture<Response> asyncCall(FullHttpRequest req, ServerInstance serverInstance) {
-        final FullHttpRequest httpRequest = req;
+    public Response call(AsyncHttpRequest req, ServerInstance serverInstance) {
+        throw new UnsupportedOperationException("Async Http Caller不支持同步调用");
+    }
+
+    @Override
+    public CompletableFuture<Response> asyncCall(AsyncHttpRequest req, ServerInstance serverInstance) {
+        final FullHttpRequest httpRequest = req.getFullHttpRequest();
         try {
             final AsyncHttpClient httpClient = this.client;
             BoundRequestBuilder requestBuilder = new BoundRequestBuilder(httpClient,
-                    httpRequest.method().name(),
-                    true);
-            //TODO 路由,Filter
-            requestBuilder.setUri(Uri.create("http://localhost:9001/test1"));
+                    httpRequest.method().name(), true);
+
+            requestBuilder.setUri(Uri.create(serverInstance.toUri() + req.getRequestPath()));
             requestBuilder.setHeaders(httpRequest.headers());
             requestBuilder.addHeader(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 

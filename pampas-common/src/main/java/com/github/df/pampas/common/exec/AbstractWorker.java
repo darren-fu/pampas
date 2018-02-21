@@ -20,12 +20,11 @@ package com.github.df.pampas.common.exec;
 
 import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
-import com.github.df.pampas.common.tools.JsonTools;
 import com.github.df.pampas.common.tools.ResponseTools;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.EventExecutor;
 import org.slf4j.Logger;
@@ -53,7 +52,6 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
     @Override
     public Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter) {
 
-        System.out.println("req.originUri(): " + req.originUri());
         CompletableFuture<PampasResponse<R>> future = null;
         try {
             future = doExecute(req);
@@ -66,12 +64,11 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
             try {
                 PampasResponse pampasResponse = filter == null ? rsp : filter.onSuccess(req, rsp);
                 if (rsp.success()) {
-                    log.debug("成功获取响应:{}", rsp);
+                    log.debug("成功获取响应:{}", pampasResponse);
                     sendResp(req.channelHandlerContext(), pampasResponse.responseData(), req.isKeepalive());
                 } else {
                     log.error("Abstract Worker response failed", rsp.exception());
-                    HttpResponse httpResponse = ResponseTools.buildResponse(rsp.exception().getMessage());
-                    sendResp(req.channelHandlerContext(), httpResponse, req.isKeepalive());
+                    sendResp(req.channelHandlerContext(), rsp.exception().getMessage(), req.isKeepalive());
                 }
 
                 EventExecutor executor = req.channelHandlerContext().executor();
@@ -96,18 +93,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
     }
 
     protected void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
-        Object objToFlush = resp;
-        if (!(resp instanceof HttpMessage)) {
-            byte[] respBytes = JsonTools.defaultMapper().toJson(resp).getBytes();
-            FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                    HttpResponseStatus.OK,
-                    Unpooled.wrappedBuffer(respBytes));
-            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_LENGTH, respBytes.length);
-            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
-            objToFlush = fullHttpResponse;
-        }
-
-
+        HttpResponse objToFlush = ResponseTools.buildResponse(resp);
         if (keepalive) {
             ctx.writeAndFlush(objToFlush);
         } else {

@@ -24,14 +24,24 @@ import com.github.df.pampas.common.exec.payload.PampasResponse;
 import java.util.concurrent.Future;
 
 /**
- * 作业者
+ * 工作者
+ * 处理Pampas收取的请求
  * Created by darrenfu on 18-1-24.
  *
+ * @param <Q> the type parameter
+ * @param <R> the type parameter
  * @author: darrenfu
- * @date: 18-1-24
+ * @date: 18 -1-24
  */
 public interface Worker<Q extends Object, R extends Object> {
 
+    /**
+     * 执行请求和过滤器，返回Future
+     *
+     * @param req    the req
+     * @param filter the filter
+     * @return the future
+     */
     Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter);
 
 //    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);

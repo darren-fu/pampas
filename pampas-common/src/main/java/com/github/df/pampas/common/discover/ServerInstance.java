@@ -45,7 +45,7 @@ import static com.github.df.pampas.common.base.PampasConsts.Instance.*;
 @Data
 @EqualsAndHashCode(of = {"instanceId", "serviceName", "protocol", "host", "port", "room"})
 public class ServerInstance {
-    
+
     private static final Logger log = LoggerFactory.getLogger(ServerInstance.class);
 
     /**
@@ -118,6 +118,8 @@ public class ServerInstance {
     @Setter(value = AccessLevel.PRIVATE)
     private boolean ready = false;
 
+    @Setter(value = AccessLevel.PRIVATE)
+    private String uri;
 
     public ServerInstance(String serviceName) {
         this.serviceName = serviceName;
@@ -150,6 +152,16 @@ public class ServerInstance {
         return instance;
     }
 
+
+    public String toUri() {
+        if (StringUtils.isNotEmpty(uri)) {
+            return this.uri;
+        }
+        StringBuilder sb = StringBuilderFactory.DEFAULT.stringBuilder();
+        this.uri = sb.append(this.getProtocol()).append("://")
+                .append(this.getHost()).append(":").append(this.getPort()).toString();
+        return this.uri;
+    }
 
     /**
      * 服务实例准备完成

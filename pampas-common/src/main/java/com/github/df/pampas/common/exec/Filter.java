@@ -22,7 +22,7 @@ import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
 
 /**
- * 回调
+ * worker回调、过滤器
  * Created by darrenfu on 18-1-24.
  *
  * @param <Q> the type parameter

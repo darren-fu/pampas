@@ -16,8 +16,9 @@
  *
  */
 
-package com.github.df.pampas.http;
+package com.github.df.pampas.asynchttp;
 
+import com.github.df.pampas.common.discover.ServerInstance;
 import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.DefaultPampasResponse;
 import com.github.df.pampas.common.exec.payload.PampasRequest;
@@ -37,24 +38,25 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-2
  */
-public class HttpRequestWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
-    HttpCaller caller = new HttpCaller();
+public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
 
-    public HttpRequestWorker() {
+    public AsyncHttpWorker() {
     }
 
 
     @Override
     protected void doAfter(String name) {
-        System.out.println("HttpRequestWorker:" + Thread.currentThread().getName());
+        System.out.println("AsyncHttpWorker:" + Thread.currentThread().getName());
     }
 
     @Override
     public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req) {
-
+        AsyncHttpCaller caller = AsyncHttpCallerFactory.getHttpCaller(req.serviceName());
         FullHttpRequest requestData = req.requestData();
+        ServerInstance serverInstance = ServerInstance.buildWithUri(req.serviceName(), "http://localhost:9001");
 
-        CompletableFuture<Response> future = caller.asyncCall(requestData, null);
+        AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, req.path());
+        CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);
         CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {
             FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.protocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
                     //response.getResponseBodyAsByteBuffer是HeapByteBuf

@@ -25,12 +25,28 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 请求者
  *
+ * @param <Q> the type parameter
+ * @param <R> the type parameter
  * @author: darrenfu
- * @date: 18-1-26
+ * @date: 18 -1-26
  */
 public interface Caller<Q extends Object, R extends Object> {
 
+    /**
+     * 同步请求，直接返回结果
+     *
+     * @param req            the req
+     * @param serverInstance the server instance
+     * @return the r
+     */
     R call(Q req, ServerInstance serverInstance);
 
+    /**
+     * 异步请求，返回CompletableFuture
+     *
+     * @param req            the req
+     * @param serverInstance the server instance
+     * @return the completable future
+     */
     CompletableFuture<R> asyncCall(Q req, ServerInstance serverInstance);
 }

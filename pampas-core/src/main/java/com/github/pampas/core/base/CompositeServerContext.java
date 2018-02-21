@@ -20,6 +20,7 @@ package com.github.pampas.core.base;
 
 import com.github.df.pampas.common.discover.ServerContext;
 import com.github.df.pampas.common.discover.ServerInstance;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +96,12 @@ public class CompositeServerContext implements ServerContext {
                             || lastRefreshTime <= 0
                             || lastRefreshTime.longValue() != serverContext.lastRefreshedTime()) {
                         for (String serviceName : serverContext.getAllServiceName()) {
-                            instanceMap.put(serviceName, serverContext.getServerList(serviceName));
+                            if (instanceMap.contains(serviceName) && CollectionUtils.isNotEmpty(instanceMap.get(serviceName))) {
+                                instanceMap.get(serviceName).removeAll(serverContext.getServerList(serviceName));
+                                instanceMap.get(serviceName).addAll(serverContext.getServerList(serviceName));
+                            } else {
+                                instanceMap.put(serviceName, serverContext.getServerList(serviceName));
+                            }
                         }
                         this.refreshMap.put(contextHash, serverContext.lastRefreshedTime());
                         this.lastRefreshedTime = System.currentTimeMillis();

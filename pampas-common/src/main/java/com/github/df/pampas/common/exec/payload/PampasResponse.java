@@ -69,6 +69,11 @@ public interface PampasResponse<T> extends Operation {
         public boolean isCanceled() {
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "[" + OKPampasResponse.class.getSimpleName() + "]" + this.responseData();
+        }
     }
 
     class ExceptionPampasResponse implements PampasResponse<Throwable> {

@@ -21,6 +21,7 @@ package com.github.pampas.core.server;
 import com.github.df.pampas.common.exec.Worker;
 import com.github.df.pampas.common.exec.payload.DefaultPampasRequest;
 import com.github.df.pampas.common.tracer.OpenTracingContext;
+import com.github.df.pampas.grpc.GrpcWorker;
 import com.github.pampas.core.echo.EchoWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -57,9 +58,9 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private Worker worker;
 
     public HttpServerHandler() {
-        this.worker = new EchoWorker();
+//        this.worker = new EchoWorker();
 //        this.worker = new HttpRequestWorker();
-//        this.worker = new GrpcWorker();
+        this.worker = new GrpcWorker();
     }
 
 

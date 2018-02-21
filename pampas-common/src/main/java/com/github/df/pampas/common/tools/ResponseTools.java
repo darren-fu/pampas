@@ -32,15 +32,22 @@ public class ResponseTools {
     /**
      * 使用文本构建简单的HTTP响应
      *
-     * @param msg the msg
+     * @param obj the obj
      * @return the http response
      */
-    public static HttpResponse buildResponse(String msg) {
-        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                HttpResponseStatus.BAD_GATEWAY,
-                Unpooled.wrappedBuffer(msg.getBytes()));
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, msg.getBytes().length);
-        return response;
+    public static HttpResponse buildResponse(Object obj) {
+
+        if (!(obj instanceof HttpResponse)) {
+            byte[] respBytes = JsonTools.defaultMapper().toJson(obj).getBytes();
+            FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.OK,
+                    Unpooled.wrappedBuffer(respBytes));
+            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_LENGTH, respBytes.length);
+            fullHttpResponse.headers().add(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
+            return fullHttpResponse;
+        }
+        return (HttpResponse) obj;
     }
+
+
 }

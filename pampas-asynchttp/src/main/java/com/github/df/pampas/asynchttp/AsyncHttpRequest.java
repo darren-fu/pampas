@@ -16,10 +16,11 @@
  *
  */
 
-package com.github.df.pampas.http;
+package com.github.df.pampas.asynchttp;
 
-import com.github.df.pampas.common.exec.payload.PampasRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Created by darrenfu on 18-1-24.
@@ -27,10 +28,12 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @author: darrenfu
  * @date: 18-1-24
  */
-public abstract class HttpPampasRequest implements PampasRequest<FullHttpRequest> {
+@Data
+@AllArgsConstructor
+public class AsyncHttpRequest {
 
-    @Override
-    public FullHttpRequest requestData() {
-        return null;
-    }
+    private FullHttpRequest fullHttpRequest;
+
+    private String requestPath;
+
 }

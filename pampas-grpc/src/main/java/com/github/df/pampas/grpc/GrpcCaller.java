@@ -24,6 +24,7 @@ import com.github.df.pampas.grpc.classloader.DynamicMultiClassLoader;
 import com.github.df.pampas.grpc.client.GrpcRequest;
 import com.github.df.pampas.grpc.client.GrpcServiceDefine;
 import com.github.df.pampas.grpc.tools.URLTools;
+import io.grpc.CallOptions;
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.AbstractStub;
@@ -32,6 +33,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by darrenfu on 18-2-15.
@@ -61,10 +63,11 @@ public class GrpcCaller implements Caller<GrpcRequest, Object> {
             Class grpcClz = loader.load(serviceDefine.getRpcClass());
             Method newBlockingStub = grpcClz.getMethod("newBlockingStub", Channel.class);
             AbstractStub stub = (AbstractStub) newBlockingStub.invoke(grpcClz, channel);
+            stub.withDeadlineAfter(1_000, TimeUnit.MILLISECONDS);
             System.out.println(stub);
 
-//            Class reqClz = loader.load(serviceDefine.getReqPojoClass());
-            Class<?> reqClz = Class.forName("df.open.grpc.hello.HelloServiceProto$HelloReq", false, loader);
+            Class reqClz = loader.load(serviceDefine.getReqPojoClass());
+//            Class<?> reqClz = Class.forName("df.open.grpc.hello.HelloServiceProto$HelloReq", false, loader);
 
             Constructor<?> constructor = reqClz.getDeclaredConstructor();
             constructor.setAccessible(true);
@@ -90,12 +93,16 @@ public class GrpcCaller implements Caller<GrpcRequest, Object> {
 
         return null;
     }
+
     static String host = "localhost";
     static Integer server_port = 50051;
+
     private Channel createChannel(ServerInstance serverInstance) {
-//        Channel channel = ManagedChannelBuilder.forAddress(serverInstance.getHost(), serverInstance.getPort()).usePlaintext(true).build();
-//        return channel;
-        return ManagedChannelBuilder.forAddress(host, server_port).usePlaintext(true).build();
+        Channel channel = ManagedChannelBuilder
+                .forAddress(serverInstance.getHost(), serverInstance.getPort())
+                .usePlaintext(true).build();
+        return channel;
+//        return ManagedChannelBuilder.forAddress(host, server_port).usePlaintext(true).build();
     }
 
     public void doCallAsync() throws Exception {
