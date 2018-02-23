@@ -20,11 +20,15 @@ package com.github.df.pampas.common.route;
 
 /**
  * API路由选择器
- * RequestURI + Header --#Selector#--> UpstreamURI + Header
+ * RequestURI + Header --#Selector#--> Locator
  * Created by darrenfu on 18-2-10.
  *
  * @author: darrenfu
  * @date: 18-2-10
  */
-public interface Selector {
+public interface Selector<R> {
+
+    boolean isMatch(R request);
+
+    Locator select(R request);
 }

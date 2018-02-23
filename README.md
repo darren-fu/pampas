@@ -1,5 +1,9 @@
 > developing... 
 
+# Mind-Map 
+
+![pampas](https://raw.githubusercontent.com/darren-fu/scrip-paper/master/imgs/pampas_brain.png)
+
 # pampas
 API网关  
 
@@ -17,8 +21,6 @@ API网关
 
 # pampas-ui
 网关管理平台
-- 页面(nodejs)
-- 后台(spring-boot) 
 
 [pampas-ui](https://github.com/darren-fu/pampas-ui)
 

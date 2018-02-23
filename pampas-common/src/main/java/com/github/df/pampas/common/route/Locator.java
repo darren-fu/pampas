@@ -19,12 +19,15 @@
 package com.github.df.pampas.common.route;
 
 /**
- * Created by darrenfu on 18-2-10.
+ * 标明路由的目标服务名称 和 路径
+ * Created by darrenfu on 18-2-23.
  *
  * @author: darrenfu
- * @date: 18-2-10
+ * @date: 18-2-23
  */
-public interface Mapper<R> {
+public interface Locator {
 
-    boolean isMatch(R request);
+    String serviceName();
+
+    String mappedPath();
 }

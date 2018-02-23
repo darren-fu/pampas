@@ -19,12 +19,10 @@
 package com.github.df.pampas.common.route;
 
 /**
- * Created by darrenfu on 18-2-10.
+ * Created by darrenfu on 18-2-23.
  *
  * @author: darrenfu
- * @date: 18-2-10
+ * @date: 18-2-23
  */
-public interface Mapper<R> {
-
-    boolean isMatch(R request);
+public class RouteRuleProperties {
 }
