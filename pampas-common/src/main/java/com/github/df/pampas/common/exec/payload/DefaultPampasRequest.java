@@ -131,9 +131,9 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     private void unpack(String uri) {
         this.uri = uri;
-        int i = uri.indexOf("?"); // seperator between body and parameters
+        int i = uri.indexOf("?"); // split between body and parameters
         if (i >= 1) {
-            this.parameters = new HashMap<String, String>();
+            this.parameters = new HashMap();
 
             String[] parts = uri.substring(i + 1).split("\\&");
 

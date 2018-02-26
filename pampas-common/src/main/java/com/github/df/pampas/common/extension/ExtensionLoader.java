@@ -213,11 +213,11 @@ public class ExtensionLoader<T> {
 
         // 多个实现，按优先级排序返回
         for (Map.Entry<String, Class<T>> entry : extensionClasses.entrySet()) {
-            Activation activation = entry.getValue().getAnnotation(Activation.class);
+            SpiCondition spiCondition = entry.getValue().getAnnotation(SpiCondition.class);
             if (StringUtils.isBlank(key)) {
                 exts.add(getExtension(entry.getKey()));
-            } else if (activation != null && activation.key() != null) {
-                for (String k : activation.key()) {
+            } else if (spiCondition != null && spiCondition.key() != null) {
+                for (String k : spiCondition.key()) {
                     if (key.equals(k)) {
                         exts.add(getExtension(entry.getKey()));
                         break;
@@ -225,9 +225,9 @@ public class ExtensionLoader<T> {
                 }
             }
         }
-//        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(Activation.class).sequence()));
+//        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(SpiCondition.class).order()));
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-        Collections.sort(exts, new ActivationComparator<T>());
+        Collections.sort(exts, new SpiComparator<T>());
         return exts;
     }
 

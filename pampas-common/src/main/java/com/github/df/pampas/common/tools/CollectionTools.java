@@ -37,10 +37,15 @@ public class CollectionTools {
     }
 
     public static <K> List<K> toList(K... val) {
-        if (val != null && val.length > 0) {
-            return Arrays.asList(val);
+        if (val == null || val.length == 0) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        List<K> list = new ArrayList<>(val.length);
+        for (K k : val) {
+            list.add(k);
+        }
+
+        return list;
     }
 
 }

@@ -18,7 +18,6 @@
 
 package com.github.df.pampas.common.tools;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;

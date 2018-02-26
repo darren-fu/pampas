@@ -18,6 +18,9 @@
 
 package com.github.df.pampas.common.route;
 
+import com.github.df.pampas.common.extension.Scope;
+import com.github.df.pampas.common.extension.Spi;
+
 /**
  * API路由选择器
  * RequestURI + Header --#Selector#--> Locator
@@ -26,6 +29,7 @@ package com.github.df.pampas.common.route;
  * @author: darrenfu
  * @date: 18-2-10
  */
+@Spi(scope = Scope.SINGLETON)
 public interface Selector<R> {
 
     boolean isMatch(R request);

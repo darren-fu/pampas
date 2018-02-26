@@ -18,6 +18,10 @@
 
 package com.github.df.pampas.common.route;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 标明路由的目标服务名称 和 路径
  * Created by darrenfu on 18-2-23.
@@ -25,9 +29,13 @@ package com.github.df.pampas.common.route;
  * @author: darrenfu
  * @date: 18-2-23
  */
-public interface Locator {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Locator {
 
-    String serviceName();
+    private String serviceName;
 
-    String mappedPath();
+    private String mappedPath;
+
 }

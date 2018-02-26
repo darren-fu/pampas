@@ -102,7 +102,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         if (log.isTraceEnabled()) {
             log.trace("http request:{}", httpRequest);
         }
-
+        System.out.println(httpRequest.uri());
         Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
         Span span = spanBuilder.start();
         span.setTag("method", httpRequest.method().name());
