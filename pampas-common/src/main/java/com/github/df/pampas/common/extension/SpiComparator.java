@@ -41,6 +41,5 @@ public class SpiComparator<T> implements Comparator<T> {
             return p1.order() - p2.order();
         }
     }
-
-
+ 
 }
