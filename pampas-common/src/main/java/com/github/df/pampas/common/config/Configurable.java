@@ -16,30 +16,43 @@
  *
  */
 
-package com.github.df.pampas.common.extension;
-
-import java.lang.annotation.*;
+package com.github.df.pampas.common.config;
 
 /**
- * Spi有多个实现时，可以根据条件进行过滤、排序后再返回。
+ * 可配置化的定义接口
+ * Created by darrenfu on 18-3-4.
+ *
+ * @author: darrenfu
+ * @date: 18 -3-4
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SpiCondition {
+public interface Configurable {
+
 
     /**
-     * seq号越小，在返回的list<Instance>中的位置越靠前，尽量使用 0-100以内的数字
+     * 获取KEY，用于区分不同的可配置对象
+     *
+     * @return
      */
-    int order() default 20;
+    String getKey();
+
 
     /**
-     * spi 的key，获取spi列表时，根据key进行匹配，当key中存在待过滤的search-key时，匹配成功
+     * 默认配置项
+     *
+     * @return the version config
      */
-    String[] key() default "";
+    VersionConfig defaultConfig();
 
     /**
-     * 是否支持重试的时候也调用
+     * 重新加载配置项，可能是从远程加载
+     *
+     * @return the version config
      */
-    boolean retry() default true;
+    VersionConfig reloadConfig();
+
+    /**
+     * 使用配置项从新配置当前对象
+     */
+    void setupWithConfig(VersionConfig versionConfig);
+
 }

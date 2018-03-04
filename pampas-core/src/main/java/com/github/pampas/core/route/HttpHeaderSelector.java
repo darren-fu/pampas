@@ -18,19 +18,20 @@
 
 package com.github.pampas.core.route;
 
-import com.github.df.pampas.common.extension.Spi;
+import com.github.df.pampas.common.extension.SpiMeta;
 import com.github.df.pampas.common.route.Locator;
 import com.github.df.pampas.common.route.Selector;
 import com.github.df.pampas.common.tools.RequestTools;
 import io.netty.handler.codec.http.HttpRequest;
 
 /**
+ * 针对Header的选择器
  * Created by darrenfu on 18-2-26.
  *
  * @author: darrenfu
  * @date: 18-2-26
  */
-@Spi
+@SpiMeta(name = "header-selector", order = 10)
 public class HttpHeaderSelector implements Selector<HttpRequest> {
 
     private static final String DEFAULT_HEADER_NAME = "P-SRV-NAME";
@@ -55,5 +56,12 @@ public class HttpHeaderSelector implements Selector<HttpRequest> {
     public Locator select(HttpRequest request) {
         return new Locator(request.headers().get(this.header),
                 RequestTools.getPathInUri(request.uri()));
+    }
+
+
+    public static void main(String[] args) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName("com.github.df.pampas.common.route.Selector");
+
+
     }
 }

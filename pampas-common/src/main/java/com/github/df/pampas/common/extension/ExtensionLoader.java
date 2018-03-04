@@ -213,7 +213,7 @@ public class ExtensionLoader<T> {
 
         // 多个实现，按优先级排序返回
         for (Map.Entry<String, Class<T>> entry : extensionClasses.entrySet()) {
-            SpiCondition spiCondition = entry.getValue().getAnnotation(SpiCondition.class);
+            SpiMeta spiCondition = entry.getValue().getAnnotation(SpiMeta.class);
             if (StringUtils.isBlank(key)) {
                 exts.add(getExtension(entry.getKey()));
             } else if (spiCondition != null && spiCondition.key() != null) {

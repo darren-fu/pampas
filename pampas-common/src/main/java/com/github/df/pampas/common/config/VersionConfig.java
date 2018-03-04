@@ -16,30 +16,38 @@
  *
  */
 
-package com.github.df.pampas.common.extension;
+package com.github.df.pampas.common.config;
 
-import java.util.Comparator;
+import java.math.BigDecimal;
 
 /**
- * Priority comparator
+ * 版本化配置
+ * Created by darrenfu on 18-3-4.
+ *
+ * @author: darrenfu
+ * @date: 18 -3-4
  */
-
-public class SpiComparator<T> implements Comparator<T> {
+public interface VersionConfig {
 
     /**
-     * order 大的排在后面,如果没有设置sequence的排到最前面
+     * 版本
+     *
+     * @return the version
      */
-    @Override
-    public int compare(T o1, T o2) {
-        SpiMeta p1 = o1.getClass().getAnnotation(SpiMeta.class);
-        SpiMeta p2 = o2.getClass().getAnnotation(SpiMeta.class);
-        if (p1 == null) {
+    BigDecimal getVersion();
+
+
+    /**
+     * 与otherVersionConfig进行版本比较
+     *
+     * @param otherVersionConfig
+     * @return 1版本比otherVersionConfig更高 0相同 -1低于otherVersionConfig
+     */
+    default int compareWith(VersionConfig otherVersionConfig) {
+        if (otherVersionConfig == null) {
             return 1;
-        } else if (p2 == null) {
-            return -1;
-        } else {
-            return p1.order() - p2.order();
         }
+        return this.getVersion().compareTo(otherVersionConfig.getVersion());
     }
- 
+
 }
