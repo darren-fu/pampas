@@ -46,21 +46,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * </pre>
  * <p>
  * ->from motan
+ *
+ * @param <T> the type parameter
  */
-@SuppressWarnings({"unused", "Duplicates"})
+@SuppressWarnings({"unused", "Duplicates", "unchecked", "WeakerAccess"})
 public class SpiContext<T> {
 
     private static final Logger log = LoggerFactory.getLogger(SpiContext.class);
 
     private static InnerMethodHolder inner = new InnerMethodHolder();
 
+    //SpiContext 缓存
+    private static ConcurrentMap<Class<?>, SpiContext<?>> contextMap = new ConcurrentHashMap();
 
-    private static ConcurrentMap<Class<?>, SpiContext<?>> contextMap = new ConcurrentHashMap<Class<?>, SpiContext<?>>();
-
+    //单例缓存
     private ConcurrentMap<String, T> singletonInstances = null;
+
+    //SpiClass缓存
     private ConcurrentMap<String, SpiClass<T>> spiClassMap = null;
 
+    //SPI interface
     private Class<T> type;
+
+    //是否完成初始化：加载Spi实现类
     private volatile AtomicBoolean init = new AtomicBoolean(false);
 
     // spi path prefix
@@ -78,6 +86,13 @@ public class SpiContext<T> {
     }
 
 
+    /**
+     * Gets context.
+     *
+     * @param <T>  the type parameter
+     * @param type the type
+     * @return the context
+     */
     @SuppressWarnings("unchecked")
     public static <T> SpiContext<T> getContext(Class<T> type) {
         inner.checkInterfaceType(type);
@@ -95,7 +110,7 @@ public class SpiContext<T> {
         SpiContext<T> loader = (SpiContext<T>) contextMap.get(type);
 
         if (loader == null) {
-            loader = new SpiContext<T>(type);
+            loader = new SpiContext(type);
 
             contextMap.putIfAbsent(type, loader);
 
@@ -113,6 +128,12 @@ public class SpiContext<T> {
         }
     }
 
+    /**
+     * Gets extension class.
+     *
+     * @param name the name
+     * @return the extension class
+     */
     public Class<T> getExtensionClass(String name) {
         checkInit();
 
@@ -121,6 +142,12 @@ public class SpiContext<T> {
         return spiClass == null ? null : spiClass.getClz();
     }
 
+    /**
+     * Gets extension.
+     *
+     * @param name the name
+     * @return the extension
+     */
     public T getExtension(String name) {
         checkInit();
 
@@ -168,23 +195,21 @@ public class SpiContext<T> {
             return null;
         }
 
-        if (obj == null) {
-            obj = singletonInstances.get(name);
-            if (obj != null) {
-                return obj;
-            }
-
-            obj = clz.newInstance();
-            if (obj instanceof Configurable) {
-                // todo: init with Config
-            }
-            singletonInstances.putIfAbsent(name, obj);
-            obj = singletonInstances.get(name);
+        obj = clz.newInstance();
+        if (obj instanceof Configurable) {
+            // todo: init with Config
         }
+        singletonInstances.putIfAbsent(name, obj);
+        obj = singletonInstances.get(name);
 
         return obj;
     }
 
+    /**
+     * Add extension class.
+     *
+     * @param clz the clz
+     */
     public void addExtensionClass(Class<T> clz) {
         if (clz == null) {
             return;
@@ -211,7 +236,8 @@ public class SpiContext<T> {
      * 有些地方需要spi的所有激活的instances，所以需要能返回一个列表的方法 注意：1 SpiMeta 中的active 为true； 2
      * 按照spiMeta中的sequence进行排序 FIXME： 是否需要对singleton来区分对待，后面再考虑 fishermen
      *
-     * @return
+     * @param key the key
+     * @return extensions extensions
      */
     @SuppressWarnings("unchecked")
     public List<T> getExtensions(String key) {
@@ -222,7 +248,7 @@ public class SpiContext<T> {
         }
 
         // 如果只有一个实现，直接返回
-        List<T> exts = new ArrayList<T>(spiClassMap.size());
+        List<T> exts = new ArrayList(spiClassMap.size());
 
         // 多个实现，按优先级排序返回
         for (Map.Entry<String, SpiClass<T>> entry : spiClassMap.entrySet()) {
@@ -240,14 +266,10 @@ public class SpiContext<T> {
         }
 //        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(SpiCondition.class).order()));
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-        Collections.sort(exts, new SpiComparator<T>());
+        Collections.sort(exts, new SpiComparator());
         return exts;
     }
 
-
-    private static <T> boolean isSpiType(Class<T> clz) {
-        return clz.isAnnotationPresent(Spi.class);
-    }
 
     private ConcurrentMap<String, SpiClass<T>> loadExtensionClasses(String prefix) {
         String fullName = prefix + type.getName();
@@ -323,28 +345,32 @@ public class SpiContext<T> {
 
     /**
      * 获取扩展点的名字
-     * <p>
-     * <pre>
-     * 		如果扩展类有SpiMeta的注解，那么获取对应的name，如果没有的话获取classname
-     * </pre>
+     * 如果扩展类有SpiMeta的注解，那么获取对应的name，如果没有的话获取classname
      *
-     * @param clz
-     * @return
+     * @param clz the clz
+     * @return spi name
      */
     public String getSpiName(Class<?> clz) {
         SpiMeta spiMeta = clz.getAnnotation(SpiMeta.class);
-
-        String name = (spiMeta != null && !"".equals(spiMeta.name())) ? spiMeta.name() : clz.getSimpleName();
-
-        return name;
+        return (spiMeta != null && !"".equals(spiMeta.name())) ? spiMeta.name() : clz.getSimpleName();
     }
 
+    /**
+     * Gets spi meta.
+     *
+     * @param clz the clz
+     * @return the spi meta
+     */
     public SpiMeta getSpiMeta(Class<?> clz) {
-        SpiMeta spiMeta = clz.getAnnotation(SpiMeta.class);
-
-        return spiMeta;
+        return clz.getAnnotation(SpiMeta.class);
     }
 
+    /**
+     * Gets scope.
+     *
+     * @param clz the clz
+     * @return the scope
+     */
     public Scope getScope(Class<?> clz) {
         Spi spi = clz.getAnnotation(Spi.class);
         return spi.scope();
@@ -356,6 +382,9 @@ public class SpiContext<T> {
      */
     private static class InnerMethodHolder {
 
+        private <T> boolean isSpiType(Class<T> clz) {
+            return clz.isAnnotationPresent(Spi.class);
+        }
 
         /**
          * check clz
@@ -365,12 +394,12 @@ public class SpiContext<T> {
          * 		2.  is contains @Spi annotation
          * </pre>
          *
-         * @param <T>
-         * @param clz
+         * @param <T> the type parameter
+         * @param clz the clz
          */
-        private <T> void checkInterfaceType(Class<T> clz) {
+        protected <T> void checkInterfaceType(Class<T> clz) {
             if (clz == null) {
-                inner.failThrows(clz, "Error extension type is null");
+                inner.failThrows(null, "Error extension type is null");
             }
 
             if (!clz.isInterface()) {
@@ -392,9 +421,10 @@ public class SpiContext<T> {
          * 		3) check extension clz instanceof Type.class
          * </pre>
          *
-         * @param clz
+         * @param spiType the spi type
+         * @param clz     the clz
          */
-        private void checkExtensionType(Class spiType, Class clz) {
+        protected void checkExtensionType(Class spiType, Class clz) {
             checkClassPublic(clz);
 
             checkConstructorPublic(clz);
@@ -402,19 +432,35 @@ public class SpiContext<T> {
             checkClassInherit(spiType, clz);
         }
 
-        private void checkClassInherit(Class spiType, Class clz) {
+        /**
+         * Check class inherit.
+         *
+         * @param spiType the spi type
+         * @param clz     the clz
+         */
+        protected void checkClassInherit(Class spiType, Class clz) {
             if (!spiType.isAssignableFrom(clz)) {
                 failThrows(clz, "Error is not instanceof " + spiType.getName());
             }
         }
 
-        private void checkClassPublic(Class clz) {
+        /**
+         * Check class public.
+         *
+         * @param clz the clz
+         */
+        protected void checkClassPublic(Class clz) {
             if (!Modifier.isPublic(clz.getModifiers())) {
                 failThrows(clz, "Error is not a public class");
             }
         }
 
-        private void checkConstructorPublic(Class clz) {
+        /**
+         * Check constructor public.
+         *
+         * @param clz the clz
+         */
+        protected void checkConstructorPublic(Class clz) {
             Constructor<?>[] constructors = clz.getConstructors();
 
             if (constructors == null || constructors.length == 0) {
@@ -430,14 +476,22 @@ public class SpiContext<T> {
             failThrows(clz, "Error has no public no-args constructor");
         }
 
-        private void parseUrl(Class type, URL url, List<String> classNames) throws ServiceConfigurationError {
+        /**
+         * Parse url.
+         *
+         * @param type       the type
+         * @param url        the url
+         * @param classNames the class names
+         * @throws ServiceConfigurationError the service configuration error
+         */
+        protected void parseUrl(Class type, URL url, List<String> classNames) throws ServiceConfigurationError {
             InputStream inputStream = null;
             BufferedReader reader = null;
             try {
                 inputStream = url.openStream();
                 reader = new BufferedReader(new InputStreamReader(inputStream, PampasConsts.CHARSET_UTF8));
 
-                String line = null;
+                String line;
                 int indexNumber = 0;
 
                 while ((line = reader.readLine()) != null) {
@@ -460,7 +514,18 @@ public class SpiContext<T> {
             }
         }
 
-        private void parseLine(Class type, URL url, String line, int lineNumber, List<String> names) throws IOException,
+        /**
+         * Parse line.
+         *
+         * @param type       the type
+         * @param url        the url
+         * @param line       the line
+         * @param lineNumber the line number
+         * @param names      the names
+         * @throws IOException               the io exception
+         * @throws ServiceConfigurationError the service configuration error
+         */
+        protected void parseLine(Class type, URL url, String line, int lineNumber, List<String> names) throws IOException,
                 ServiceConfigurationError {
             int ci = line.indexOf('#');
 
@@ -495,20 +560,24 @@ public class SpiContext<T> {
             }
         }
 
-        private static <T> void failLog(Class<T> type, String msg, Throwable cause) {
-            log.error(type.getName() + ": " + msg, cause);
+        private <T> void failLog(Class<T> type, String msg, Throwable cause) {
+            log.error(typeName(type) + ": " + msg, cause);
         }
 
-        private static <T> void failThrows(Class<T> type, String msg, Throwable cause) {
-            throw new PampasException(type.getName() + ": " + msg, cause);
+        private <T> void failThrows(Class<T> type, String msg, Throwable cause) {
+            throw new PampasException(typeName(type) + ": " + msg, cause);
         }
 
-        private static <T> void failThrows(Class<T> type, String msg) {
-            throw new PampasException(type.getName() + ": " + msg);
+        private <T> void failThrows(Class<T> type, String msg) {
+            throw new PampasException(typeName(type) + ": " + msg);
         }
 
-        private static <T> void failThrows(Class<T> type, URL url, int line, String msg) throws ServiceConfigurationError {
+        private <T> void failThrows(Class<T> type, URL url, int line, String msg) throws ServiceConfigurationError {
             failThrows(type, url + ":" + line + ": " + msg);
+        }
+
+        private String typeName(Class type) {
+            return type == null ? "" : type.getName();
         }
     }
 
