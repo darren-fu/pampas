@@ -19,6 +19,7 @@
 package com.github.df.pampas.common.tools;
 
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -46,6 +47,17 @@ public class CollectionTools {
         }
 
         return list;
+    }
+
+
+    public static <T> T[] toArray(Collection<T> coll, Class<T> clz) {
+
+        if (coll == null || coll.size() == 0) {
+            return (T[]) Array.newInstance(clz, 0);
+        }
+
+        T[] dest = (T[]) Array.newInstance(clz, coll.size());
+        return coll.toArray(dest);
     }
 
 }

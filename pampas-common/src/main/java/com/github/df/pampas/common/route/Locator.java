@@ -34,6 +34,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Locator {
 
+    private String worker;
+
     private String serviceName;
 
     private String mappedPath;

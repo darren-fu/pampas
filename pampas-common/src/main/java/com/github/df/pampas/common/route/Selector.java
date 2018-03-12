@@ -32,6 +32,8 @@ import com.github.df.pampas.common.extension.Spi;
 @Spi(scope = Scope.SINGLETON)
 public interface Selector<R> {
 
+    String name();
+
     boolean isMatch(R request);
 
     Locator select(R request);

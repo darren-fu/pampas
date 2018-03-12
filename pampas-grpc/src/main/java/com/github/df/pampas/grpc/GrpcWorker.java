@@ -24,6 +24,7 @@ import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.Caller;
 import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.extension.SpiMeta;
 import com.github.df.pampas.grpc.classloader.DynamicMultiClassLoader;
 import com.github.df.pampas.grpc.client.GrpcRequest;
 import com.github.df.pampas.grpc.client.GrpcServiceDefine;
@@ -55,6 +56,7 @@ import static com.github.df.pampas.grpc.ClientDynamic.channel;
  * @author: darrenfu
  * @date: 18-2-15
  */
+@SpiMeta(name = "grpc", order = 20)
 public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
     private static final Logger log = LoggerFactory.getLogger(GrpcWorker.class);
 

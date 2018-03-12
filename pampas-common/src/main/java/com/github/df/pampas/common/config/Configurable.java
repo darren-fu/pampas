@@ -18,6 +18,8 @@
 
 package com.github.df.pampas.common.config;
 
+import com.github.df.pampas.common.extension.SpiContext;
+
 /**
  * 可配置化的定义接口
  * Created by darrenfu on 18-3-4.
@@ -25,7 +27,7 @@ package com.github.df.pampas.common.config;
  * @author: darrenfu
  * @date: 18 -3-4
  */
-public interface Configurable {
+public interface Configurable<T extends VersionConfig> {
 
 
     /**
@@ -33,26 +35,30 @@ public interface Configurable {
      *
      * @return
      */
-    String getKey();
+    default String getKey() {
+        return SpiContext.getSpiName(getClass());
+    }
 
 
     /**
-     * 默认配置项
+     * 获取配置项
      *
      * @return the version config
      */
-    VersionConfig defaultConfig();
+    T getConfig();
+
+
+    Class<T> configClass();
+
 
     /**
-     * 重新加载配置项，可能是从远程加载
-     *
-     * @return the version config
+     * 使用配置项配置当前对象
      */
-    VersionConfig reloadConfig();
+    Configurable setupWithConfig(T t);
 
-    /**
-     * 使用配置项从新配置当前对象
-     */
-    void setupWithConfig(VersionConfig versionConfig);
+
+    default void register() {
+    }
+
 
 }

@@ -104,7 +104,7 @@ public class ExtensionLoader<T> {
                 return clz.newInstance();
             }
         } catch (Exception e) {
-            failThrows(type, "Error when getExtension " + name, e);
+            failThrows(type, "Error when getSpiInstance " + name, e);
         }
 
         return null;
@@ -227,7 +227,7 @@ public class ExtensionLoader<T> {
         }
 //        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(SpiCondition.class).order()));
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-        Collections.sort(exts, new SpiComparator<T>());
+//        Collections.sort(exts, new SpiComparator<>());
         return exts;
     }
 

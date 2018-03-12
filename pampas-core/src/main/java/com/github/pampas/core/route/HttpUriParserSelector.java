@@ -19,13 +19,12 @@
 package com.github.pampas.core.route;
 
 import com.github.df.pampas.common.config.Configurable;
-import com.github.df.pampas.common.config.VersionConfig;
 import com.github.df.pampas.common.extension.SpiMeta;
 import com.github.df.pampas.common.route.Locator;
 import com.github.df.pampas.common.route.Selector;
 import io.netty.handler.codec.http.HttpRequest;
 
-import static com.github.pampas.core.route.HttpUriParserSelector.kEY_SELECTOR;
+import static com.github.pampas.core.route.HttpUriParserSelector.SELECTOR_NAME;
 
 /**
  * 针对URI的选择器
@@ -37,10 +36,10 @@ import static com.github.pampas.core.route.HttpUriParserSelector.kEY_SELECTOR;
  * @author: darrenfu
  * @date: 18-3-4
  */
-@SpiMeta(name = kEY_SELECTOR, order = 100)
-public class HttpUriParserSelector implements Selector<HttpRequest>, Configurable {
+@SpiMeta(name = SELECTOR_NAME, order = 100)
+public class HttpUriParserSelector implements Selector<HttpRequest>, Configurable<RouteRuleConfig> {
 
-    protected static final String kEY_SELECTOR = "uri-selector";
+    protected static final String SELECTOR_NAME = "uri-parser-selector";
 
     //是否去除URI中的serviceName
     private boolean needStripServiceName;
@@ -52,6 +51,11 @@ public class HttpUriParserSelector implements Selector<HttpRequest>, Configurabl
 
     public HttpUriParserSelector(boolean needStripServiceName) {
         this.needStripServiceName = needStripServiceName;
+    }
+
+    @Override
+    public String name() {
+        return SELECTOR_NAME;
     }
 
     @Override
@@ -73,25 +77,25 @@ public class HttpUriParserSelector implements Selector<HttpRequest>, Configurabl
         this.needStripServiceName = needStripServiceName;
     }
 
-    @Override
-    public String getKey() {
-        return kEY_SELECTOR;
+
+    public static void main(String[] args) {
+        HttpUriParserSelector selector = new HttpUriParserSelector();
+        selector.register();
+        System.out.println(selector.getKey());
     }
 
     @Override
-    public VersionConfig defaultConfig() {
+    public RouteRuleConfig getConfig() {
         return null;
     }
 
     @Override
-    public VersionConfig reloadConfig() {
-        return null;
+    public Class<RouteRuleConfig> configClass() {
+        return RouteRuleConfig.class;
     }
 
     @Override
-    public void setupWithConfig(VersionConfig versionConfig) {
-
+    public Configurable setupWithConfig(RouteRuleConfig routeRuleConfig) {
+        return null;
     }
-
-
 }

@@ -23,6 +23,7 @@ import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.DefaultPampasResponse;
 import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.extension.SpiMeta;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -38,6 +39,7 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-2
  */
+@SpiMeta(name = "async-http",order = 20)
 public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
 
     public AsyncHttpWorker() {

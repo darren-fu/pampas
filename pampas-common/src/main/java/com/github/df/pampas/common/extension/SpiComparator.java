@@ -24,15 +24,15 @@ import java.util.Comparator;
  * Priority comparator
  */
 
-public class SpiComparator<T> implements Comparator<T> {
+public class SpiComparator implements Comparator<Class<?>> {
 
     /**
      * order 大的排在后面,如果没有设置sequence的排到最前面
      */
     @Override
-    public int compare(T o1, T o2) {
-        SpiMeta p1 = o1.getClass().getAnnotation(SpiMeta.class);
-        SpiMeta p2 = o2.getClass().getAnnotation(SpiMeta.class);
+    public int compare(Class<?> o1, Class<?> o2) {
+        SpiMeta p1 = o1.getAnnotation(SpiMeta.class);
+        SpiMeta p2 = o2.getAnnotation(SpiMeta.class);
         if (p1 == null) {
             return 1;
         } else if (p2 == null) {
@@ -41,5 +41,5 @@ public class SpiComparator<T> implements Comparator<T> {
             return p1.order() - p2.order();
         }
     }
- 
+
 }

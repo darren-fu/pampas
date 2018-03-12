@@ -19,8 +19,11 @@
 package com.github.df.pampas.common.extension;
 
 import com.github.df.pampas.common.base.PampasConsts;
+import com.github.df.pampas.common.config.ConfigContext;
 import com.github.df.pampas.common.config.Configurable;
+import com.github.df.pampas.common.config.VersionConfig;
 import com.github.df.pampas.common.exception.PampasException;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -61,6 +65,7 @@ public class SpiContext<T> {
 
     //单例缓存
     private ConcurrentMap<String, T> singletonInstances = null;
+    private static ConcurrentMap<Class, Object> singletonClzInstances = new ConcurrentHashMap();
 
     //SpiClass缓存
     private ConcurrentMap<String, SpiClass<T>> spiClassMap = null;
@@ -123,7 +128,7 @@ public class SpiContext<T> {
 
     private void checkInit() {
         if (!init.get() && init.compareAndSet(false, true)) {
-            spiClassMap = loadExtensionClasses(PREFIX);
+            spiClassMap = loadSpiClasses(PREFIX);
             singletonInstances = new ConcurrentHashMap();
         }
     }
@@ -134,7 +139,7 @@ public class SpiContext<T> {
      * @param name the name
      * @return the extension class
      */
-    public Class<T> getExtensionClass(String name) {
+    public Class<T> getSpiClass(String name) {
         checkInit();
 
         SpiClass spiClass = spiClassMap.get(name);
@@ -148,7 +153,7 @@ public class SpiContext<T> {
      * @param name the name
      * @return the extension
      */
-    public T getExtension(String name) {
+    public T getSpiInstance(String name) {
         checkInit();
 
         if (name == null) {
@@ -173,7 +178,7 @@ public class SpiContext<T> {
                 }
             }
         } catch (Exception e) {
-            inner.failThrows(type, "Error when getExtension " + name, e);
+            inner.failThrows(type, "Error when getSpiInstance " + name, e);
         }
 
 
@@ -196,12 +201,18 @@ public class SpiContext<T> {
         }
 
         obj = clz.newInstance();
-        if (obj instanceof Configurable) {
-            // todo: init with Config
-        }
+
         singletonInstances.putIfAbsent(name, obj);
         obj = singletonInstances.get(name);
+        singletonClzInstances.put(clz, obj);
+        if (obj instanceof Configurable) {
+            // todo: init with Config
+            Configurable configurable = (Configurable) obj;
+            Class<? extends VersionConfig> configClass = configurable.configClass();
 
+            configurable.setupWithConfig(ConfigContext.getConfig(configClass));
+            ConfigContext.addListenerConfig(configClass, clz);
+        }
         return obj;
     }
 
@@ -210,7 +221,7 @@ public class SpiContext<T> {
      *
      * @param clz the clz
      */
-    public void addExtensionClass(Class<T> clz) {
+    public void addSpiClass(Class<T> clz) {
         if (clz == null) {
             return;
         }
@@ -240,7 +251,24 @@ public class SpiContext<T> {
      * @return extensions extensions
      */
     @SuppressWarnings("unchecked")
-    public List<T> getExtensions(String key) {
+    public List<T> getSpiInstances(String key) {
+
+        if (spiClassMap.size() == 0) {
+            return Collections.emptyList();
+        }
+
+        List<Class<T>> spiClassList = getSpiClasses(key);
+        if (CollectionUtils.isEmpty(spiClassList)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        List<T> list = spiClassList.stream().map(clz -> getSpiInstance(getSpiName(clz))).collect(Collectors.toList());
+
+        return list;
+    }
+
+
+    public List<Class<T>> getSpiClasses(String key) {
         checkInit();
 
         if (spiClassMap.size() == 0) {
@@ -248,30 +276,30 @@ public class SpiContext<T> {
         }
 
         // 如果只有一个实现，直接返回
-        List<T> exts = new ArrayList(spiClassMap.size());
+        List<Class<T>> exts = new ArrayList(spiClassMap.size());
 
         // 多个实现，按优先级排序返回
         for (Map.Entry<String, SpiClass<T>> entry : spiClassMap.entrySet()) {
-            SpiMeta spiCondition = entry.getValue().getClz().getAnnotation(SpiMeta.class);
+            Class<T> clz = entry.getValue().getClz();
+            SpiMeta spiCondition = clz.getAnnotation(SpiMeta.class);
             if (StringUtils.isBlank(key)) {
-                exts.add(getExtension(entry.getKey()));
+                exts.add(clz);
             } else if (spiCondition != null && spiCondition.key() != null) {
                 for (String k : spiCondition.key()) {
                     if (key.equals(k)) {
-                        exts.add(getExtension(entry.getKey()));
+                        exts.add(clz);
                         break;
                     }
                 }
             }
         }
-//        exts.stream().sorted(Comparator.comparingInt(v->v.getClass().getAnnotation(SpiCondition.class).order()));
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         Collections.sort(exts, new SpiComparator());
         return exts;
     }
 
 
-    private ConcurrentMap<String, SpiClass<T>> loadExtensionClasses(String prefix) {
+    private ConcurrentMap<String, SpiClass<T>> loadSpiClasses(String prefix) {
         String fullName = prefix + type.getName();
         List<String> classNames = new ArrayList();
 
@@ -294,9 +322,10 @@ public class SpiContext<T> {
             }
         } catch (Exception e) {
             throw new PampasException(
-                    "ExtensionLoader loadExtensionClasses error, prefix: " + prefix + " type: " + type.getClass(), e);
+                    "ExtensionLoader loadSpiClasses error, prefix: " + prefix + " type: " + type.getClass(), e);
         }
 
+        classNames = classNames.stream().distinct().collect(Collectors.toList());
         return loadClass(classNames);
     }
 
@@ -350,7 +379,7 @@ public class SpiContext<T> {
      * @param clz the clz
      * @return spi name
      */
-    public String getSpiName(Class<?> clz) {
+    public static String getSpiName(Class<?> clz) {
         SpiMeta spiMeta = clz.getAnnotation(SpiMeta.class);
         return (spiMeta != null && !"".equals(spiMeta.name())) ? spiMeta.name() : clz.getSimpleName();
     }
@@ -361,7 +390,7 @@ public class SpiContext<T> {
      * @param clz the clz
      * @return the spi meta
      */
-    public SpiMeta getSpiMeta(Class<?> clz) {
+    public static SpiMeta getSpiMeta(Class<?> clz) {
         return clz.getAnnotation(SpiMeta.class);
     }
 
@@ -371,11 +400,21 @@ public class SpiContext<T> {
      * @param clz the clz
      * @return the scope
      */
-    public Scope getScope(Class<?> clz) {
+    public static Scope getScope(Class<?> clz) {
         Spi spi = clz.getAnnotation(Spi.class);
         return spi.scope();
     }
 
+
+    /**
+     * 获取单例所有对象MAP
+     * class->Instance
+     *
+     * @return 单例对象map
+     */
+    public static Map<Class, Object> getSingletonInstanceMap() {
+        return Collections.unmodifiableMap(singletonClzInstances);
+    }
 
     /**
      * 内部方法持有类

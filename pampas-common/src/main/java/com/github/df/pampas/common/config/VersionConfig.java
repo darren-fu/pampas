@@ -50,4 +50,11 @@ public interface VersionConfig {
         return this.getVersion().compareTo(otherVersionConfig.getVersion());
     }
 
+
+
+    VersionConfig setupWithDefault();
+
+
+
+
 }

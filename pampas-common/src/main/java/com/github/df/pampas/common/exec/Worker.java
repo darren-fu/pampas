@@ -20,6 +20,9 @@ package com.github.df.pampas.common.exec;
 
 import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.extension.Scope;
+import com.github.df.pampas.common.extension.Spi;
+import com.github.df.pampas.common.extension.SpiMeta;
 
 import java.util.concurrent.Future;
 
@@ -33,7 +36,19 @@ import java.util.concurrent.Future;
  * @author: darrenfu
  * @date: 18 -1-24
  */
+@Spi(scope = Scope.SINGLETON)
 public interface Worker<Q extends Object, R extends Object> {
+
+    /**
+     * 工作者名称
+     *
+     * @return
+     */
+    default String name() {
+        SpiMeta spiMeta = getClass().getAnnotation(SpiMeta.class);
+        return (spiMeta != null && !"".equals(spiMeta.name())) ? spiMeta.name() : getClass().getSimpleName();
+    }
+
 
     /**
      * 执行请求和过滤器，返回Future

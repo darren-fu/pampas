@@ -21,6 +21,7 @@ package com.github.pampas.core.echo;
 import com.github.df.pampas.common.exec.AbstractWorker;
 import com.github.df.pampas.common.exec.payload.PampasRequest;
 import com.github.df.pampas.common.exec.payload.PampasResponse;
+import com.github.df.pampas.common.extension.SpiMeta;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
  * @author: darrenfu
  * @date: 18-2-2
  */
+@SpiMeta(name = "echo",order = 100)
 public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
 
     @Override

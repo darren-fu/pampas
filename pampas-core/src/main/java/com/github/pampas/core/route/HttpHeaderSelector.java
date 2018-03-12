@@ -21,8 +21,9 @@ package com.github.pampas.core.route;
 import com.github.df.pampas.common.extension.SpiMeta;
 import com.github.df.pampas.common.route.Locator;
 import com.github.df.pampas.common.route.Selector;
-import com.github.df.pampas.common.tools.RequestTools;
 import io.netty.handler.codec.http.HttpRequest;
+
+import static com.github.pampas.core.route.HttpHeaderSelector.SELECTOR_NAME;
 
 /**
  * 针对Header的选择器
@@ -31,15 +32,18 @@ import io.netty.handler.codec.http.HttpRequest;
  * @author: darrenfu
  * @date: 18-2-26
  */
-@SpiMeta(name = "header-selector", order = 10)
+@SpiMeta(name = SELECTOR_NAME, order = 80)
 public class HttpHeaderSelector implements Selector<HttpRequest> {
 
-    private static final String DEFAULT_HEADER_NAME = "P-SRV-NAME";
+    protected static final String SELECTOR_NAME = "header-selector";
+
+    private static final String DEFAULT_SRV_NAME = "P-SRV-NAME";
+    private static final String DEFAULT_TYPE_NAME = "P-PROTOCOL-NAME";
 
     public String header;
 
     public HttpHeaderSelector() {
-        this(DEFAULT_HEADER_NAME);
+        this(DEFAULT_SRV_NAME);
     }
 
     public HttpHeaderSelector(String header) {
@@ -48,14 +52,20 @@ public class HttpHeaderSelector implements Selector<HttpRequest> {
 
 
     @Override
+    public String name() {
+        return SELECTOR_NAME;
+    }
+
+    @Override
     public boolean isMatch(HttpRequest request) {
         return request.headers().contains(this.header);
     }
 
     @Override
     public Locator select(HttpRequest request) {
-        return new Locator(request.headers().get(this.header),
-                RequestTools.getPathInUri(request.uri()));
+        return new Locator();
+//        return new Locator(request.headers().get(this.header),
+//                RequestTools.getPathInUri(request.uri()));
     }
 
 
