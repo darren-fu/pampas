@@ -18,7 +18,6 @@
 
 package com.github.pampas.core;
 
-import com.github.pampas.core.test.GatewayServer2;
 import com.github.pampas.core.server.GatewayServer;
 
 
@@ -40,9 +39,10 @@ public class Application {
 
 //        OpenTracingContext.setTracerFactory(new ZipkinTraceFactory());
         GatewayServer server1 = new GatewayServer("server1", 9000);
-        GatewayServer2 server2 = new GatewayServer2("server2", 9001);
         server1.start();
 //        server2.start();
+
+
 
     }
 }

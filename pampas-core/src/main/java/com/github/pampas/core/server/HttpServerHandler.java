@@ -18,11 +18,10 @@
 
 package com.github.pampas.core.server;
 
-import com.github.df.pampas.common.exec.Worker;
-import com.github.df.pampas.common.exec.payload.DefaultPampasRequest;
-import com.github.df.pampas.common.tracer.OpenTracingContext;
-import com.github.df.pampas.grpc.GrpcWorker;
-import com.github.pampas.core.echo.EchoWorker;
+import com.github.pampas.common.exec.Worker;
+import com.github.pampas.common.exec.payload.DefaultPampasRequest;
+import com.github.pampas.common.tracer.OpenTracingContext;
+import com.github.pampas.grpc.GrpcWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;

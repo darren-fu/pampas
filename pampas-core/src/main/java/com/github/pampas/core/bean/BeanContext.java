@@ -18,8 +18,6 @@
 
 package com.github.pampas.core.bean;
 
-import com.github.df.pampas.common.config.VersionConfig;
-
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

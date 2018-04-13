@@ -18,10 +18,13 @@
 
 package com.github.pampas.core.route;
 
-import com.github.df.pampas.common.config.VersionConfig;
-import com.github.df.pampas.common.extension.SpiContext;
-import com.github.df.pampas.common.route.Selector;
-import com.github.df.pampas.common.tools.CollectionTools;
+import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.route.Selector;
+import com.github.pampas.common.tools.CollectionTools;
+import com.github.pampas.core.route.rule.DubboRule;
+import com.github.pampas.core.route.rule.HttpRule;
+import com.github.pampas.core.route.rule.GrpcRule;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,13 +36,19 @@ import java.util.stream.Collectors;
  * @author: darrenfu
  * @date: 18-2-23
  */
+
 public class RouteRuleConfig implements VersionConfig {
 
     public boolean stripPrefix;
 
-    public String defaultSelector = "";
-
     public String[] selectors;
+
+
+    private List<HttpRule> http;
+
+    private List<GrpcRule> grpc;
+
+    private List<DubboRule> dubbo;
 
 
     @Override
@@ -55,7 +64,6 @@ public class RouteRuleConfig implements VersionConfig {
     @Override
     public VersionConfig setupWithDefault() {
         this.stripPrefix = true;
-        this.defaultSelector = HttpUriParserSelector.SELECTOR_NAME;
         SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
 
         List<Class<Selector>> selectorClzList = selectorSpiContext.getSpiClasses(null);

@@ -18,10 +18,10 @@
 
 package com.github.pampas.core.route;
 
-import com.github.df.pampas.common.config.Configurable;
-import com.github.df.pampas.common.extension.SpiMeta;
-import com.github.df.pampas.common.route.Locator;
-import com.github.df.pampas.common.route.Selector;
+import com.github.pampas.common.config.Configurable;
+import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.route.Locator;
+import com.github.pampas.common.route.Selector;
 import io.netty.handler.codec.http.HttpRequest;
 
 import static com.github.pampas.core.route.HttpUriParserSelector.SELECTOR_NAME;

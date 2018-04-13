@@ -18,8 +18,8 @@
 
 package com.github.pampas.core.base;
 
-import com.github.df.pampas.common.discover.ServerContext;
-import com.github.df.pampas.common.discover.ServerInstance;
+import com.github.pampas.common.discover.ServerContext;
+import com.github.pampas.common.discover.ServerInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;

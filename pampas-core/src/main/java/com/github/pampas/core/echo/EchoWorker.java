@@ -18,10 +18,10 @@
 
 package com.github.pampas.core.echo;
 
-import com.github.df.pampas.common.exec.AbstractWorker;
-import com.github.df.pampas.common.exec.payload.PampasRequest;
-import com.github.df.pampas.common.exec.payload.PampasResponse;
-import com.github.df.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.exec.AbstractWorker;
+import com.github.pampas.common.exec.payload.PampasRequest;
+import com.github.pampas.common.exec.payload.PampasResponse;
+import com.github.pampas.common.extension.SpiMeta;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 import java.util.concurrent.CompletableFuture;

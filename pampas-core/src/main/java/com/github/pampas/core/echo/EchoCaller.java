@@ -18,8 +18,8 @@
 
 package com.github.pampas.core.echo;
 
-import com.github.df.pampas.common.discover.ServerInstance;
-import com.github.df.pampas.common.exec.Caller;
+import com.github.pampas.common.discover.ServerInstance;
+import com.github.pampas.common.exec.Caller;
 
 import java.util.concurrent.CompletableFuture;
 

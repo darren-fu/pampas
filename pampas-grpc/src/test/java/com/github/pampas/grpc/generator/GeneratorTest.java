@@ -18,9 +18,9 @@
 
 package com.github.pampas.grpc.generator;
 
-import com.github.df.pampas.grpc.runtime.CompileApi;
-import com.github.df.pampas.grpc.Consts;
-import com.github.df.pampas.grpc.runtime.DynamicJarCreator;
+import com.github.pampas.grpc.runtime.CompileApi;
+import com.github.pampas.grpc.Consts;
+import com.github.pampas.grpc.runtime.DynamicJarCreator;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
