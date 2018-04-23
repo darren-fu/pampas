@@ -18,6 +18,7 @@
 
 package com.github.pampas.common.exec;
 
+import com.github.pampas.common.exception.PampasException;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.tools.ResponseTools;
@@ -56,10 +57,10 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
         try {
             future = doExecute(req);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new PampasException(e.getMessage());
         }
 
-        String netty_threadName = Thread.currentThread().getName();
+        String nettyThreadname = Thread.currentThread().getName();
         future.thenApply(rsp -> {
             try {
                 PampasResponse pampasResponse = filter == null ? rsp : filter.onSuccess(req, rsp);
@@ -72,7 +73,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
                 }
 
                 EventExecutor executor = req.channelHandlerContext().executor();
-                executor.submit(() -> doAfter(netty_threadName));
+                executor.submit(() -> doAfter(nettyThreadname));
                 return pampasResponse;
             } catch (Exception ex) {
                 log.error("Abstract Worker thenApply error", ex);
@@ -92,7 +93,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
         return future;
     }
 
-    protected void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
+    private void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
         HttpResponse objToFlush = ResponseTools.buildResponse(resp);
         if (keepalive) {
             ctx.writeAndFlush(objToFlush);
