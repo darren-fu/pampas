@@ -42,7 +42,7 @@ public class CompileApi {
         CompileApi compileApi = new CompileApi();
         File file = new File(filePath);
         String sourceDir = file.exists() && file.isFile() ? file.getParent() : filePath;
-        String jarPath = System.getProperty("java.class.path");
+        String jarPath = System.getProperty("java.class.requestPath");
         String targetDir = sourceDir;
         boolean compilerResult = compileApi.compiler("UTF-8", jarPath, filePath, sourceDir, targetDir, diagnostics);
         if (compilerResult) {

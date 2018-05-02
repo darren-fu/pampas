@@ -37,7 +37,7 @@ public class URLTools {
     /**
      * To url url.
      *
-     * @param path the path
+     * @param path the requestPath
      * @return the url
      */
     public static URL toUrl(String path) {

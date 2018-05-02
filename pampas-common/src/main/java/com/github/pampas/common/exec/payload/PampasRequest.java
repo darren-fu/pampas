@@ -93,7 +93,7 @@ public interface PampasRequest<T> extends Operation {
     /**
      * RestyCommand的请求路径 （eg. /resty/user/get）
      *
-     * @return the path
+     * @return the requestPath
      */
     String path();
 

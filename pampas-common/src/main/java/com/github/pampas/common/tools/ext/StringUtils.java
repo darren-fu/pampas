@@ -617,10 +617,10 @@ public abstract class StringUtils
     }
 
     /**
-     * Extract the filename from the given Java resource path,
+     * Extract the filename from the given Java resource requestPath,
      * e.g. {@code "mypath/myfile.txt" -> "myfile.txt"}.
      *
-     * @param path the file path (may be {@code null})
+     * @param path the file requestPath (may be {@code null})
      * @return the extracted filename, or {@code null} if none
      */
     public static String getFilename(String path)
@@ -634,10 +634,10 @@ public abstract class StringUtils
     }
 
     /**
-     * Extract the filename extension from the given Java resource path,
+     * Extract the filename extension from the given Java resource requestPath,
      * e.g. "mypath/myfile.txt" -> "txt".
      *
-     * @param path the file path (may be {@code null})
+     * @param path the file requestPath (may be {@code null})
      * @return the extracted filename extension, or {@code null} if none
      */
     public static String getFilenameExtension(String path)
@@ -660,11 +660,11 @@ public abstract class StringUtils
     }
 
     /**
-     * Strip the filename extension from the given Java resource path,
+     * Strip the filename extension from the given Java resource requestPath,
      * e.g. "mypath/myfile.txt" -> "mypath/myfile".
      *
-     * @param path the file path (may be {@code null})
-     * @return the path with stripped filename extension,
+     * @param path the file requestPath (may be {@code null})
+     * @return the requestPath with stripped filename extension,
      * or {@code null} if none
      */
     public static String stripFilenameExtension(String path)
@@ -687,13 +687,13 @@ public abstract class StringUtils
     }
 
     /**
-     * Apply the given relative path to the given Java resource path,
+     * Apply the given relative requestPath to the given Java resource requestPath,
      * assuming standard Java folder separation (i.e. "/" separators).
      *
-     * @param path         the path to start from (usually a full file path)
-     * @param relativePath the relative path to apply
-     *                     (relative to the full file path above)
-     * @return the full file path that results from applying the relative path
+     * @param path         the requestPath to start from (usually a full file requestPath)
+     * @param relativePath the relative requestPath to apply
+     *                     (relative to the full file requestPath above)
+     * @return the full file requestPath that results from applying the relative requestPath
      */
     public static String applyRelativePath(String path, String relativePath)
     {

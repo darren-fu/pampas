@@ -35,7 +35,7 @@ public class RequestTools {
      * \: /user/get
      *
      * @param uri the uri eg. /user/get?id=12
-     * @return the path in uri eg. /user/get
+     * @return the requestPath in uri eg. /user/get
      */
     public static String getPathInUri(String uri) {
         int indexOfMark = uri.indexOf("?");
@@ -48,11 +48,11 @@ public class RequestTools {
 
     /**
      * 过滤请求路径前缀
-     * path: /service_a/user/get
+     * requestPath: /service_a/user/get
      * prefix:/service_a
      * return: /user/get
      *
-     * @param path   the path eg./service_a/user/get
+     * @param path   the requestPath eg./service_a/user/get
      * @param prefix the prefix eg.service_a
      * @return the string /user/get
      */

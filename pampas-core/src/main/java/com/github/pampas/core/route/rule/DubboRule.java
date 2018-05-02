@@ -18,6 +18,8 @@
 
 package com.github.pampas.core.route.rule;
 
+import com.github.pampas.common.exec.payload.PampasRequest;
+import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
 
 /**
@@ -29,5 +31,15 @@ import lombok.Data;
 @Data
 public class DubboRule extends AbstractRule {
 
+    String code;
 
+    @Override
+    public RuleTypeEnum ruleType() {
+        return RuleTypeEnum.DUBBO;
+    }
+
+    @Override
+    public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
+        return false;
+    }
 }

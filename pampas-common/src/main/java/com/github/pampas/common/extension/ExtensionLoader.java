@@ -57,7 +57,7 @@ public class ExtensionLoader<T> {
     private Class<T> type;
     private volatile boolean init = false;
 
-    // spi path prefix
+    // spi requestPath prefix
     private static final String PREFIX = "META-INF/services/";
     private ClassLoader classLoader;
 

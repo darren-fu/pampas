@@ -114,15 +114,16 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             HttpMethod method = httpRequest.method();//获取请求方法
             //如果不是这个路径，就直接返回错误
             if (!"/test".equalsIgnoreCase(path)) {
-                Thread.sleep(10000L);
+                Thread.sleep(1000L);
                 result = "非法请求!";
                 send(ctx, result, HttpResponseStatus.BAD_REQUEST);
                 return;
             }
             DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
             ///todo: Selector URI->ServiceName    map serviceName -> worker
+            //
             requestInfo.setServiceName("demo");
-
+    
             this.worker.execute(requestInfo, null);
         } catch (Exception e) {
             e.printStackTrace();

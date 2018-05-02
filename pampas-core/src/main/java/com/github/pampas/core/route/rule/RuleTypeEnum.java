@@ -18,26 +18,15 @@
 
 package com.github.pampas.core.route.rule;
 
-import com.github.pampas.common.exec.payload.PampasRequest;
-import io.netty.handler.codec.http.FullHttpRequest;
-import lombok.Data;
-
 /**
- * Created by darrenfu on 18-3-14.
+ * 匹配规则分类枚举
+ * Created by darrenfu on 18-4-28.
  *
  * @author: darrenfu
- * @date: 18-3-14
+ * @date: 18-4-28
  */
-@Data
-public class GrpcRule extends AbstractRule {
+public enum RuleTypeEnum {
 
-    @Override
-    public RuleTypeEnum ruleType() {
-        return RuleTypeEnum.GRPC;
-    }
+    HTTP, DUBBO, GRPC;
 
-    @Override
-    public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
-        return false;
-    }
 }

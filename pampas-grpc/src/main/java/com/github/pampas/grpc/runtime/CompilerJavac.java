@@ -31,10 +31,10 @@ import java.io.InputStreamReader;
 public class CompilerJavac {
     private static String source_dir = "/home/darrenfu/IdeaProjects/pampas/pampas-grpc/df/open/grpc/hello";
     private static String dest_dir = source_dir;
-    private static String claspath = System.getProperty("java.class.path");
+    private static String claspath = System.getProperty("java.class.requestPath");
 
     public static void main(String[] args) throws IOException {
-        System.out.println(System.getProperty("java.class.path"));
+        System.out.println(System.getProperty("java.class.requestPath"));
 
         doCompileWithJavac("HelloServiceProto");
         doCompileWithJavac("HelloServiceGrpc");

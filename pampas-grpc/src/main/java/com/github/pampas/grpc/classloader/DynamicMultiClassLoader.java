@@ -154,7 +154,7 @@ public class DynamicMultiClassLoader extends URLClassLoader implements AutoClose
 
 
     private Class findClass0(String name) throws ClassNotFoundException {
-        // get path of given class
+        // get requestPath of given class
         String classPath = getClassPath(name);
         System.out.println("name:" + name + ":" + classPath);
         if (classPath == null)

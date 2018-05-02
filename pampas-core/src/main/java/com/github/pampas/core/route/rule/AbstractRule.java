@@ -18,34 +18,87 @@
 
 package com.github.pampas.core.route.rule;
 
+import com.github.pampas.common.exec.payload.PampasRequest;
+import com.github.pampas.common.tools.AntPathMatcher;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpRequest;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import lombok.ToString;
 
 /**
  * Created by darrenfu on 18-3-14.
  *
  * @author: darrenfu
- * @date: 18-3-14
+ * @date: 18 -3-14
  */
 @Getter
 @Setter
+@ToString
 public abstract class AbstractRule {
 
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    /**
+     * rule可匹配的请求path
+     */
     private String path;
 
-    private String serviceName;
+    /**
+     * rule可匹配的header name
+     */
+    private String headerName;
 
 
-    public boolean isMatch(String requestPath) {
-        if (StringUtils.isEmpty(requestPath)) {
+    /**
+     * rule可匹配的header value
+     */
+    private String headerValue;
+
+    /**
+     * rule对应的service
+     */
+    private String service;
+
+
+    protected AntPathMatcher antPathMatcher() {
+        return antPathMatcher;
+    }
+
+    /**
+     * 路由规则类型 H
+     *
+     * @return rule type enum
+     * @see RuleTypeEnum
+     */
+    public abstract RuleTypeEnum ruleType();
+
+
+    /**
+     * 校验请求是否匹配此规则
+     *
+     * @param request the request
+     * @return boolean
+     */
+    public boolean isMatch(PampasRequest request) {
+        if (request == null || request.requestData() == null) {
+            return false;
+        }
+        if (!(request.requestData() instanceof HttpRequest)) {
             return false;
         }
 
-
-        return true;
-
-
+        return checkMatch(request);
     }
+
+
+    /**
+     * 校验HTTP Request 是否匹配 Rule
+     *
+     * @param request the request
+     * @return the boolean
+     */
+    public abstract boolean checkMatch(PampasRequest<FullHttpRequest> request);
 
 }

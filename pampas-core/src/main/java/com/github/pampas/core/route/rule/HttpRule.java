@@ -18,9 +18,14 @@
 
 package com.github.pampas.core.route.rule;
 
+import com.github.pampas.common.exec.payload.PampasRequest;
+import com.github.pampas.common.tools.AntPathMatcher;
+import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ * HTTP路由规则
  * Created by darrenfu on 18-3-14.
  *
  * @author: darrenfu
@@ -28,6 +33,27 @@ import lombok.Data;
  */
 @Data
 public class HttpRule extends AbstractRule {
+
     private String mappedPath;
 
+    @Override
+    public RuleTypeEnum ruleType() {
+        return RuleTypeEnum.HTTP;
+    }
+
+    @Override
+    public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
+
+        if (StringUtils.isNotEmpty(this.getPath())) {
+            return antPathMatcher().match(this.getPath(), request.path());
+        }
+
+        if (StringUtils.isNotEmpty(this.getHeader())) {
+            String headerValue = request.requestData().headers().get(this.getHeader());
+            return antPathMatcher().match(this.getPath(), request.path());
+        }
+
+
+        return false;
+    }
 }

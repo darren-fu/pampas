@@ -76,7 +76,7 @@ public class SpiContext<T> {
     //是否完成初始化：加载Spi实现类
     private volatile AtomicBoolean init = new AtomicBoolean(false);
 
-    // spi path prefix
+    // spi requestPath prefix
     private static final String PREFIX = "META-INF/services/";
 
     private ClassLoader classLoader;

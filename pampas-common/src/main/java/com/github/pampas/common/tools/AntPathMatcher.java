@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * {@link PathMatcher} implementation for Ant-style path patterns.
+ * {@link PathMatcher} implementation for Ant-style requestPath patterns.
  * <p>
  * <p>Part of this mapping code has been kindly borrowed from <a href="http://ant.apache.org">Apache Ant</a>.
  * <p>
@@ -35,8 +35,8 @@ import java.util.regex.Pattern;
  * <ul>
  * <li>{@code ?} matches one character</li>
  * <li>{@code *} matches zero or more characters</li>
- * <li>{@code **} matches zero or more <em>directories</em> in a path</li>
- * <li>{@code {spring:[a-z]+}} matches the regexp {@code [a-z]+} as a path variable named "spring"</li>
+ * <li>{@code **} matches zero or more <em>directories</em> in a requestPath</li>
+ * <li>{@code {spring:[a-z]+}} matches the regexp {@code [a-z]+} as a requestPath variable named "spring"</li>
  * </ul>
  * <p>
  * <h3>Examples</h3>
@@ -46,9 +46,9 @@ import java.util.regex.Pattern;
  * <li>{@code com/*.jsp} &mdash; matches all {@code .jsp} files in the
  * {@code com} directory</li>
  * <li><code>com/&#42;&#42;/test.jsp</code> &mdash; matches all {@code test.jsp}
- * files underneath the {@code com} path</li>
+ * files underneath the {@code com} requestPath</li>
  * <li><code>org/springframework/&#42;&#42;/*.jsp</code> &mdash; matches all
- * {@code .jsp} files underneath the {@code org/springframework} path</li>
+ * {@code .jsp} files underneath the {@code org/springframework} requestPath</li>
  * <li><code>org/&#42;&#42;/servlet/bla.jsp</code> &mdash; matches
  * {@code org/springframework/servlet/bla.jsp} but also
  * {@code org/springframework/testing/servlet/bla.jsp} and {@code org/servlet/bla.jsp}</li>
@@ -56,7 +56,7 @@ import java.util.regex.Pattern;
  * to the {@code filename} variable</li>
  * </ul>
  * <p>
- * <p><strong>Note:</strong> a pattern and a path must both be absolute or must
+ * <p><strong>Note:</strong> a pattern and a requestPath must both be absolute or must
  * both be relative in order for the two to match. Therefore it is recommended
  * that users of this implementation to sanitize patterns in order to prefix
  * them with "/" as it makes sense in the context in which they're used.
@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
 public class AntPathMatcher implements PathMatcher {
 
     /**
-     * Default path separator: "/"
+     * Default requestPath separator: "/"
      */
     public static final String DEFAULT_PATH_SEPARATOR = "/";
 
@@ -105,9 +105,9 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * A convenient, alternative constructor to use with a custom path separator.
+     * A convenient, alternative constructor to use with a custom requestPath separator.
      *
-     * @param pathSeparator the path separator to use, must not be {@code null}.
+     * @param pathSeparator the requestPath separator to use, must not be {@code null}.
      * @since 4.1
      */
     public AntPathMatcher(String pathSeparator) {
@@ -119,7 +119,7 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Set the path separator to use for pattern parsing.
+     * Set the requestPath separator to use for pattern parsing.
      * <p>Default is "/", as in Ant.
      */
     public void setPathSeparator(String pathSeparator) {
@@ -184,13 +184,13 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Actually match the given {@code path} against the given {@code pattern}.
+     * Actually match the given {@code requestPath} against the given {@code pattern}.
      *
      * @param pattern   the pattern to match against
-     * @param path      the path String to test
+     * @param path      the requestPath String to test
      * @param fullMatch whether a full pattern match is required (else a pattern match
-     *                  as far as the given base path goes is sufficient)
-     * @return {@code true} if the supplied {@code path} matched, {@code false} if it didn't
+     *                  as far as the given base requestPath goes is sufficient)
+     * @return {@code true} if the supplied {@code requestPath} matched, {@code false} if it didn't
      */
     protected boolean doMatch(String pattern, String path, boolean fullMatch, Map<String, String> uriTemplateVariables) {
         if (path.startsWith(this.pathSeparator) != pattern.startsWith(this.pathSeparator)) {
@@ -371,7 +371,7 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Tokenize the given path pattern into parts, based on this matcher's settings.
+     * Tokenize the given requestPath pattern into parts, based on this matcher's settings.
      * <p>Performs caching based on {@link #setCachePatterns}, delegating to
      * {@link #tokenizePath(String)} for the actual tokenization algorithm.
      *
@@ -401,10 +401,10 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Tokenize the given path String into parts, based on this matcher's settings.
+     * Tokenize the given requestPath String into parts, based on this matcher's settings.
      *
-     * @param path the path to tokenize
-     * @return the tokenized path parts
+     * @param path the requestPath to tokenize
+     * @return the tokenized requestPath parts
      */
     protected String[] tokenizePath(String path) {
         return StringUtils.tokenizeToStringArray(path, this.pathSeparator, this.trimTokens, true);
@@ -458,7 +458,7 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Given a pattern and a full path, determine the pattern-mapped part. <p>For example: <ul>
+     * Given a pattern and a full requestPath, determine the pattern-mapped part. <p>For example: <ul>
      * <li>'{@code /docs/cvs/commit.html}' and '{@code /docs/cvs/commit.html} -> ''</li>
      * <li>'{@code /docs/*}' and '{@code /docs/cvs/commit} -> '{@code cvs/commit}'</li>
      * <li>'{@code /docs/cvs/*.html}' and '{@code /docs/cvs/commit.html} -> '{@code commit.html}'</li>
@@ -467,7 +467,7 @@ public class AntPathMatcher implements PathMatcher {
      * <li>'{@code /*.html}' and '{@code /docs/cvs/commit.html} -> '{@code docs/cvs/commit.html}'</li>
      * <li>'{@code *.html}' and '{@code /docs/cvs/commit.html} -> '{@code /docs/cvs/commit.html}'</li>
      * <li>'{@code *}' and '{@code /docs/cvs/commit.html} -> '{@code /docs/cvs/commit.html}'</li> </ul>
-     * <p>Assumes that {@link #match} returns {@code true} for '{@code pattern}' and '{@code path}', but
+     * <p>Assumes that {@link #match} returns {@code true} for '{@code pattern}' and '{@code requestPath}', but
      * does <strong>not</strong> enforce this.
      */
     @Override
@@ -596,7 +596,7 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * Given a full path, returns a {@link Comparator} suitable for sorting patterns in order of
+     * Given a full requestPath, returns a {@link Comparator} suitable for sorting patterns in order of
      * explicitness.
      * <p>This{@code Comparator} will {@linkplain java.util.Collections#sort(List, Comparator) sort}
      * a list so that more specific patterns (without uri templates or wild cards) come before
@@ -606,10 +606,10 @@ public class AntPathMatcher implements PathMatcher {
      * <li>{@code /hotels/{hotel}}</li> <li>{@code /hotels/*}</li>
      * </ol>
      * the returned comparator will sort this list so that the order will be as indicated.
-     * <p>The full path given as parameter is used to test for exact matches. So when the given path
+     * <p>The full requestPath given as parameter is used to test for exact matches. So when the given requestPath
      * is {@code /hotels/2}, the pattern {@code /hotels/2} will be sorted before {@code /hotels/1}.
      *
-     * @param path the full path to use for comparison
+     * @param path the full requestPath to use for comparison
      * @return a comparator capable of sorting patterns in order of explicitness
      */
     @Override
@@ -727,7 +727,7 @@ public class AntPathMatcher implements PathMatcher {
 
         /**
          * Compare two patterns to determine which should match first, i.e. which
-         * is the most specific regarding the current path.
+         * is the most specific regarding the current requestPath.
          *
          * @return a negative integer, zero, or a positive integer as pattern1 is
          * more specific, equally specific, or less specific than pattern2.
@@ -875,7 +875,7 @@ public class AntPathMatcher implements PathMatcher {
     }
 
     /**
-     * A simple cache for patterns that depend on the configured path separator.
+     * A simple cache for patterns that depend on the configured requestPath separator.
      */
     private static class PathSeparatorPatternCache {
 

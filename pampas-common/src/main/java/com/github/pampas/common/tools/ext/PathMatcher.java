@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 /**
- * Strategy interface for {@code String}-based path matching.
+ * Strategy interface for {@code String}-based requestPath matching.
  *
  *
  * <p>The default implementation is {@link AntPathMatcher}, supporting the
@@ -38,79 +38,79 @@ public interface PathMatcher
 {
 
 	/**
-	 * Does the given {@code path} represent a pattern that can be matched
+	 * Does the given {@code requestPath} represent a pattern that can be matched
 	 * by an implementation of this interface?
 	 * <p>If the return value is {@code false}, then the {@link #match}
 	 * method does not have to be used because direct equality comparisons
-	 * on the static path Strings will lead to the same result.
-	 * @param path the path String to check
-	 * @return {@code true} if the given {@code path} represents a pattern
+	 * on the static requestPath Strings will lead to the same result.
+	 * @param path the requestPath String to check
+	 * @return {@code true} if the given {@code requestPath} represents a pattern
 	 */
 	boolean isPattern(String path);
 
 	/**
-	 * Match the given {@code path} against the given {@code pattern},
+	 * Match the given {@code requestPath} against the given {@code pattern},
 	 * according to this PathMatcher's matching strategy.
 	 * @param pattern the pattern to match against
-	 * @param path the path String to test
-	 * @return {@code true} if the supplied {@code path} matched,
+	 * @param path the requestPath String to test
+	 * @return {@code true} if the supplied {@code requestPath} matched,
 	 * {@code false} if it didn't
 	 */
 	boolean match(String pattern, String path);
 
 	/**
-	 * Match the given {@code path} against the corresponding part of the given
+	 * Match the given {@code requestPath} against the corresponding part of the given
 	 * {@code pattern}, according to this PathMatcher's matching strategy.
 	 * <p>Determines whether the pattern at least matches as far as the given base
-	 * path goes, assuming that a full path may then match as well.
+	 * requestPath goes, assuming that a full requestPath may then match as well.
 	 * @param pattern the pattern to match against
-	 * @param path the path String to test
-	 * @return {@code true} if the supplied {@code path} matched,
+	 * @param path the requestPath String to test
+	 * @return {@code true} if the supplied {@code requestPath} matched,
 	 * {@code false} if it didn't
 	 */
 	boolean matchStart(String pattern, String path);
 
 	/**
-	 * Given a pattern and a full path, determine the pattern-mapped part.
-	 * <p>This method is supposed to find out which part of the path is matched
+	 * Given a pattern and a full requestPath, determine the pattern-mapped part.
+	 * <p>This method is supposed to find out which part of the requestPath is matched
 	 * dynamically through an actual pattern, that is, it strips off a statically
-	 * defined leading path from the given full path, returning only the actually
-	 * pattern-matched part of the path.
+	 * defined leading requestPath from the given full requestPath, returning only the actually
+	 * pattern-matched part of the requestPath.
 	 * <p>For example: For "myroot/*.html" as pattern and "myroot/myfile.html"
-	 * as full path, this method should return "myfile.html". The detailed
+	 * as full requestPath, this method should return "myfile.html". The detailed
 	 * determination rules are specified to this PathMatcher's matching strategy.
-	 * <p>A simple implementation may return the given full path as-is in case
+	 * <p>A simple implementation may return the given full requestPath as-is in case
 	 * of an actual pattern, and the empty String in case of the pattern not
 	 * containing any dynamic parts (i.e. the {@code pattern} parameter being
-	 * a static path that wouldn't qualify as an actual {@link #isPattern pattern}).
+	 * a static requestPath that wouldn't qualify as an actual {@link #isPattern pattern}).
 	 * A sophisticated implementation will differentiate between the static parts
-	 * and the dynamic parts of the given path pattern.
-	 * @param pattern the path pattern
-	 * @param path the full path to introspect
-	 * @return the pattern-mapped part of the given {@code path}
+	 * and the dynamic parts of the given requestPath pattern.
+	 * @param pattern the requestPath pattern
+	 * @param path the full requestPath to introspect
+	 * @return the pattern-mapped part of the given {@code requestPath}
 	 * (never {@code null})
 	 */
 	String extractPathWithinPattern(String pattern, String path);
 
 	/**
-	 * Given a pattern and a full path, extract the URI template variables. URI template
+	 * Given a pattern and a full requestPath, extract the URI template variables. URI template
 	 * variables are expressed through curly brackets ('{' and '}').
-	 * <p>For example: For pattern "/hotels/{hotel}" and path "/hotels/1", this method will
+	 * <p>For example: For pattern "/hotels/{hotel}" and requestPath "/hotels/1", this method will
 	 * return a map containing "hotel"->"1".
-	 * @param pattern the path pattern, possibly containing URI templates
-	 * @param path the full path to extract template variables from
+	 * @param pattern the requestPath pattern, possibly containing URI templates
+	 * @param path the full requestPath to extract template variables from
 	 * @return a map, containing variable names as keys; variables values as values
 	 */
 	Map<String, String> extractUriTemplateVariables(String pattern, String path);
 
 	/**
-	 * Given a full path, returns a {@link Comparator} suitable for sorting patterns
-	 * in order of explicitness for that path.
+	 * Given a full requestPath, returns a {@link Comparator} suitable for sorting patterns
+	 * in order of explicitness for that requestPath.
 	 * <p>The full algorithm used depends on the underlying implementation, but generally,
 	 * the returned {@code Comparator} will
 	 * {@linkplain java.util.Collections#sort(java.util.List, Comparator) sort}
 	 * a list so that more specific patterns come before generic patterns.
-	 * @param path the full path to use for comparison
+	 * @param path the full requestPath to use for comparison
 	 * @return a comparator capable of sorting patterns in order of explicitness
 	 */
 	Comparator<String> getPatternComparator(String path);
