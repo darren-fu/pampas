@@ -19,7 +19,6 @@
 package com.github.pampas.core.route.rule;
 
 import com.github.pampas.common.exec.payload.PampasRequest;
-import com.github.pampas.common.tools.AntPathMatcher;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -43,16 +42,17 @@ public class HttpRule extends AbstractRule {
 
     @Override
     public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
-
         if (StringUtils.isNotEmpty(this.getPath())) {
+            if (!super.getIsAntPath()) {
+                return request.path().equals(this.getPath());
+            }
             return antPathMatcher().match(this.getPath(), request.path());
         }
 
-        if (StringUtils.isNotEmpty(this.getHeader())) {
-            String headerValue = request.requestData().headers().get(this.getHeader());
-            return antPathMatcher().match(this.getPath(), request.path());
+        if (StringUtils.isNotEmpty(this.getHeaderName())) {
+            String headerValue = request.requestData().headers().get(this.getHeaderName());
+            return antPathMatcher().match(this.getHeaderValue(), headerValue);
         }
-
 
         return false;
     }

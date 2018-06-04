@@ -43,11 +43,11 @@ public class AsyncHttpConfigFactory {
      */
     public static AsyncHttpClientConfig createConfig(int connectTimeout, int requestTimeout) {
         timer.start();
-        DefaultChannelPool channelPool = new DefaultChannelPool(60000,
+        DefaultChannelPool channelPool = new DefaultChannelPool(60_000,
                 -1,
                 DefaultChannelPool.PoolLeaseStrategy.LIFO,
                 timer,
-                300000);// cleanerPeriod 不能超过MaxIdleTime
+                30_000);// cleanerPeriod 不能超过MaxIdleTime
         //ahc-default.properties
         return new DefaultAsyncHttpClientConfig.Builder()
 //                .setFollowRedirect(false)

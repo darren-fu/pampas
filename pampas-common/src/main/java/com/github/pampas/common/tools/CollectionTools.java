@@ -51,7 +51,6 @@ public class CollectionTools {
 
 
     public static <T> T[] toArray(Collection<T> coll, Class<T> clz) {
-
         if (coll == null || coll.size() == 0) {
             return (T[]) Array.newInstance(clz, 0);
         }

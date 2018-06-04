@@ -75,18 +75,4 @@ public class RouteRuleConfig implements VersionConfig {
     }
 
 
-    public static void main(String[] args) {
-        SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
-
-        List<Class<Selector>> selectorClzList = selectorSpiContext.getSpiClasses(null);
-
-
-        List<String> spiNameList = selectorClzList.stream().map(v -> SpiContext.getSpiName(v)).collect(Collectors.toList());
-        String[] strings = CollectionTools.toArray(spiNameList, String.class);
-        for (String string : strings) {
-            System.out.println("->" + string);
-        }
-        System.out.println(strings.toString());
-        System.out.println(CollectionTools.toArray(spiNameList, String.class));
-    }
 }

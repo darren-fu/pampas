@@ -23,7 +23,6 @@ import com.github.pampas.common.tools.AntPathMatcher;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -44,6 +43,8 @@ public abstract class AbstractRule {
      * rule可匹配的请求path
      */
     private String path;
+
+    private volatile Boolean isAntPath;
 
     /**
      * rule可匹配的header name
@@ -89,6 +90,9 @@ public abstract class AbstractRule {
             return false;
         }
 
+        if (this.isAntPath == null) {
+            this.isAntPath = antPathMatcher().isPattern(request.path());
+        }
         return checkMatch(request);
     }
 
