@@ -25,6 +25,7 @@ import com.github.pampas.common.exec.Caller;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.route.Locator;
 import com.github.pampas.grpc.classloader.DynamicMultiClassLoader;
 import com.github.pampas.grpc.client.GrpcRequest;
 import com.github.pampas.grpc.client.GrpcServiceDefine;
@@ -69,7 +70,7 @@ public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse
     }
 
     @Override
-    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req) throws IOException {
+    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) throws IOException {
         log.debug("{}开始执行", GrpcWorker.class.getSimpleName());
 
         String protilFileName = "test.proto";

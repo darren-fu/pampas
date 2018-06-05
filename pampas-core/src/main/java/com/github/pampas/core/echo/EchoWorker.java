@@ -22,6 +22,7 @@ import com.github.pampas.common.exec.AbstractWorker;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.route.Locator;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +43,7 @@ public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
     }
 
     @Override
-    public CompletableFuture<PampasResponse<String>> doExecute(PampasRequest<FullHttpRequest> req) {
+    public CompletableFuture<PampasResponse<String>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) {
         return CompletableFuture.completedFuture(PampasResponse.OK_RESP);
     }
 

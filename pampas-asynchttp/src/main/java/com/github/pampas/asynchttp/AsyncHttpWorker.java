@@ -24,6 +24,7 @@ import com.github.pampas.common.exec.payload.DefaultPampasResponse;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.route.Locator;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -54,7 +55,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
     }
 
     @Override
-    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req) {
+    public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) {
         AsyncHttpCaller caller = AsyncHttpCallerFactory.getHttpCaller(req.serviceName());
         FullHttpRequest requestData = req.requestData();
         ServerInstance serverInstance = ServerInstance.buildWithUri(req.serviceName(), "http://localhost:9001");
