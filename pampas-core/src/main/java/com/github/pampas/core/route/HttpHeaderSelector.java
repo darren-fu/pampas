@@ -68,10 +68,4 @@ public class HttpHeaderSelector implements Selector<HttpRequest> {
 //                RequestTools.getPathInUri(request.uri()));
     }
 
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        Class<?> aClass = Class.forName("com.github.pampas.common.route.Selector");
-
-
-    }
 }

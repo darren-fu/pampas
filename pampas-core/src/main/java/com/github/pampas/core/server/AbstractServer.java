@@ -21,6 +21,8 @@ package com.github.pampas.core.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -52,16 +54,24 @@ public abstract class AbstractServer {
 
     protected final AtomicReference<ServerState> serverStateRef;
 
+
+    private boolean useEpoll() {
+        String sysName = System.getProperty("os.name");
+        return sysName.contains("linux");
+    }
+
     public AbstractServer(String serverName, int port, ServerConfig config) {
+
+
         this.serverName = serverName;
         this.port = port;
         this.config = config;
         serverStateRef = new AtomicReference<>(ServerState.Created);
-        boss = new NioEventLoopGroup();
-        worker = new NioEventLoopGroup();
+        boss = useEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        worker = useEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
 
-        bootstrap.group(boss, worker).channel(NioServerSocketChannel.class)
+        bootstrap.group(boss, worker).channel(useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 // 启用Pool Bytebuf,http request的content将使用堆外pooled direct bytebuf,其它信息(header)仍然是堆内
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
@@ -75,6 +85,7 @@ public abstract class AbstractServer {
                 //ChannelOut boundBuffer 高水位线 低水位线
                 .option(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT)
                 .handler(new LoggingHandler(LogLevel.DEBUG)).childHandler(newChannelInitializer());
+
     }
 
     public abstract ChannelInitializer<SocketChannel> newChannelInitializer();

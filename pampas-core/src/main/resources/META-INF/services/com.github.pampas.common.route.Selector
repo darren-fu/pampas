@@ -1,2 +1,3 @@
 com.github.pampas.core.route.HttpHeaderSelector
 com.github.pampas.core.route.HttpUriParserSelector
+com.github.pampas.core.route.PampasRequestSelector

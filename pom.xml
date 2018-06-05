@@ -32,7 +32,7 @@
                 <artifactId>netty-all</artifactId>
                 <!--<version>4.1.19.Final</version>-->
                 <!--<version>4.1.16.Final</version>-->
-                <version>4.1.17.Final</version>
+                <version>4.1.22.Final</version>
             </dependency>
 
             <dependency>

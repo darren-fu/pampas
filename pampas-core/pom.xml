@@ -26,9 +26,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>com.github.darren-fu</groupId>-->
-            <!--<artifactId>pampas-asynchttp</artifactId>-->
-            <!--<version>${parent.version}</version>-->
+        <!--<groupId>com.github.darren-fu</groupId>-->
+        <!--<artifactId>pampas-asynchttp</artifactId>-->
+        <!--<version>${parent.version}</version>-->
         <!--</dependency>-->
 
         <dependency>
@@ -37,11 +37,15 @@
             <version>${parent.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>io.netty</groupId>-->
-            <!--<artifactId>netty-all</artifactId>-->
+        <!--<groupId>io.netty</groupId>-->
+        <!--<artifactId>netty-all</artifactId>-->
         <!--</dependency>-->
 
-
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport-native-epoll</artifactId>
+            <classifier>${os.detected.classifier}</classifier>
+        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -77,6 +81,14 @@
 
     </dependencies>
 
-
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.0</version>
+            </extension>
+        </extensions>
+    </build>
 
 </project>
