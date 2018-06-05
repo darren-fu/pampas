@@ -31,9 +31,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.darren-fu</groupId>
+            <artifactId>pampas-common</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
-            <version>2.5.9</version>
+            <version>2.5.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
         </dependency>
     </dependencies>
 

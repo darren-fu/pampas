@@ -44,24 +44,24 @@ public class DubboServiceFactory {
     }
 
     private DubboServiceFactory() {
+        System.setProperty("dubbo.application.logger", "slf4j");
         Properties prop = new Properties();
         ClassLoader loader = DubboServiceFactory.class.getClassLoader();
 
         try {
-            prop.load(loader.getResourceAsStream("dubboconf.properties"));
+            prop.load(loader.getResourceAsStream("dubbo.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName(prop.getProperty("application.name"));
-        //这里配置了dubbo的application信息*(demo只配置了name)*，因此demo没有额外的dubbo.xml配置文件
+        applicationConfig.setLogger(prop.getProperty("application.logger", "slf4j"));
 
         RegistryConfig registryConfig = new RegistryConfig();
-//        registry.setAddress("zookeeper://127.0.0.1:2181");
         registryConfig.setAddress(prop.getProperty("registry.address"));
-        //这里配置dubbo的注册中心信息，因此demo没有额外的dubbo.xml配置文件
-
+        registryConfig.setTimeout(Integer.valueOf(prop.getProperty("registry.timeout", "60000")));
+        registryConfig.setClient(prop.getProperty("registry.client", "zkclient"));
         this.application = applicationConfig;
         this.registry = registryConfig;
     }
@@ -70,29 +70,24 @@ public class DubboServiceFactory {
         return SingletonHolder.INSTANCE;
     }
 
-    public Object genericInvoke(String interfaceClass, String methodName, List<Map<String, Object>> parameters) {
+    public Object genericInvoke(DubboRequest dubboRequest) {
 
-        ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>();
+        ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
         reference.setApplication(application);
         reference.setRegistry(registry);
-        reference.setInterface(interfaceClass); // 接口名
-        reference.setGeneric(true); // 声明为泛化接口
-        /*ReferenceConfig实例很重，封装了与注册中心的连接以及与提供者的连接，
-        需要缓存，否则重复生成ReferenceConfig可能造成性能问题并且会有内存和连接泄漏。
-        API方式编程时，容易忽略此问题。
-        这里使用dubbo内置的简单缓存工具类进行缓存*/
+        reference.setInterface(dubboRequest.getService());
+        reference.setGeneric(true);
         ReferenceConfigCache cache = ReferenceConfigCache.getCache();
         GenericService genericService = cache.get(reference);
-        // 用com.alibaba.dubbo.rpc.service.GenericService可以替代所有接口引用
 
-        int len = parameters.size();
+        int len = dubboRequest.getParams().size();
         String[] invokeParamTyeps = new String[len];
         Object[] invokeParams = new Object[len];
         for (int i = 0; i < len; i++) {
-            invokeParamTyeps[i] = parameters.get(i).get("ParamType") + "";
-            invokeParams[i] = parameters.get(i).get("Object");
+            invokeParamTyeps[i] = String.valueOf(dubboRequest.getParams().getJSONObject(i).getString("type"));
+            invokeParams[i] = dubboRequest.getParams().getJSONObject(i).get("value");
         }
-        return genericService.$invoke(methodName, invokeParamTyeps, invokeParams);
-    }
+        return genericService.$invoke(dubboRequest.getMethod(), invokeParamTyeps, invokeParams);
 
+    }
 }
