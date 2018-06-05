@@ -23,6 +23,7 @@ import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.Scope;
 import com.github.pampas.common.extension.Spi;
 import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.route.Locator;
 
 import java.util.concurrent.Future;
 
@@ -54,10 +55,11 @@ public interface Worker<Q extends Object, R extends Object> {
      * 执行请求和过滤器，返回Future
      *
      * @param req    the req
+     * @param locator
      * @param filter the filter
      * @return the future
      */
-    Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter);
+    Future<PampasResponse<R>> execute(PampasRequest<Q> req, Locator locator, Filter<Q, R> filter);
 
 //    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
 }

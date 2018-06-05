@@ -21,6 +21,7 @@ package com.github.pampas.common.exec;
 import com.github.pampas.common.exception.PampasException;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
+import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.tools.ResponseTools;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -51,7 +52,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
     public abstract CompletableFuture<PampasResponse<R>> doExecute(PampasRequest<Q> req) throws IOException;
 
     @Override
-    public Future<PampasResponse<R>> execute(PampasRequest<Q> req, Filter<Q, R> filter) {
+    public Future<PampasResponse<R>> execute(PampasRequest<Q> req, Locator locator, Filter<Q, R> filter) {
 
         CompletableFuture<PampasResponse<R>> future = null;
         try {

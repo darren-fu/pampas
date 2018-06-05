@@ -18,8 +18,12 @@
 
 package com.github.pampas.core.server;
 
+import com.github.pampas.common.exception.PampasException;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.exec.payload.DefaultPampasRequest;
+import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.route.Locator;
+import com.github.pampas.common.route.Selector;
 import com.github.pampas.common.tracer.OpenTracingContext;
 import com.github.pampas.grpc.GrpcWorker;
 import io.netty.buffer.ByteBuf;
@@ -29,14 +33,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
-import io.opentracing.Span;
 import io.opentracing.Tracer;
-import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -62,7 +65,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         this.worker = new GrpcWorker();
     }
 
-
     /**
      * 阻塞的ExecutorService
      *
@@ -83,13 +85,11 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 });
     }
 
-
     /*
      * 收到消息时，返回信息
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
         Tracer tracer = OpenTracingContext.getTracer();
 
         if (!(msg instanceof FullHttpRequest)) {
@@ -102,32 +102,36 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             log.trace("http request:{}", httpRequest);
         }
         System.out.println(httpRequest.uri());
-        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
-        Span span = spanBuilder.start();
-        span.setTag("method", httpRequest.method().name());
-        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
-
+//        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
+//        Span span = spanBuilder.start();
+//        span.setTag("method", httpRequest.method().name());
+//        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
         //span.finish();
         try {
             String path = httpRequest.uri();          //获取路径
-            String body = getBody(httpRequest);     //获取参数
-            HttpMethod method = httpRequest.method();//获取请求方法
             //如果不是这个路径，就直接返回错误
-            if (!"/test".equalsIgnoreCase(path)) {
-                Thread.sleep(1000L);
-                result = "非法请求!";
-                send(ctx, result, HttpResponseStatus.BAD_REQUEST);
-                return;
-            }
             DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
+
             ///todo: Selector URI->ServiceName    map serviceName -> worker
-            //
-            requestInfo.setServiceName("demo");
-    
-            this.worker.execute(requestInfo, null);
+            SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
+            List<Selector> selectors = selectorSpiContext.getSpiInstances(null);
+            Locator locator = null;
+            for (Selector selector : selectors) {
+                locator = selector.select(requestInfo);
+                if (locator != null) {
+                    break;
+                }
+            }
+            if (locator == null) {
+                log.warn("请求没有匹配到合适的路由:{}", requestInfo);
+                throw new PampasException("请求没有匹配到合适的路由:" + requestInfo.originUri());
+            }
+
+            this.worker.execute(requestInfo, locator, null);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+
         }
     }
 

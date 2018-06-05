@@ -41,7 +41,7 @@ public class HttpRule extends AbstractRule {
     }
 
     @Override
-    public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
+    protected boolean checkMatch(PampasRequest<FullHttpRequest> request) {
         if (StringUtils.isNotEmpty(this.getPath())) {
             if (!super.getIsAntPath()) {
                 return request.path().equals(this.getPath());

@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.github.pampas.common.base.PampasConsts.Worker.GRPC;
 import static com.github.pampas.grpc.ClientDynamic.channel;
 
 /**
@@ -56,7 +57,7 @@ import static com.github.pampas.grpc.ClientDynamic.channel;
  * @author: darrenfu
  * @date: 18-2-15
  */
-@SpiMeta(name = "grpc", order = 20)
+@SpiMeta(name = "grpc", key = GRPC, order = 20)
 public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
     private static final Logger log = LoggerFactory.getLogger(GrpcWorker.class);
 

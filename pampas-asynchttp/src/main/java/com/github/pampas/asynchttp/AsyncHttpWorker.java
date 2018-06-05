@@ -33,13 +33,15 @@ import org.asynchttpclient.Response;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.github.pampas.common.base.PampasConsts.Worker.HTTP;
+
 /**
  * Created by darrenfu on 18-2-2.
  *
  * @author: darrenfu
  * @date: 18-2-2
  */
-@SpiMeta(name = "async-http",order = 20)
+@SpiMeta(name = "http-async", key = HTTP, order = 20)
 public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse> {
 
     public AsyncHttpWorker() {

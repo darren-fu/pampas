@@ -39,6 +39,12 @@ public class FinalExceptionHandler extends ChannelDuplexHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
-        log.error("处理消息发生异常", cause);
+        try {
+            log.error("处理消息发生异常", cause);
+            ctx.close();
+        } catch (Exception ex) {
+            log.warn("关闭channel失败:{}", ex);
+        }
+
     }
 }

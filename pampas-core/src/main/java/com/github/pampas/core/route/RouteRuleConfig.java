@@ -25,6 +25,7 @@ import com.github.pampas.common.tools.CollectionTools;
 import com.github.pampas.core.route.rule.DubboRule;
 import com.github.pampas.core.route.rule.HttpRule;
 import com.github.pampas.core.route.rule.GrpcRule;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  * @date: 18-2-23
  */
 
+@Data
 public class RouteRuleConfig implements VersionConfig {
 
     public boolean stripPrefix;

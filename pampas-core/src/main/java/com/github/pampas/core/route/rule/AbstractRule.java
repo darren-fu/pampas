@@ -103,6 +103,6 @@ public abstract class AbstractRule {
      * @param request the request
      * @return the boolean
      */
-    public abstract boolean checkMatch(PampasRequest<FullHttpRequest> request);
+    protected abstract boolean checkMatch(PampasRequest<FullHttpRequest> request);
 
 }

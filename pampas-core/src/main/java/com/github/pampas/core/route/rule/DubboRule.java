@@ -39,7 +39,7 @@ public class DubboRule extends AbstractRule {
     }
 
     @Override
-    public boolean checkMatch(PampasRequest<FullHttpRequest> request) {
+    protected boolean checkMatch(PampasRequest<FullHttpRequest> request) {
         return false;
     }
 }

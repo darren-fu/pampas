@@ -18,6 +18,7 @@
 
 package com.github.pampas.common.route;
 
+import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.extension.Scope;
 import com.github.pampas.common.extension.Spi;
 
@@ -30,11 +31,11 @@ import com.github.pampas.common.extension.Spi;
  * @date: 18-2-10
  */
 @Spi(scope = Scope.SINGLETON)
-public interface Selector<R> {
+public interface Selector<R extends PampasRequest> {
 
     String name();
 
-    boolean isMatch(R request);
+//    boolean isMatch(R request);
 
     Locator select(R request);
 }

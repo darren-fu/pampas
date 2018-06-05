@@ -65,4 +65,11 @@ public class PampasConsts {
         public static final String PROP_VERSION_DEFAULT = "";
     }
 
+    public static class Worker{
+        public static final String HTTP = "http";
+        public static final String DUBBO = "dubbo";
+        public static final String GRPC = "grpc";
+
+    }
+
 }
