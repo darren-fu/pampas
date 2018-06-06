@@ -16,9 +16,17 @@
  *
  */
 
-package com.github.pampas.common.config;
+package com.github.pampas.core.base;
 
+import com.github.pampas.common.config.ConfigLoader;
+import com.github.pampas.common.config.Configurable;
+import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.tools.ClassTools;
+import com.github.pampas.core.route.RouteRuleConfig;
+import com.github.pampas.core.route.rule.HttpRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +40,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: darrenfu
  * @date: 18 -3-8
  */
-public class ConfigContext {
+@SpiMeta(name = "config-context", order = 50)
+public class VersionConfigLoader implements ConfigLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(VersionConfigLoader.class);
 
     private static final Byte ONE = Byte.valueOf("1");
 
@@ -48,7 +59,8 @@ public class ConfigContext {
      * @param configClz    the config clz
      * @param configurable the configurable
      */
-    public static void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
+    @Override
+    public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
 
         if (configAndConfigurableMap.contains(configClz)) {
             WeakHashMap<Configurable, Byte> instanceMap = configAndConfigurableMap.get(configClz);
@@ -71,8 +83,8 @@ public class ConfigContext {
         Map<String, WeakHashMap<Object, Byte>> map = new HashMap();
 
         WeakHashMap<Object, Byte> weakHashMap = new WeakHashMap<>();
-        ConfigContext c1 = new ConfigContext();
-        ConfigContext c2 = new ConfigContext();
+        VersionConfigLoader c1 = new VersionConfigLoader();
+        VersionConfigLoader c2 = new VersionConfigLoader();
 
         weakHashMap.put(c1, Byte.MIN_VALUE);
         weakHashMap.put(c2, Byte.MIN_VALUE);
@@ -95,22 +107,25 @@ public class ConfigContext {
 
 
     /**
-     * Gets config.
+     * Load config t.
      *
      * @param <T>       the type parameter
      * @param configClz the config clz
-     * @return the config
+     * @return the t
      */
-    public static <T extends VersionConfig> T getConfig(Class<T> configClz) {
+    @Override
+    public <T extends VersionConfig> T loadConfig(Class<T> configClz) {
+
         VersionConfig config = configInstanceMap.get(configClz);
 
         if (config == null) {
             T instance = ClassTools.instance(configClz);
             instance.setupWithDefault();
-            T loadConfig = loadConfig(configClz);
+            ///todo : load config from remote server
 
-            if (loadConfig != null) {
-                instance = loadConfig;
+            if (configClz == RouteRuleConfig.class) {
+                log.info("加载RouteRuleConfig配置");
+                instance = (T) buildRouteRuleConfig();
             }
 
             configInstanceMap.putIfAbsent(configClz, instance);
@@ -119,19 +134,23 @@ public class ConfigContext {
         return (T) config;
     }
 
-
     /**
-     * Load config t.
+     * 测试使用
      *
-     * @param <T>       the type parameter
-     * @param configClz the config clz
-     * @return the t
+     * @return
      */
-    public static <T extends VersionConfig> T loadConfig(Class<T> configClz) {
+    private RouteRuleConfig buildRouteRuleConfig() {
+        RouteRuleConfig config = new RouteRuleConfig();
+        config.setStripPrefix(true);
 
-        ///todo : load config from remote server
+        HttpRule httpRule = new HttpRule();
+        httpRule.setPath("/admin/**");
+        httpRule.setService("admin_service");
+        httpRule.setStripPrefix(true);
 
-        return null;
+        config.addRules(httpRule);
+        return config;
+
     }
 
 }

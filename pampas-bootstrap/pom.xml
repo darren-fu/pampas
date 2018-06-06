@@ -36,6 +36,13 @@
             <artifactId>pampas-core</artifactId>
             <version>${parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.darren-fu</groupId>
+            <artifactId>pampas-asynchttp</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

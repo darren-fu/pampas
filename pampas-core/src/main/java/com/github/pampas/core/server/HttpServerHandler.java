@@ -25,7 +25,6 @@ import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
 import com.github.pampas.common.tracer.OpenTracingContext;
-import com.github.pampas.grpc.GrpcWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -57,12 +56,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private String result = "";
 
-    private Worker worker;
 
     public HttpServerHandler() {
-//        this.worker = new EchoWorker();
-//        this.worker = new HttpRequestWorker();
-        this.worker = new GrpcWorker();
     }
 
     /**
@@ -107,32 +102,37 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 //        span.setTag("method", httpRequest.method().name());
 //        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
         //span.finish();
-        try {
-            String path = httpRequest.uri();          //获取路径
-            //如果不是这个路径，就直接返回错误
-            DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
+        String path = httpRequest.uri();          //获取路径
+        //如果不是这个路径，就直接返回错误
+        DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
 
-            ///todo: Selector URI->ServiceName    map serviceName -> worker
-            SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
-            List<Selector> selectors = selectorSpiContext.getSpiInstances(null);
-            Locator locator = null;
-            for (Selector selector : selectors) {
-                locator = selector.select(requestInfo);
-                if (locator != null) {
-                    break;
-                }
+        ///todo: Selector URI->ServiceName    map serviceName -> worker
+        SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
+        List<Selector> selectors = selectorSpiContext.getSpiInstances(null);
+        Locator locator = null;
+        for (Selector selector : selectors) {
+            locator = selector.select(requestInfo);
+            if (locator != null) {
+                break;
             }
-            if (locator == null) {
-                log.warn("请求没有匹配到合适的路由:{}", requestInfo);
-                throw new PampasException("请求没有匹配到合适的路由:" + requestInfo.originUri());
-            }
-
-            this.worker.execute(requestInfo, locator, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
         }
+        if (locator == null) {
+            log.warn("请求没有匹配到合适的路由:{}", requestInfo);
+            // todo: 需要返回给client
+            throw new PampasException("请求没有匹配到合适的路由:" + requestInfo.originUri());
+        }
+
+        Worker worker = getWorker(locator.getWorker());
+        worker.execute(requestInfo, locator, null);
+    }
+
+
+    private Worker getWorker(String key) {
+        List<Worker> workers = SpiContext.getContext(Worker.class).getSpiInstances(key);
+        if (workers == null || workers.size() < 1) {
+            throw new PampasException("没有合适的Worker:" + key);
+        }
+        return workers.get(0);
     }
 
     /**

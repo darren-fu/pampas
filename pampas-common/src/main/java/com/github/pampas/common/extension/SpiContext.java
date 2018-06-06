@@ -19,7 +19,7 @@
 package com.github.pampas.common.extension;
 
 import com.github.pampas.common.base.PampasConsts;
-import com.github.pampas.common.config.ConfigContext;
+import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.exception.PampasException;
@@ -73,6 +73,8 @@ public class SpiContext<T> {
     //SPI interface
     private Class<T> type;
 
+    private boolean singleton = false;
+
     //是否完成初始化：加载Spi实现类
     private volatile AtomicBoolean init = new AtomicBoolean(false);
 
@@ -116,20 +118,22 @@ public class SpiContext<T> {
 
         if (loader == null) {
             loader = new SpiContext(type);
-
+            Spi spi = type.getAnnotation(Spi.class);
+            if (spi.scope() == Scope.SINGLETON) {
+                loader.singleton = true;
+            }
             contextMap.putIfAbsent(type, loader);
 
             loader = (SpiContext<T>) contextMap.get(type);
+            checkInit(loader);
         }
-
         return loader;
     }
 
-
-    private void checkInit() {
-        if (!init.get() && init.compareAndSet(false, true)) {
-            spiClassMap = loadSpiClasses(PREFIX);
-            singletonInstances = new ConcurrentHashMap();
+    private static void checkInit(SpiContext context) {
+        if (!context.init.get() && context.init.compareAndSet(false, true)) {
+            context.spiClassMap = context.loadSpiClasses(PREFIX);
+            context.singletonInstances = new ConcurrentHashMap();
         }
     }
 
@@ -140,7 +144,6 @@ public class SpiContext<T> {
      * @return the extension class
      */
     public Class<T> getSpiClass(String name) {
-        checkInit();
 
         SpiClass spiClass = spiClassMap.get(name);
 
@@ -154,16 +157,12 @@ public class SpiContext<T> {
      * @return the extension
      */
     public T getSpiInstance(String name) {
-        checkInit();
-
         if (name == null) {
             return null;
         }
         T t = null;
         try {
-            Spi spi = type.getAnnotation(Spi.class);
-
-            if (spi.scope() == Scope.SINGLETON) {
+            if (this.singleton) {
                 t = getSingletonInstance(name);
             } else {
                 SpiClass<T> spiClass = spiClassMap.getOrDefault(name, SpiClass.EMPTY_SPI);
@@ -180,8 +179,6 @@ public class SpiContext<T> {
         } catch (Exception e) {
             inner.failThrows(type, "Error when getSpiInstance " + name, e);
         }
-
-
         return t;
     }
 
@@ -207,11 +204,15 @@ public class SpiContext<T> {
         singletonClzInstances.put(clz, obj);
         if (obj instanceof Configurable) {
             // todo: init with Config
+            SpiContext<ConfigLoader> configContext = SpiContext.getContext(ConfigLoader.class);
+            List<ConfigLoader> configLoaders = configContext.getSpiInstances(null);
             Configurable configurable = (Configurable) obj;
             Class<? extends VersionConfig> configClass = configurable.configClass();
 
-            configurable.setupWithConfig(ConfigContext.getConfig(configClass));
-            ConfigContext.markConfigurable(configClass, configurable);
+            for (ConfigLoader configLoader : configLoaders) {
+                configurable.setupWithConfig(configLoader.loadConfig(configClass));
+                configLoader.markConfigurable(configClass, configurable);
+            }
         }
         return obj;
     }
@@ -226,7 +227,6 @@ public class SpiContext<T> {
             return;
         }
 
-        checkInit();
 
         inner.checkExtensionType(type, clz);
 
@@ -252,7 +252,6 @@ public class SpiContext<T> {
      */
     @SuppressWarnings("unchecked")
     public List<T> getSpiInstances(String key) {
-
         if (spiClassMap.size() == 0) {
             return Collections.emptyList();
         }
@@ -269,7 +268,6 @@ public class SpiContext<T> {
 
 
     public List<Class<T>> getSpiClasses(String key) {
-        checkInit();
 
         if (spiClassMap.size() == 0) {
             return Collections.emptyList();
@@ -427,7 +425,7 @@ public class SpiContext<T> {
 
         /**
          * check clz
-         * <p>
+         *
          * <pre>
          * 		1.  is interface
          * 		2.  is contains @Spi annotation
@@ -453,7 +451,7 @@ public class SpiContext<T> {
 
         /**
          * check extension clz
-         * <p>
+         *
          * <pre>
          * 		1) is public class
          * 		2) contain public constructor and has not-args constructor

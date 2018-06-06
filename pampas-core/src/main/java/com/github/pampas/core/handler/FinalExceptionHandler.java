@@ -42,7 +42,7 @@ public class FinalExceptionHandler extends ChannelDuplexHandler {
         try {
             log.error("处理消息发生异常", cause);
             ctx.close();
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             log.warn("关闭channel失败:{}", ex);
         }
 

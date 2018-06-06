@@ -19,17 +19,15 @@
 package com.github.pampas.core.route;
 
 import com.github.pampas.common.config.VersionConfig;
-import com.github.pampas.common.extension.SpiContext;
-import com.github.pampas.common.route.Selector;
-import com.github.pampas.common.tools.CollectionTools;
+import com.github.pampas.core.route.rule.AbstractRule;
 import com.github.pampas.core.route.rule.DubboRule;
-import com.github.pampas.core.route.rule.HttpRule;
 import com.github.pampas.core.route.rule.GrpcRule;
+import com.github.pampas.core.route.rule.HttpRule;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by darrenfu on 18-2-23.
@@ -41,9 +39,9 @@ import java.util.stream.Collectors;
 @Data
 public class RouteRuleConfig implements VersionConfig {
 
-    public boolean stripPrefix;
+    private Boolean stripPrefix;
 
-    public String[] selectors;
+    private String[] selectors;
 
 
     private List<HttpRule> http;
@@ -66,15 +64,40 @@ public class RouteRuleConfig implements VersionConfig {
     @Override
     public VersionConfig setupWithDefault() {
         this.stripPrefix = true;
-        SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
 
-        List<Class<Selector>> selectorClzList = selectorSpiContext.getSpiClasses(null);
-
-        List<String> spiNameList = selectorClzList.stream().map(v -> SpiContext.getSpiName(v)).collect(Collectors.toList());
-
-        this.selectors = CollectionTools.toArray(spiNameList, String.class);
         return this;
     }
 
+
+    public RouteRuleConfig addRules(AbstractRule... rules) {
+        if (rules == null || rules.length == 0) {
+            return this;
+        }
+
+        for (AbstractRule rule : rules) {
+            if (rule == null) {
+                continue;
+            }
+            if (rule instanceof HttpRule) {
+                if (http == null) {
+                    http = new ArrayList<>(64);
+                }
+                http.add((HttpRule) rule);
+            }
+            if (rule instanceof GrpcRule) {
+                if (grpc == null) {
+                    grpc = new ArrayList<>(64);
+                }
+                grpc.add((GrpcRule) rule);
+            }
+            if (rule instanceof DubboRule) {
+                if (dubbo == null) {
+                    dubbo = new ArrayList<>(64);
+                }
+                dubbo.add((DubboRule) rule);
+            }
+        }
+        return this;
+    }
 
 }

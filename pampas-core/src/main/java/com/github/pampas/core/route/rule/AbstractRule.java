@@ -25,6 +25,7 @@ import io.netty.handler.codec.http.HttpRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by darrenfu on 18-3-14.
@@ -32,34 +33,52 @@ import lombok.ToString;
  * @author: darrenfu
  * @date: 18 -3-14
  */
-@Getter
-@Setter
+
 @ToString
 public abstract class AbstractRule {
 
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    @Getter
+    private volatile boolean inited = false;
+
+    @Getter
+    @Setter
+    private Boolean stripPrefix;
+
+    @Getter
+    private String prefix;
+
     /**
      * rule可匹配的请求path
      */
+    @Getter
+    @Setter
     private String path;
 
+    @Getter
     private volatile Boolean isAntPath;
 
     /**
      * rule可匹配的header name
      */
+    @Getter
+    @Setter
     private String headerName;
 
 
     /**
      * rule可匹配的header value
      */
+    @Getter
+    @Setter
     private String headerValue;
 
     /**
      * rule对应的service
      */
+    @Getter
+    @Setter
     private String service;
 
 
@@ -76,6 +95,28 @@ public abstract class AbstractRule {
     public abstract RuleTypeEnum ruleType();
 
 
+    public synchronized void init() {
+        if (inited) {
+            return;
+        }
+        if (StringUtils.isNotEmpty(path)) {
+            if (!path.startsWith("/")) {
+                path = "/" + path;
+            }
+            int secondSlash = path.indexOf("/", 1);
+
+            if (secondSlash > 0) {
+                prefix = path.substring(0, secondSlash);
+            }
+        }
+
+        if (this.isAntPath == null) {
+            this.isAntPath = antPathMatcher().isPattern(path);
+        }
+        this.inited = true;
+    }
+
+
     /**
      * 校验请求是否匹配此规则
      *
@@ -83,16 +124,17 @@ public abstract class AbstractRule {
      * @return boolean
      */
     public boolean isMatch(PampasRequest request) {
-        if (request == null || request.requestData() == null) {
+        if (StringUtils.isEmpty(path) || request == null || request.requestData() == null) {
             return false;
         }
         if (!(request.requestData() instanceof HttpRequest)) {
             return false;
         }
-
-        if (this.isAntPath == null) {
-            this.isAntPath = antPathMatcher().isPattern(request.path());
+        if (!inited) {
+            init();
         }
+
+
         return checkMatch(request);
     }
 

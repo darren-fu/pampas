@@ -18,7 +18,6 @@
 
 package com.github.pampas.core.base;
 
-import com.github.pampas.common.config.ConfigContext;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.SystemConfig;
 import com.github.pampas.common.exec.Worker;
@@ -82,7 +81,7 @@ public class WorkerExchanger implements Configurable<SystemConfig> {
 
     @Override
     public SystemConfig getConfig() {
-        return ConfigContext.getConfig(SystemConfig.class);
+        return null;
     }
 
     @Override
@@ -100,14 +99,6 @@ public class WorkerExchanger implements Configurable<SystemConfig> {
     private static class InstanceHolder {
         private static WorkerExchanger INSTANCE = new WorkerExchanger();
 
-        static {
-            log.info("加载{}...", WorkerExchanger.class.getSimpleName());
-            INSTANCE.setupWithConfig(ConfigContext.getConfig(SystemConfig.class));
-            ConfigContext.markConfigurable(SystemConfig.class, INSTANCE);
-
-            log.info("加载{}完成:{}", WorkerExchanger.class.getSimpleName(), INSTANCE);
-
-        }
 
     }
 
