@@ -1,11 +1,11 @@
 package com.github.pampas.dubbo;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pampas.common.exec.AbstractWorker;
 import com.github.pampas.common.exec.Caller;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.route.Locator;
+import com.github.pampas.common.tools.JsonTools;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import org.slf4j.Logger;
@@ -33,7 +33,8 @@ public class DubboWorker extends AbstractWorker<FullHttpRequest, FullHttpRespons
     @Override
     public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) throws IOException {
         String content = req.requestData().content().toString(Charset.forName("UTF-8"));
-        DubboRequest dubboRequest = JSON.toJavaObject(JSON.parseObject(content), DubboRequest.class);
+        DubboRequest dubboRequest = JsonTools.INSTANCE.fromJson(content,DubboRequest.class);
         return caller.asyncCall(dubboRequest,null);
     }
+
 }

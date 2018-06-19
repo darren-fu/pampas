@@ -25,8 +25,6 @@ import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
 import com.alibaba.dubbo.rpc.service.GenericService;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
