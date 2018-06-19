@@ -34,24 +34,26 @@ public class AsyncHttpConfigFactory {
 
     public static final AsyncHttpClientConfig DEFAULT_CONFIG = AsyncHttpConfigFactory.createConfig(3000, 30_000);
 
-    private static HashedWheelTimer timer = new HashedWheelTimer();
-
     /**
      * 生成默认的httpclient config
      *
      * @return the config
      */
     public static AsyncHttpClientConfig createConfig(int connectTimeout, int requestTimeout) {
+        HashedWheelTimer timer = new HashedWheelTimer();
         timer.start();
+        // cleanerPeriod 不能超过MaxIdleTime
         DefaultChannelPool channelPool = new DefaultChannelPool(60_000,
                 -1,
                 DefaultChannelPool.PoolLeaseStrategy.LIFO,
                 timer,
-                30_000);// cleanerPeriod 不能超过MaxIdleTime
+                30_000);
         //ahc-default.properties
+        String sysName = System.getProperty("os.name");
         return new DefaultAsyncHttpClientConfig.Builder()
 //                .setFollowRedirect(false)
 //                .setIoThreadsCount(ioThreads);
+                .setUseNativeTransport(sysName.contains("linux"))
                 .setSoReuseAddress(true)
                 .setConnectTimeout(connectTimeout) //连接超时
                 .setRequestTimeout(requestTimeout) //请求请求超时
@@ -64,8 +66,8 @@ public class AsyncHttpConfigFactory {
                 .setCompressionEnforced(defaultCompressionEnforced())//false
                 .setKeepAlive(true)
                 .setKeepAliveStrategy(new DefaultKeepAliveStrategy())
-                .setMaxConnections(10_000)
-                .setMaxConnectionsPerHost(1_000)
+                .setMaxConnections(1_000_000)
+                .setMaxConnectionsPerHost(100_000)
                 .setMaxRequestRetry(0)
                 .setChannelPool(channelPool)
                 .build();

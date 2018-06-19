@@ -58,7 +58,8 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
         try {
             future = doExecute(req, locator);
         } catch (Exception e) {
-            throw new PampasException(e.getMessage());
+            e.printStackTrace();
+            throw new PampasException(e);
         }
 
         String nettyThreadname = Thread.currentThread().getName();

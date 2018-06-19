@@ -56,9 +56,9 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
 
     @Override
     public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) {
-        AsyncHttpCaller caller = AsyncHttpCallerFactory.getHttpCaller(req.serviceName());
+        AsyncHttpCaller caller = AsyncHttpCallerFactory.getHttpCaller(locator.getServiceName());
         FullHttpRequest requestData = req.requestData();
-        ServerInstance serverInstance = ServerInstance.buildWithUri(req.serviceName(), "http://localhost:9001");
+        ServerInstance serverInstance = ServerInstance.buildWithUri(locator.getServiceName(), "http://localhost:9001");
 
         AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, req.path());
         CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);

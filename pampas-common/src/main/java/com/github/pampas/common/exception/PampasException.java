@@ -25,6 +25,11 @@ package com.github.pampas.common.exception;
  * @date: 18-2-1
  */
 public class PampasException extends RuntimeException {
+
+    public PampasException(Throwable ex) {
+        super(ex);
+    }
+
     public PampasException(String message) {
         super(message);
     }
