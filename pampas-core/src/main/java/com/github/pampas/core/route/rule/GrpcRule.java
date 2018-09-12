@@ -31,6 +31,10 @@ import lombok.Data;
 @Data
 public class GrpcRule extends AbstractRule {
 
+    public GrpcRule(String service, Boolean stripPrefix, String path) {
+        super(service, stripPrefix, path);
+    }
+
     @Override
     public RuleTypeEnum ruleType() {
         return RuleTypeEnum.GRPC;

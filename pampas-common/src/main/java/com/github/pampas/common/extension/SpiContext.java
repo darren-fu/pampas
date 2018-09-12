@@ -242,6 +242,9 @@ public class SpiContext<T> {
         }
     }
 
+    public List<T> getSpiInstances() {
+        return this.getSpiInstances(null);
+    }
 
     /**
      * 有些地方需要spi的所有激活的instances，所以需要能返回一个列表的方法 注意：1 SpiMeta 中的active 为true； 2

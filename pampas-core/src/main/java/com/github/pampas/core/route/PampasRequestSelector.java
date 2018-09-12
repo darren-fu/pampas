@@ -11,6 +11,7 @@ import com.github.pampas.core.route.rule.GrpcRule;
 import com.github.pampas.core.route.rule.HttpRule;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
                 boolean match = httpRule.isMatch(request);
                 if (match) {
                     Locator locator = new Locator();
+                    locator.setLoadBalancer(ObjectUtils.defaultIfNull(config.getLoadBalancer(), PampasConsts.LoadBalancer.RANDOM));
                     locator.setWorker(PampasConsts.Worker.HTTP);
                     locator.setMappedPath(httpRule.getMappedPath());
                     locator.setServiceName(httpRule.getService());

@@ -1,0 +1,2 @@
+com.github.pampas.core.loadbalance.RandomLoadBalancer
+com.github.pampas.core.loadbalance.RoundRobinLoadBalancer

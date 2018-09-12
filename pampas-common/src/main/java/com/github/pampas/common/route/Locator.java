@@ -18,6 +18,7 @@
 
 package com.github.pampas.common.route;
 
+import com.github.pampas.common.base.PampasConsts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,10 +35,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Locator {
 
+    /**
+     * 工作者
+     *
+     * @see com.github.pampas.common.base.PampasConsts.Worker
+     */
     private String worker;
 
+    /**
+     * upstream的服务名称
+     */
     private String serviceName;
+
 
     private String mappedPath;
 
+    /**
+     * 负载均衡器
+     *
+     * @see PampasConsts.LoadBalancer
+     */
+    private String loadBalancer;
 }

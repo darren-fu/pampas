@@ -39,6 +39,8 @@ import java.util.List;
 @Data
 public class RouteRuleConfig implements VersionConfig {
 
+    private String loadBalancer;
+
     private Boolean stripPrefix;
 
     private String[] selectors;

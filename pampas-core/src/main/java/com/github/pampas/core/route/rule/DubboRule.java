@@ -33,6 +33,12 @@ public class DubboRule extends AbstractRule {
 
     String code;
 
+
+    public DubboRule(String service, Boolean stripPrefix, String path, String code) {
+        super(service, stripPrefix, path);
+        this.code = code;
+    }
+
     @Override
     public RuleTypeEnum ruleType() {
         return RuleTypeEnum.DUBBO;

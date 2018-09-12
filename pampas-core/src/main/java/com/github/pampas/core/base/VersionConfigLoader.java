@@ -21,9 +21,6 @@ package com.github.pampas.core.base;
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.VersionConfig;
-import com.github.pampas.common.tools.ClassTools;
-import com.github.pampas.core.route.RouteRuleConfig;
-import com.github.pampas.core.route.rule.HttpRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class VersionConfigLoader<T extends VersionConfig> implements ConfigLoader<T> {
 
-    private static final Logger log = LoggerFactory.getLogger(VersionConfigLoader.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private static final Byte ONE = Byte.valueOf("1");
 
@@ -57,9 +54,6 @@ public abstract class VersionConfigLoader<T extends VersionConfig> implements Co
      */
     @Override
     public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
-
-//    public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
-
         if (configAndConfigurableMap.contains(configClz)) {
             WeakHashMap<Configurable, Byte> instanceMap = configAndConfigurableMap.get(configClz);
             instanceMap.put(configurable, ONE);
@@ -78,44 +72,13 @@ public abstract class VersionConfigLoader<T extends VersionConfig> implements Co
      */
     @Override
     public T loadConfig(Class<T> configClz) {
-
-        VersionConfig config = configInstanceMap.get(configClz);
-
-        if (config == null) {
-            T instance = ClassTools.instance(configClz);
-//            instance.setupWithDefault();
-            ///todo : load config from remote server
-
-            if (configClz == RouteRuleConfig.class) {
-                log.info("加载RouteRuleConfig配置");
-                instance = (T) buildRouteRuleConfig();
-            }
-
-            configInstanceMap.putIfAbsent(configClz, instance);
-            config = configInstanceMap.get(configClz);
-        }
+        VersionConfig config = configInstanceMap.computeIfAbsent(configClz, (clz) -> {
+            log.info("加载{}配置", configClz.getSimpleName());
+            return doConfigLoad();
+        });
         return (T) config;
     }
 
     public abstract T doConfigLoad();
-
-    /**
-     * 测试使用
-     *
-     * @return
-     */
-    private RouteRuleConfig buildRouteRuleConfig() {
-        RouteRuleConfig config = new RouteRuleConfig();
-        config.setStripPrefix(true);
-
-        HttpRule httpRule = new HttpRule();
-        httpRule.setPath("/admin/**");
-        httpRule.setService("admin_service");
-        httpRule.setStripPrefix(true);
-
-        config.addRules(httpRule);
-        return config;
-
-    }
 
 }

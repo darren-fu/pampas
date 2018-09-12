@@ -16,8 +16,9 @@
  *
  */
 
-package com.github.pampas.core.mock;
+package com.github.pampas.bootstrap.mock;
 
+import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.core.base.VersionConfigLoader;
 import com.github.pampas.core.route.RouteRuleConfig;
 import com.github.pampas.core.route.rule.HttpRule;
@@ -34,6 +35,8 @@ public class MockRouteRuleConfigLoader extends VersionConfigLoader<RouteRuleConf
     public RouteRuleConfig doConfigLoad() {
 
         RouteRuleConfig config = new RouteRuleConfig();
+        config.setStripPrefix(false);
+        config.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
         config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
         log.debug("加载配置详情:{}", config);
         return config;

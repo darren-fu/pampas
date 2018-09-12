@@ -66,10 +66,14 @@ public class PampasConsts {
     }
 
     public static class Worker{
-        public static final String HTTP = "http";
-        public static final String DUBBO = "dubbo";
-        public static final String GRPC = "grpc";
+        public static final String HTTP = "HTTP";
+        public static final String DUBBO = "DUBBO";
+        public static final String GRPC = "GRPC";
+    }
 
+    public static class LoadBalancer{
+        public static final String RANDOM = "RANDOM";
+        public static final String ROUND_ROBIN = "ROUND_ROBIN";
     }
 
 }

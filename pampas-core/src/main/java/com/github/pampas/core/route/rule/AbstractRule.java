@@ -42,6 +42,13 @@ public abstract class AbstractRule {
     @Getter
     private volatile boolean inited = false;
 
+    /**
+     * rule对应的service
+     */
+    @Getter
+    @Setter
+    private String service;
+
     @Getter
     @Setter
     private Boolean stripPrefix;
@@ -74,13 +81,24 @@ public abstract class AbstractRule {
     @Setter
     private String headerValue;
 
-    /**
-     * rule对应的service
-     */
-    @Getter
-    @Setter
-    private String service;
 
+    public AbstractRule(String service, String path) {
+        this(service, false, path);
+    }
+
+
+    public AbstractRule(String service, Boolean stripPrefix, String path) {
+        this(service, stripPrefix, path, null, null);
+    }
+
+    public AbstractRule(String service, Boolean stripPrefix, String path,
+                        String headerName, String headerValue) {
+        this.service = service;
+        this.stripPrefix = stripPrefix;
+        this.path = path;
+        this.headerName = headerName;
+        this.headerValue = headerValue;
+    }
 
     protected AntPathMatcher antPathMatcher() {
         return antPathMatcher;

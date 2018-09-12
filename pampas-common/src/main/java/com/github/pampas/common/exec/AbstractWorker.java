@@ -45,7 +45,7 @@ import java.util.concurrent.Future;
  */
 public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> implements Worker<Q, R> {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractWorker.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected abstract void doAfter(String threadName);
 

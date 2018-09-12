@@ -35,6 +35,20 @@ public class HttpRule extends AbstractRule {
 
     private String mappedPath;
 
+    public HttpRule(String service, String path, String mappedPath) {
+        this(service, false, path, mappedPath);
+    }
+
+    public HttpRule(String service, Boolean stripPrefix, String path, String mappedPath) {
+        this(service, stripPrefix, path, mappedPath, null, null);
+    }
+
+
+    public HttpRule(String service, Boolean stripPrefix, String path, String mappedPath, String headerName, String headerValue) {
+        super(service, stripPrefix, path, headerName, headerValue);
+        this.mappedPath = mappedPath;
+    }
+
     @Override
     public RuleTypeEnum ruleType() {
         return RuleTypeEnum.HTTP;
