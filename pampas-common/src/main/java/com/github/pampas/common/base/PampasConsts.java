@@ -59,10 +59,10 @@ public class PampasConsts {
 
 
         /**
-         * server开始服务时间
+         * server version
          */
         public static final String PROP_VERSION_KEY = "version";
-        public static final String PROP_VERSION_DEFAULT = "";
+        public static final String PROP_VERSION_DEFAULT = null;
     }
 
     public static class Worker{

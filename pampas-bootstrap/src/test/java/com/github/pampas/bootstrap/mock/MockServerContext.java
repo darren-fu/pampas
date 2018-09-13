@@ -61,9 +61,10 @@ public class MockServerContext implements ServerContext {
     @Override
     public List<ServerInstance> getServerList(String serviceName) {
         this.instanceMap.put(serviceName, CollectionTools.toList(
-                ServerInstance.buildWithUri(serviceName, "http://localhost:9001"),
-                ServerInstance.buildWithUri(serviceName, "http://localhost:9002"),
-                ServerInstance.buildWithUri(serviceName, "http://localhost:9003")));
+//                ServerInstance.buildWithUri(serviceName, "http://localhost:9003"),
+//                ServerInstance.buildWithUri(serviceName, "http://localhost:9002"),
+                ServerInstance.buildWithUri(serviceName, "http://localhost:9001")
+        ));
 
         return instanceMap.get(serviceName);
     }

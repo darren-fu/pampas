@@ -70,7 +70,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
                     log.debug("成功获取响应:{}", pampasResponse);
                     sendResp(req.channelHandlerContext(), pampasResponse.responseData(), req.isKeepalive());
                 } else {
-                    log.error("Abstract Worker response failed", rsp.exception());
+                    log.error("请求失败:{}", rsp.exception());
                     sendResp(req.channelHandlerContext(), rsp.exception().getMessage(), req.isKeepalive());
                 }
 

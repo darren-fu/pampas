@@ -30,6 +30,8 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.util.Iterator;
@@ -45,6 +47,9 @@ import java.util.concurrent.atomic.LongAdder;
 public class TestHttpServerHandler extends ChannelInboundHandlerAdapter {
     private String result = "";
     static LongAdder count = new LongAdder();
+
+    private static final Logger log = LoggerFactory.getLogger(TestHttpServerHandler.class);
+
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
@@ -93,7 +98,7 @@ public class TestHttpServerHandler extends ChannelInboundHandlerAdapter {
             String body = getBody(httpRequest);     //获取参数
             HttpMethod method = httpRequest.method();//获取请求方法
             //如果不是这个路径，就直接返回错误
-
+            log.info("请求URI:{}，METHOD:{},body:{}", path, method, body);
 //            Thread.sleep(10000L);
             result = "非法请求!";
             send(ctx, result, HttpResponseStatus.OK);
@@ -130,6 +135,7 @@ public class TestHttpServerHandler extends ChannelInboundHandlerAdapter {
     private void send(ChannelHandlerContext ctx, String context, HttpResponseStatus status) {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status, Unpooled.copiedBuffer(context, CharsetUtil.UTF_8));
 //        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON);
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, context.getBytes().length);
         response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);

@@ -34,6 +34,8 @@ public interface PampasResponse<T> extends Operation {
 
     boolean success();
 
+
+
     T responseData();
 
     Throwable exception();

@@ -34,12 +34,6 @@ import java.util.regex.Pattern;
 public class VersionInfo {
 
     /**
-     * 空版本号
-     */
-    public static final VersionInfo EMPTY_VERSION = new VersionInfo();
-
-
-    /**
      * 版本number reg
      */
     private static final Pattern VERSION_NUM_REG = Pattern.compile("^\\d+(\\.\\d)*");
@@ -109,5 +103,10 @@ public class VersionInfo {
         return versionInfo;
     }
 
-
+    @Override
+    public String toString() {
+        return "VersionInfo{" +
+                "originVersion='" + originVersion + '\'' +
+                '}';
+    }
 }

@@ -215,9 +215,9 @@ public class ServerInstance {
         //版本
         String versionAttr = StringUtils.isNotEmpty(version) ? version : getPropValue(PampasConsts.Instance.PROP_VERSION_KEY, PampasConsts.Instance.PROP_VERSION_DEFAULT);
         this.version = versionAttr;
-        this.setVersionInfo(ObjectUtils.defaultIfNull(this.versionInfo,
-                StringUtils.isEmpty(versionAttr) ? VersionInfo.EMPTY_VERSION : VersionInfo.create(this.instanceId, versionAttr)));
-
+        if (StringUtils.isNotEmpty(versionAttr)) {
+            this.setVersionInfo(VersionInfo.create(this.instanceId, versionAttr));
+        }
 
         this.getPropValue(PampasConsts.Instance.PROP_TIMESTAMP_KEY, PampasConsts.Instance.PROP_TIMESTAMP_DEFAULT);
         this.ready = true;
@@ -235,14 +235,18 @@ public class ServerInstance {
      */
     public <T> String getPropValue(String propKey, T defaultValue) {
         if (props == null || props.size() == 0) {
-            return String.valueOf(defaultValue);
+            return objToString(defaultValue);
         }
         String propVal = props.get(propKey);
 
         if (propVal == null) {
-            return String.valueOf(defaultValue);
+            return objToString(defaultValue);
         }
         return propVal;
+    }
+
+    private String objToString(Object obj) {
+        return obj == null ? null : String.valueOf(obj);
     }
 
     /**
@@ -275,5 +279,29 @@ public class ServerInstance {
         }
         props.putAll(propMap);
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return com.google.common.base.MoreObjects.toStringHelper(this)
+                .omitNullValues()
+                .add("instanceId", instanceId)
+                .add("serviceName", serviceName)
+                .add("group", group)
+                .add("protocol", protocol)
+                .add("host", host)
+                .add("port", port)
+                .add("room", room)
+                .add("isAlive", isAlive)
+                .add("startTimestamp", startTimestamp)
+                .add("weight", weight)
+                .add("warmupSeconds", warmupSeconds)
+                .add("versionInfo", versionInfo)
+                .add("version", version)
+                .add("props", props)
+                .add("ready", ready)
+                .add("uri", uri)
+                .toString();
     }
 }

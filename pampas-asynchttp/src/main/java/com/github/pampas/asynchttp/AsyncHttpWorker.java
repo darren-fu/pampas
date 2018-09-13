@@ -43,6 +43,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Created by darrenfu on 18-2-2.
  *
@@ -78,7 +80,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         for (ServerContext serverContext : serverContextList) {
             serverList = serverContext.getServerList(locator.getServiceName());
             if (serverList != null && serverList.size() > 0) {
-                log.debug("服务{},例:{}", locator.getServiceName(), serverList);
+                log.debug("服务{},实例列表:{}", locator.getServiceName(), serverList);
 
                 if (loadBalancer == null) {
                     return serverList.get(0);
@@ -99,11 +101,11 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         // 负载均衡
         ServerInstance serverInstance = this.doLoadBalance(locator);
 
-        AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, req.path());
+        AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, req.originUri());
         CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);
 
         CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {
-            log.debug("请求目标:{}，请求内容:{}，响应内容:{}", serverInstance.getUri(), requestData, AhcTools.responseToString(response));
+            log.debug("请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri(), requestData.content().toString(UTF_8), AhcTools.responseToString(response));
             FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.protocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
                     //response.getResponseBodyAsByteBuffer是HeapByteBuf
                     // zero-copy 设置FullHttpResponse的body
@@ -111,6 +113,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
             fullHttpResponse.headers().set(response.getHeaders());
             DefaultPampasResponse<FullHttpResponse> defaultResponseInfo = new DefaultPampasResponse();
             defaultResponseInfo.setResponseData(fullHttpResponse);
+            defaultResponseInfo.setSuccess(true);
             return (PampasResponse<FullHttpResponse>) defaultResponseInfo;
         }).exceptionally(ex -> {
             log.warn("请求目标:{}，请求内容:{}，出现异常:{}", serverInstance.getUri(), requestData, ex.getMessage(), ex);

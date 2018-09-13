@@ -18,7 +18,12 @@
 
 package com.github.pampas.common.exec.payload;
 
+import com.google.common.base.MoreObjects;
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http.FullHttpResponse;
 import lombok.Setter;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Created by darrenfu on 18-2-5.
@@ -29,10 +34,10 @@ import lombok.Setter;
 public class DefaultPampasResponse<T> implements PampasResponse<T> {
 
     @Setter
-    private long id;
+    private Long id;
 
     @Setter
-    private boolean success;
+    private boolean success = true;
 
     @Setter
     private T responseData;
@@ -68,5 +73,26 @@ public class DefaultPampasResponse<T> implements PampasResponse<T> {
     @Override
     public boolean isCanceled() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String body = null;
+        Object status = null;
+        if (responseData != null && responseData instanceof FullHttpResponse) {
+            FullHttpResponse httpResponse = (FullHttpResponse) this.responseData;
+            ByteBuf content = httpResponse.content();
+            body = content.toString(UTF_8);
+            status = httpResponse.status();
+        }
+
+        return MoreObjects.toStringHelper(this)
+                .omitNullValues()
+                .add("id", id)
+                .add("success", success)
+                .add("status", status)
+                .add("responseData", body == null ? responseData : body)
+                .add("exception", exception)
+                .toString();
     }
 }
