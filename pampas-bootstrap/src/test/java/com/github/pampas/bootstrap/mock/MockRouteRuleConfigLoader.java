@@ -19,7 +19,8 @@
 package com.github.pampas.bootstrap.mock;
 
 import com.github.pampas.common.base.PampasConsts;
-import com.github.pampas.core.base.VersionConfigLoader;
+import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.core.base.AbstractConfigLoader;
 import com.github.pampas.core.route.RouteRuleConfig;
 import com.github.pampas.core.route.rule.HttpRule;
 
@@ -29,7 +30,8 @@ import com.github.pampas.core.route.rule.HttpRule;
  * @author: darrenfu
  * @date: 18-7-2
  */
-public class MockRouteRuleConfigLoader extends VersionConfigLoader<RouteRuleConfig> {
+@SpiMeta(name = "loader-mock-route-rule", key = PampasConsts.ConfigLoaderKey.ROUTE_RULE)
+public class MockRouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleConfig> {
 
     @Override
     public RouteRuleConfig doConfigLoad() {
@@ -40,5 +42,10 @@ public class MockRouteRuleConfigLoader extends VersionConfigLoader<RouteRuleConf
         config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
         log.debug("加载配置详情:{}", config);
         return config;
+    }
+
+    @Override
+    public Class<RouteRuleConfig> configClass() {
+        return RouteRuleConfig.class;
     }
 }

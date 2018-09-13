@@ -19,6 +19,7 @@
 package com.github.pampas.core.route;
 
 import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.core.route.rule.AbstractRule;
 import com.github.pampas.core.route.rule.DubboRule;
 import com.github.pampas.core.route.rule.GrpcRule;
@@ -36,6 +37,7 @@ import java.util.List;
  * @date: 18-2-23
  */
 
+@SpiMeta(name = "config-route-rule")
 @Data
 public class RouteRuleConfig implements VersionConfig {
 
@@ -54,7 +56,7 @@ public class RouteRuleConfig implements VersionConfig {
 
 
     @Override
-    public BigDecimal getVersion() {
+    public BigDecimal configVersionNumber() {
         return null;
     }
 

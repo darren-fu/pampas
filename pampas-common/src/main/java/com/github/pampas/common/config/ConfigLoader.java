@@ -11,8 +11,12 @@ import com.github.pampas.common.extension.Spi;
 @Spi(scope = Scope.SINGLETON)
 public interface ConfigLoader<T extends VersionConfig> {
 
+    Class<T> configClass();
+
+    void addListener(Configurable<T> configurable);
+
     void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable);
 
-    T loadConfig(Class<T> configClz);
+    T loadConfig();
 
 }

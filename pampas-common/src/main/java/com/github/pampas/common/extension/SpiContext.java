@@ -156,7 +156,7 @@ public class SpiContext<T> {
      * @param name the name
      * @return the extension
      */
-    public T getSpiInstance(String name) {
+    public T getSpiInstanceByName(String name) {
         if (name == null) {
             return null;
         }
@@ -177,7 +177,7 @@ public class SpiContext<T> {
                 }
             }
         } catch (Exception e) {
-            inner.failThrows(type, "Error when getSpiInstance " + name, e);
+            inner.failThrows(type, "Error when getSpiInstanceByName " + name, e);
         }
         return t;
     }
@@ -203,15 +203,19 @@ public class SpiContext<T> {
         obj = singletonInstances.get(name);
         singletonClzInstances.put(clz, obj);
         if (obj instanceof Configurable) {
-            // todo: init with Config
-            SpiContext<ConfigLoader> configContext = SpiContext.getContext(ConfigLoader.class);
-            List<ConfigLoader> configLoaders = configContext.getSpiInstances(null);
             Configurable configurable = (Configurable) obj;
             Class<? extends VersionConfig> configClass = configurable.configClass();
 
+            // todo: init with Config
+            SpiContext<ConfigLoader> configContext = SpiContext.getContext(ConfigLoader.class);
+            List<ConfigLoader> configLoaders = configContext.getSpiInstances();
+
             for (ConfigLoader configLoader : configLoaders) {
-                configurable.setupWithConfig(configLoader.loadConfig(configClass));
-                configLoader.markConfigurable(configClass, configurable);
+                if (configLoader.configClass() == configClass) {
+                    configLoader.addListener(configurable);
+                    configLoader.loadConfig();
+                    configLoader.markConfigurable(configClass, configurable);
+                }
             }
         }
         return obj;
@@ -243,7 +247,7 @@ public class SpiContext<T> {
     }
 
     public List<T> getSpiInstances() {
-        return this.getSpiInstances(null);
+        return this.getSpiInstancesByKey(null);
     }
 
     /**
@@ -254,7 +258,7 @@ public class SpiContext<T> {
      * @return extensions extensions
      */
     @SuppressWarnings("unchecked")
-    public List<T> getSpiInstances(String key) {
+    public List<T> getSpiInstancesByKey(String key) {
         if (spiClassMap.size() == 0) {
             return Collections.emptyList();
         }
@@ -264,7 +268,7 @@ public class SpiContext<T> {
             return Collections.EMPTY_LIST;
         }
 
-        List<T> list = spiClassList.stream().map(clz -> getSpiInstance(getSpiName(clz))).collect(Collectors.toList());
+        List<T> list = spiClassList.stream().map(clz -> getSpiInstanceByName(getSpiName(clz))).collect(Collectors.toList());
 
         return list;
     }

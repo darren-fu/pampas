@@ -18,6 +18,7 @@
 
 package com.github.pampas.common.config;
 
+import com.github.pampas.common.extension.SpiMeta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,7 @@ import java.math.BigDecimal;
  * @author: darrenfu
  * @date: 18-3-13
  */
+@SpiMeta(name = "config-system")
 @Getter
 @Setter
 public class SystemConfig implements VersionConfig {
@@ -37,7 +39,7 @@ public class SystemConfig implements VersionConfig {
 
 
     @Override
-    public BigDecimal getVersion() {
+    public BigDecimal configVersionNumber() {
         return null;
     }
 

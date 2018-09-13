@@ -65,15 +65,20 @@ public class PampasConsts {
         public static final String PROP_VERSION_DEFAULT = null;
     }
 
-    public static class Worker{
+    public static class Worker {
         public static final String HTTP = "HTTP";
         public static final String DUBBO = "DUBBO";
         public static final String GRPC = "GRPC";
     }
 
-    public static class LoadBalancer{
+    public static class LoadBalancer {
         public static final String RANDOM = "RANDOM";
         public static final String ROUND_ROBIN = "ROUND_ROBIN";
     }
 
+
+    public static class ConfigLoaderKey {
+        public static final String ROUTE_RULE = "route-rule";
+        public static final String SERVER_CONTEXT = "server-context";
+    }
 }

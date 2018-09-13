@@ -84,7 +84,7 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
 //     * @return boolean boolean
 //     */
 //    protected boolean isVersionOk(RestyCommand command, ServerInstance instance) {
-//        List<VersionRule> versionRules = command.getRestyCommandConfig().getVersion();
+//        List<VersionRule> versionRules = command.getRestyCommandConfig().configVersionNumber();
 //        if (versionRules == null || versionRules.size() == 0) {
 //            return true;
 //        }

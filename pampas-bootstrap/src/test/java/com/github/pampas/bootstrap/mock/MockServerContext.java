@@ -18,11 +18,14 @@
 
 package com.github.pampas.bootstrap.mock;
 
+import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.tools.CollectionTools;
+import com.github.pampas.core.base.AbstractConfigLoader;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,10 +36,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: darrenfu
  * @date: 18-2-6
  */
-@SpiMeta(name = "mock")
-public class MockServerContext implements ServerContext {
+@SpiMeta(name = "mock-server-context", key = PampasConsts.ConfigLoaderKey.SERVER_CONTEXT)
+public class MockServerContext extends AbstractConfigLoader<ServiceAndInstances> implements ServerContext {
 
-    private ConcurrentHashMap<String, List<ServerInstance>> instanceMap;
+    private volatile ConcurrentHashMap<String, List<ServerInstance>> instanceMap;
 
     public MockServerContext() {
         this.instanceMap = new ConcurrentHashMap<>();
@@ -91,4 +94,24 @@ public class MockServerContext implements ServerContext {
         return null;
     }
 
+    @Override
+    public ServiceAndInstances doConfigLoad() {
+        log.info("加载ServerContext的配置:{}", getClass().getSimpleName());
+        ServiceAndInstances serviceAndInstances = new ServiceAndInstances();
+        serviceAndInstances.addServiceAndInstance("TestService",
+                Arrays.asList(
+                        ServerInstance.buildWithUri("TestService", "http://localhost:7001")
+                ));
+
+        ConcurrentHashMap<String, List<ServerInstance>> map = new ConcurrentHashMap<>();
+        map.putAll(serviceAndInstances.getServiceMap());
+        this.instanceMap = map;
+
+        return serviceAndInstances;
+    }
+
+    @Override
+    public Class<ServiceAndInstances> configClass() {
+        return ServiceAndInstances.class;
+    }
 }

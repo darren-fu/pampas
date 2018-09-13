@@ -104,7 +104,7 @@ public class ExtensionLoader<T> {
                 return clz.newInstance();
             }
         } catch (Exception e) {
-            failThrows(type, "Error when getSpiInstance " + name, e);
+            failThrows(type, "Error when getSpiInstanceByName " + name, e);
         }
 
         return null;

@@ -67,7 +67,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
 
     private ServerInstance doLoadBalance(Locator locator) {
         SpiContext<LoadBalancer> loadBalancerContext = SpiContext.getContext(LoadBalancer.class);
-        LoadBalancer loadBalancer = loadBalancerContext.getSpiInstance(locator.getLoadBalancer());
+        LoadBalancer loadBalancer = loadBalancerContext.getSpiInstanceByName(locator.getLoadBalancer());
 
         List<LoadBalancer> loadBalancerList = Collections.EMPTY_LIST;
         if (loadBalancer == null) {

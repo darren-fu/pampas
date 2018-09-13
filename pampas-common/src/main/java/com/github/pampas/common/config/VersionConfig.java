@@ -38,7 +38,7 @@ public interface VersionConfig {
      *
      * @return the version
      */
-    BigDecimal getVersion();
+    BigDecimal configVersionNumber();
 
 
     /**
@@ -51,7 +51,13 @@ public interface VersionConfig {
         if (otherVersionConfig == null) {
             return 1;
         }
-        return this.getVersion().compareTo(otherVersionConfig.getVersion());
+        if (this.configVersionNumber() == null) {
+            return 0;
+        }
+        if (otherVersionConfig.configVersionNumber() == null) {
+            return 1;
+        }
+        return this.configVersionNumber().compareTo(otherVersionConfig.configVersionNumber());
     }
 
 

@@ -108,7 +108,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
         ///todo: Selector URI->ServiceName    map serviceName -> worker
         SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
-        List<Selector> selectors = selectorSpiContext.getSpiInstances(null);
+        List<Selector> selectors = selectorSpiContext.getSpiInstancesByKey(null);
         Locator locator = null;
         for (Selector selector : selectors) {
             locator = selector.select(requestInfo);
@@ -128,7 +128,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
 
     private Worker getWorker(String key) {
-        List<Worker> workers = SpiContext.getContext(Worker.class).getSpiInstances(key);
+        List<Worker> workers = SpiContext.getContext(Worker.class).getSpiInstancesByKey(key);
         if (workers == null || workers.size() < 1) {
             throw new PampasException("没有合适的Worker:" + key);
         }

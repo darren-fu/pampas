@@ -24,6 +24,8 @@ import com.github.pampas.common.config.VersionConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: darrenfu
  * @date: 18 -3-8
  */
-public abstract class VersionConfigLoader<T extends VersionConfig> implements ConfigLoader<T> {
+public abstract class AbstractConfigLoader<T extends VersionConfig> implements ConfigLoader<T> {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -45,6 +47,19 @@ public abstract class VersionConfigLoader<T extends VersionConfig> implements Co
     //VersionConfig 实例缓存    VersionConfig都保持单例
     private static ConcurrentHashMap<Class<? extends VersionConfig>, VersionConfig> configInstanceMap = new ConcurrentHashMap<>();
 
+
+    private List<Configurable<T>> configurableList;
+
+
+    @Override
+    public void addListener(Configurable<T> configurable) {
+        if (configurableList == null) {
+            configurableList = new ArrayList<>();
+        }
+        if (!configurableList.contains(configurable)) {
+            configurableList.add(configurable);
+        }
+    }
 
     /**
      * 缓存VersionConfig和Configurable的关系
@@ -67,14 +82,22 @@ public abstract class VersionConfigLoader<T extends VersionConfig> implements Co
     /**
      * Load config t.
      *
-     * @param configClz the config clz
      * @return the t
      */
     @Override
-    public T loadConfig(Class<T> configClz) {
+    public T loadConfig() {
+        Class<T> configClz = configClass();
         VersionConfig config = configInstanceMap.computeIfAbsent(configClz, (clz) -> {
             log.info("加载{}配置", configClz.getSimpleName());
-            return doConfigLoad();
+            T t = doConfigLoad();
+            log.info("加载{}配置完成:{}", configClz.getSimpleName(), t);
+
+            if (configurableList != null && configurableList.size() > 0) {
+                for (Configurable<T> configurable : configurableList) {
+                    configurable.setupWithConfig(t);
+                }
+            }
+            return t;
         });
         return (T) config;
     }
