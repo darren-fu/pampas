@@ -54,7 +54,7 @@ public interface Configurable<T extends VersionConfig> {
     /**
      * 使用配置项配置当前对象
      */
-    Configurable setupWithConfig(T t);
+    Configurable setupWithConfig(T... t);
 
 
     default void register() {

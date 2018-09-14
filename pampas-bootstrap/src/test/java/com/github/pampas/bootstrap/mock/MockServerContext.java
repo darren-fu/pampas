@@ -19,15 +19,22 @@
 package com.github.pampas.bootstrap.mock;
 
 import com.github.pampas.common.base.PampasConsts;
+import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
+import com.github.pampas.common.discover.ServiceAndInstances;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.tools.CollectionTools;
-import com.github.pampas.core.base.AbstractConfigLoader;
+import com.github.pampas.common.tools.CommonTools;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -37,9 +44,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 18-2-6
  */
 @SpiMeta(name = "mock-server-context", key = PampasConsts.ConfigLoaderKey.SERVER_CONTEXT)
-public class MockServerContext extends AbstractConfigLoader<ServiceAndInstances> implements ServerContext {
+public class MockServerContext implements ServerContext, Configurable<ServiceAndInstances> {
+
+    private static final Logger log = LoggerFactory.getLogger(MockServerContext.class);
 
     private volatile ConcurrentHashMap<String, List<ServerInstance>> instanceMap;
+
+    private ServiceAndInstances serviceAndInstances;
 
     public MockServerContext() {
         this.instanceMap = new ConcurrentHashMap<>();
@@ -63,12 +74,9 @@ public class MockServerContext extends AbstractConfigLoader<ServiceAndInstances>
 
     @Override
     public List<ServerInstance> getServerList(String serviceName) {
-        this.instanceMap.put(serviceName, CollectionTools.toList(
-//                ServerInstance.buildWithUri(serviceName, "http://localhost:9003"),
-//                ServerInstance.buildWithUri(serviceName, "http://localhost:9002"),
-                ServerInstance.buildWithUri(serviceName, "http://localhost:9001")
-        ));
-
+//        this.instanceMap.put(serviceName, CollectionTools.toList(
+//                ServerInstance.buildWithUri(serviceName, "http://localhost:9001")
+//        ));
         return instanceMap.get(serviceName);
     }
 
@@ -90,28 +98,57 @@ public class MockServerContext extends AbstractConfigLoader<ServiceAndInstances>
 
     @Override
     public List<ServerInstance> addServerList(List<ServerInstance> instanceList) {
-
         return null;
     }
 
+
     @Override
-    public ServiceAndInstances doConfigLoad() {
-        log.info("加载ServerContext的配置:{}", getClass().getSimpleName());
-        ServiceAndInstances serviceAndInstances = new ServiceAndInstances();
-        serviceAndInstances.addServiceAndInstance("TestService",
-                Arrays.asList(
-                        ServerInstance.buildWithUri("TestService", "http://localhost:7001")
-                ));
-
-        ConcurrentHashMap<String, List<ServerInstance>> map = new ConcurrentHashMap<>();
-        map.putAll(serviceAndInstances.getServiceMap());
-        this.instanceMap = map;
-
-        return serviceAndInstances;
+    public ServiceAndInstances getConfig() {
+        return this.serviceAndInstances;
     }
 
     @Override
     public Class<ServiceAndInstances> configClass() {
         return ServiceAndInstances.class;
+    }
+
+    @Override
+    public Configurable setupWithConfig(ServiceAndInstances... serviceAndInstances) {
+        this.serviceAndInstances = serviceAndInstances[0];
+        ConcurrentHashMap<String, List<ServerInstance>> map = new ConcurrentHashMap<>();
+        for (ServiceAndInstances serviceAndInstance : serviceAndInstances) {
+            for (String serviceName : serviceAndInstance.getServices()) {
+                if (map.containsKey(serviceName) && CollectionUtils.isNotEmpty(map.get(serviceName))) {
+                    map.get(serviceName).removeAll(serviceAndInstance.getInstances(serviceName));
+                    map.get(serviceName).addAll(serviceAndInstance.getInstances(serviceName));
+                } else {
+                    List<ServerInstance> list = new ArrayList<>(serviceAndInstance.getInstances(serviceName));
+                    map.put(serviceName, list);
+                }
+            }
+        }
+        if (CommonTools.isNotEmpty(map)) {
+            for (Map.Entry<String, List<ServerInstance>> entry : map.entrySet()) {
+                log.info("{}刷新服务实例集合，<{}>拥有<{}>个实例：{}", getClass().getSimpleName(), entry.getKey(), entry.getValue().size(), entry.getValue());
+            }
+            this.instanceMap = map;
+        }
+        return this;
+    }
+
+    public ConcurrentHashMap deepCloneInstanceMap() {
+        try {
+            // 将对象写到流里
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream oo = new ObjectOutputStream(bo);
+            oo.writeObject(this.instanceMap);
+            // 从流里读出来
+            ByteArrayInputStream bi = new ByteArrayInputStream(bo.toByteArray());
+            ObjectInputStream oi = new ObjectInputStream(bi);
+            return (ConcurrentHashMap) oi.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("序列化失败服务实例集合：{}", e.getMessage(), e);
+        }
+        return new ConcurrentHashMap();
     }
 }

@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 /**
  * @author maijunsheng
  * @version 创建时间：2013-5-28
- *
+ * <p>
  * -> motan
  */
 @Documented
@@ -46,4 +46,12 @@ public @interface SpiMeta {
      * 是否支持重试的时候也调用
      */
     boolean retry() default true;
+
+
+    /**
+     * static 构造函数名称
+     *
+     * @return
+     */
+    String factoryMethod() default "";
 }

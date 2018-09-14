@@ -20,11 +20,13 @@ package com.github.pampas.core.base;
 
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
+import com.github.pampas.common.extension.SpiContext;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,9 +42,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author: darrenfu
  * @date: 18-2-11
  */
+
+//@SpiMeta(name = "composite-server-context", key = PampasConsts.ConfigLoaderKey.SERVER_CONTEXT, order = 0, factoryMethod = "getInstance")
 public class CompositeServerContext implements ServerContext {
 
     private static final Logger log = LoggerFactory.getLogger(CompositeServerContext.class);
+
+
+    private static volatile CompositeServerContext instance;
 
     private List<ServerContext> serverContextList;
 
@@ -57,7 +64,30 @@ public class CompositeServerContext implements ServerContext {
 
     private volatile AtomicBoolean merging = new AtomicBoolean(false);
 
-    public CompositeServerContext(List<ServerContext> serverContextList) {
+
+    public static CompositeServerContext getInstance() {
+        if (instance == null) {
+            synchronized (CompositeServerContext.class) {
+                if (instance == null) {
+                    instance = new CompositeServerContext();
+                    SpiContext<ServerContext> context = SpiContext.getContext(ServerContext.class);
+                    List<ServerContext> spiInstances = context.getSpiInstances();
+                    for (ServerContext serverContext : spiInstances) {
+                        instance.addServerContext(serverContext);
+                    }
+                    instance.merge();
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    private CompositeServerContext() {
+
+    }
+
+    private CompositeServerContext(List<ServerContext> serverContextList) {
         this.serverContextList = serverContextList;
         this.instanceMap = new ConcurrentHashMap(32);
         this.refreshMap = new ConcurrentHashMap<>();
@@ -72,6 +102,9 @@ public class CompositeServerContext implements ServerContext {
     }
 
     public void addServerContext(ServerContext serverContext) {
+        if (this.serverContextList == null) {
+            this.serverContextList = new ArrayList<>();
+        }
         if (serverContext != null) {
             this.serverContextList.add(serverContext);
         }
@@ -157,5 +190,10 @@ public class CompositeServerContext implements ServerContext {
     @Override
     public List<ServerInstance> addServerList(List<ServerInstance> instanceList) {
         throw new UnsupportedOperationException(this.getClass() + "不支持手动添加服务列表");
+    }
+
+
+    private void init() {
+
     }
 }

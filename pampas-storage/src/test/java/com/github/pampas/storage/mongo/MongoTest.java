@@ -18,6 +18,8 @@
 
 package com.github.pampas.storage.mongo;
 
+import com.github.pampas.common.discover.ServerInstance;
+import com.github.pampas.storage.entity.DBServiceAndInstances;
 import com.github.pampas.storage.entity.Employee;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
@@ -34,6 +36,7 @@ import org.mongodb.morphia.query.UpdateResults;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -89,6 +92,20 @@ public class MongoTest {
 
 
     @Test
+    public void addServiceInstance() {
+
+        DBServiceAndInstances serviceAndInstance = new DBServiceAndInstances();
+
+        serviceAndInstance.setServiceName("TestService");
+        serviceAndInstance.setInstanceList(Arrays.asList(
+                ServerInstance.buildWithUri("TestService", "http://localhost:7001"),
+                ServerInstance.buildWithUri("TestService", "http://localhost:7002")
+        ));
+        datastore.save(serviceAndInstance);
+    }
+
+
+    @Test
     public void add() {
         final Employee elmer = new Employee("Elmer Fudd", 50000.0);
         datastore.save(elmer);
@@ -117,11 +134,12 @@ public class MongoTest {
     @Test
     public void update() {
         final Query<Employee> underPaidQuery = datastore.createQuery(Employee.class)
-                .filter("salary <=", 30000);
+                .filter("salary <=", 50000);
 
         final UpdateOperations<Employee> updateOperations = datastore.createUpdateOperations(Employee.class)
                 .inc("salary", 10000);
         final UpdateResults results = datastore.update(underPaidQuery, updateOperations);
+
         System.out.println("results:" + results);
 
     }
@@ -129,7 +147,7 @@ public class MongoTest {
     @Test
     public void del() {
         final Query<Employee> overPaidQuery = datastore.createQuery(Employee.class)
-                .filter("salary >", 100000);
+                .filter("salary >", 10000);
         datastore.delete(overPaidQuery);
 
     }

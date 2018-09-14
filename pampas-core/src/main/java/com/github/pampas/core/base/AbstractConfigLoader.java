@@ -24,6 +24,7 @@ import com.github.pampas.common.config.VersionConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -87,19 +88,18 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
     @Override
     public T loadConfig() {
         Class<T> configClz = configClass();
-        VersionConfig config = configInstanceMap.computeIfAbsent(configClz, (clz) -> {
-            log.info("加载{}配置", configClz.getSimpleName());
-            T t = doConfigLoad();
-            log.info("加载{}配置完成:{}", configClz.getSimpleName(), t);
+        log.info("开始加载配置<{}>,加载器:{}", configClz.getSimpleName(), getClass().getSimpleName());
+        T t = doConfigLoad();
+        log.info("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);
 
-            if (configurableList != null && configurableList.size() > 0) {
-                for (Configurable<T> configurable : configurableList) {
-                    configurable.setupWithConfig(t);
-                }
+        if (t != null && configurableList != null && configurableList.size() > 0) {
+            T[] arr = (T[]) Array.newInstance(configClz, 1);
+            arr[0] = t;
+            for (Configurable<T> configurable : configurableList) {
+                configurable.setupWithConfig((T[]) arr);
             }
-            return t;
-        });
-        return (T) config;
+        }
+        return t;
     }
 
     public abstract T doConfigLoad();

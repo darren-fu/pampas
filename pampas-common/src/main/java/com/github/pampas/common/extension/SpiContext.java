@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
@@ -197,7 +199,19 @@ public class SpiContext<T> {
             return null;
         }
 
-        obj = clz.newInstance();
+        SpiMeta spiMeta = getSpiMeta(clz);
+        if (spiMeta != null && !"".equals(spiMeta.factoryMethod())) {
+            try {
+                Method initMethod = clz.getMethod(spiMeta.factoryMethod(), null);
+                obj = (T) initMethod.invoke(null, null);
+            } catch (NoSuchMethodException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            obj = clz.newInstance();
+        }
+
 
         singletonInstances.putIfAbsent(name, obj);
         obj = singletonInstances.get(name);

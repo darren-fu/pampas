@@ -40,7 +40,6 @@ public class MockRouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleCon
         config.setStripPrefix(false);
         config.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
         config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
-        log.debug("加载配置详情:{}", config);
         return config;
     }
 

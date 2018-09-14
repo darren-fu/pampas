@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>pampas</artifactId>
-        <groupId>com.github.darren-fu</groupId>
+        <groupId>com.github.pampas</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,6 +13,11 @@
     <artifactId>pampas-storage</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.pampas</groupId>
+            <artifactId>pampas-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>

@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -50,6 +51,26 @@ public class CommonTools {
      */
     public static boolean isEmpty(Collection coll) {
         return coll == null || coll.isEmpty();
+    }
+
+    /**
+     * Is empty boolean.
+     *
+     * @param array the array
+     * @return the boolean
+     */
+    public static boolean isEmpty(Object[] array) {
+        return array == null || array.length == 0 || Arrays.stream(array).filter(v -> v != null).count() == 0;
+    }
+
+    /**
+     * Is not empty boolean.
+     *
+     * @param array the array
+     * @return the boolean
+     */
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0 && Arrays.stream(array).filter(v -> v != null).count() > 0;
     }
 
     /**

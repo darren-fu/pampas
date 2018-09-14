@@ -21,6 +21,7 @@ package com.github.pampas.common.discover;
 import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.tools.CommonTools;
 import com.github.pampas.common.tools.StringBuilderFactory;
+import com.google.common.base.MoreObjects;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -41,8 +43,8 @@ import java.util.Map;
  * Created by darrenfu on 17-6-25.
  */
 @Data
-@EqualsAndHashCode(of = {"instanceId", "serviceName", "protocol", "host", "port", "room"})
-public class ServerInstance {
+@EqualsAndHashCode(of = {"instanceId", "serviceName", "group", "protocol", "host", "port", "room"})
+public class ServerInstance implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(ServerInstance.class);
 
@@ -284,7 +286,7 @@ public class ServerInstance {
 
     @Override
     public String toString() {
-        return com.google.common.base.MoreObjects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .omitNullValues()
                 .add("instanceId", instanceId)
                 .add("serviceName", serviceName)

@@ -22,6 +22,7 @@ import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.SystemConfig;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.tools.CommonTools;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,9 +91,12 @@ public class WorkerExchanger implements Configurable<SystemConfig> {
     }
 
     @Override
-    public Configurable setupWithConfig(SystemConfig systemConfig) {
-        this.defaultWorker = systemConfig.getDefaultWorker();
-        log.debug("defaultWorker:{}", systemConfig.getDefaultWorker());
+    public Configurable setupWithConfig(SystemConfig... systemConfig) {
+        if(CommonTools.isEmpty(systemConfig)){
+            return this;
+        }
+        this.defaultWorker = systemConfig[0].getDefaultWorker();
+        log.debug("defaultWorker:{}", systemConfig[0].getDefaultWorker());
         return this;
     }
 

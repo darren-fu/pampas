@@ -18,15 +18,11 @@
 
 package com.github.pampas.storage.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by darrenfu on 18-1-18.
@@ -53,10 +49,26 @@ public class Employee {
     @Property("wage")
     private Double salary;
 
+    @Embedded
+    private List<Info> infos = Arrays.asList(new Info(),new Info(),new Info());
+
+
+    @Version
+    private Long version;
+
     public Employee(String name, Double salary) {
         this.name = name;
         this.salary = salary;
         this.directReports = new ArrayList<>();
+    }
+
+    @Data
+    public static class Info {
+
+        private String addr = "address";
+        private int age = 19;
+
+        private Date date = new Date();
     }
 
 }

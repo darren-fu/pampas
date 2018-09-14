@@ -6,6 +6,7 @@ import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
+import com.github.pampas.common.tools.CommonTools;
 import com.github.pampas.core.route.rule.DubboRule;
 import com.github.pampas.core.route.rule.GrpcRule;
 import com.github.pampas.core.route.rule.HttpRule;
@@ -45,8 +46,10 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
     }
 
     @Override
-    public Configurable setupWithConfig(RouteRuleConfig routeRuleConfig) {
-        this.config = routeRuleConfig;
+    public Configurable setupWithConfig(RouteRuleConfig... routeRuleConfig) {
+        if (CommonTools.isNotEmpty(routeRuleConfig)) {
+            this.config = routeRuleConfig[0];
+        }
         return this;
     }
 

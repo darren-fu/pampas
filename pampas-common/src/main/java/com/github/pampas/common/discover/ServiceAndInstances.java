@@ -1,7 +1,7 @@
-package com.github.pampas.bootstrap.mock;
+package com.github.pampas.common.discover;
 
 import com.github.pampas.common.config.VersionConfig;
-import com.github.pampas.common.discover.ServerInstance;
+import com.google.common.base.MoreObjects;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,5 +52,15 @@ public class ServiceAndInstances implements VersionConfig {
     @Override
     public VersionConfig setupWithDefault() {
         return null;
+    }
+
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .omitNullValues()
+                .add("serviceMap", serviceMap)
+                .add("timestamp", timestamp)
+                .toString();
     }
 }
