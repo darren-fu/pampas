@@ -5,6 +5,8 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Version;
 
+import java.util.Date;
+
 /**
  * Description:
  * User: darrenfu
@@ -12,7 +14,7 @@ import org.mongodb.morphia.annotations.Version;
  */
 
 @Data
-public abstract class MongoData<T> {
+public abstract class MongoData {
 
     @Id
     private ObjectId id;
@@ -20,5 +22,9 @@ public abstract class MongoData<T> {
     @Version
     private Long version;
 
-    private T data;
+    private Date createAt;
+
+    private Date updateAt;
+
+
 }

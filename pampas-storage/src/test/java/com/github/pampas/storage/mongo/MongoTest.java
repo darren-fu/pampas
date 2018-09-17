@@ -63,7 +63,6 @@ public class MongoTest {
         datastore = morphia.createDatastore(new MongoClient(), "morphia_example");
         datastore.ensureIndexes();
 
-
     }
 
     @Test

@@ -2,11 +2,8 @@ package com.github.pampas.storage.entity;
 
 import com.github.pampas.common.discover.ServerInstance;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Version;
 
 import java.util.List;
 
@@ -15,15 +12,11 @@ import java.util.List;
  * User: darrenfu
  * Date: 2018-09-14
  */
-@Entity(value = "service_instance")
+@Entity(value = DBServiceAndInstances.ENTITY)
 @Data
-public class DBServiceAndInstances {
+public class DBServiceAndInstances extends MongoData {
 
-    @Id
-    private ObjectId id;
-
-    @Version
-    private Long version;
+    public static final String ENTITY = "service_instance";
 
     private String serviceName;
 

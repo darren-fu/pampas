@@ -18,6 +18,9 @@
 
 package com.github.pampas.core.server;
 
+import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.core.server.listener.ServerReadyToStartListener;
+import com.google.common.base.MoreObjects;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -31,6 +34,10 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.time.LocalDateTime;
+import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -39,17 +46,23 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author: darrenfu
  * @date: 18-1-22
  */
-public abstract class AbstractServer {
+public abstract class AbstractServer implements PampasServer {
     private static final Logger log = LoggerFactory.getLogger(AbstractServer.class);
 
     private String serverName;
+
+    protected int port;
+    private String id;
+    private InetAddress address;
+
+    protected ServerState serverState;
 
     private EventLoopGroup boss;
     private EventLoopGroup worker;
     private ServerBootstrap bootstrap;
     private Channel channel;
     protected ServerConfig config;
-    protected int port;
+
 
 
     protected final AtomicReference<ServerState> serverStateRef;
@@ -61,13 +74,14 @@ public abstract class AbstractServer {
     }
 
     public AbstractServer(String serverName, int port, ServerConfig config) {
-
+        this.address = getLocalHostLANAddress();
+        this.id = serverName + "@" + address.getHostAddress() + ":" + port + "[" + LocalDateTime.now().toString() + "]";
 
         this.serverName = serverName;
         this.port = port;
         this.config = config;
         serverStateRef = new AtomicReference<>(ServerState.Created);
-        boss = useEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        boss = useEpoll() ? new EpollEventLoopGroup(1) : new NioEventLoopGroup(1);
         worker = useEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         bootstrap = new ServerBootstrap();
 
@@ -98,7 +112,15 @@ public abstract class AbstractServer {
         }
         log.info("准备启动网关服务器,serverName:{},端口:{}", serverName, port);
 
+        SpiContext<ServerReadyToStartListener> readyToStartListenerSpiContext = SpiContext.getContext(ServerReadyToStartListener.class);
+        for (ServerReadyToStartListener readyToStartListener : readyToStartListenerSpiContext.getSpiInstances()) {
+            readyToStartListener.readyToStart(this);
+        }
+
+
+        log.info("启动中:{}", this);
         ChannelFuture channelFuture = bootstrap.bind(port).sync();
+
         log.info("启动成功,serverName:{},端口:{}, soBacklog:{}, soKeepLive:{}, tcpNodDelay:{}", serverName, port,
                 config.soBacklog, config.soKeepAlive, config.tcpNoDelay);
 
@@ -156,6 +178,72 @@ public abstract class AbstractServer {
     }
 
 
-    protected enum ServerState {Created, Starting, Started, Shutdown}
+    public InetAddress getLocalHostLANAddress() {
+        try {
+            InetAddress candidateAddress = null;
+            // 遍历所有的网络接口
+            for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements(); ) {
+                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                // 在所有的接口下再遍历IP
+                for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements(); ) {
+                    InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
+                    if (!inetAddr.isLoopbackAddress()) {// 排除loopback类型地址
+                        if (inetAddr.isSiteLocalAddress()) {
+                            // 如果是site-local地址，就是它了
+                            return inetAddr;
+                        } else if (candidateAddress == null) {
+                            // site-local类型的地址未被发现，先记录候选地址
+                            candidateAddress = inetAddr;
+                        }
+                    }
+                }
+            }
+            if (candidateAddress != null) {
+                return candidateAddress;
+            }
+            // 如果没有发现 non-loopback地址.只能用最次选的方案
+            InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
+            return jdkSuppliedAddress;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    @Override
+    public String id() {
+        return id;
+    }
+
+    @Override
+    public String serverName() {
+        return serverName;
+    }
+
+    @Override
+    public InetAddress address() {
+        return address;
+    }
+
+    @Override
+    public Integer port() {
+        return port;
+    }
+
+    @Override
+    public ServerState status() {
+        return serverStateRef.get();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .omitNullValues()
+                .add("serverName", serverName)
+                .add("config", config)
+                .add("port", port)
+                .add("id", id)
+                .add("serverState", serverState)
+                .toString();
+    }
 }
