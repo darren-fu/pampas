@@ -26,9 +26,11 @@ import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import org.bson.types.ObjectId;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -100,6 +102,10 @@ public class MongoTest {
                 ServerInstance.buildWithUri("TestService", "http://localhost:7001"),
                 ServerInstance.buildWithUri("TestService", "http://localhost:7002")
         ));
+        Key<DBServiceAndInstances> save = datastore.save(serviceAndInstance);
+
+        System.out.println(save);
+        serviceAndInstance.setId((ObjectId)save.getId());
         datastore.save(serviceAndInstance);
     }
 

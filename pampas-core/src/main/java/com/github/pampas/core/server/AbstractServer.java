@@ -20,6 +20,7 @@ package com.github.pampas.core.server;
 
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
+import com.github.pampas.core.server.listener.ServerStartedListener;
 import com.google.common.base.MoreObjects;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -36,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.time.LocalDateTime;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -55,6 +55,8 @@ public abstract class AbstractServer implements PampasServer {
     private String id;
     private InetAddress address;
 
+    private long startTimestamp;
+
     protected ServerState serverState;
 
     private EventLoopGroup boss;
@@ -62,7 +64,6 @@ public abstract class AbstractServer implements PampasServer {
     private ServerBootstrap bootstrap;
     private Channel channel;
     protected ServerConfig config;
-
 
 
     protected final AtomicReference<ServerState> serverStateRef;
@@ -75,7 +76,8 @@ public abstract class AbstractServer implements PampasServer {
 
     public AbstractServer(String serverName, int port, ServerConfig config) {
         this.address = getLocalHostLANAddress();
-        this.id = serverName + "@" + address.getHostAddress() + ":" + port + "[" + LocalDateTime.now().toString() + "]";
+        this.id = serverName + "@" + address.getHostAddress() + ":" + port;
+        this.startTimestamp = System.currentTimeMillis();
 
         this.serverName = serverName;
         this.port = port;
@@ -108,7 +110,7 @@ public abstract class AbstractServer implements PampasServer {
     public synchronized ChannelFuture start() throws InterruptedException {
         if (!serverStateRef.compareAndSet(ServerState.Created, ServerState.Starting)) {
             log.error("服务器已经启动,serverName:{},端口:{}", port);
-            throw new IllegalStateException("Server already started");
+            throw new IllegalStateException("ServerStartedListener already started");
         }
         log.info("准备启动网关服务器,serverName:{},端口:{}", serverName, port);
 
@@ -125,6 +127,10 @@ public abstract class AbstractServer implements PampasServer {
                 config.soBacklog, config.soKeepAlive, config.tcpNoDelay);
 
         serverStateRef.set(ServerState.Started); // It will come here only if this was the thread that transitioned to Starting
+        SpiContext<ServerStartedListener> startedListenerSpiContext = SpiContext.getContext(ServerStartedListener.class);
+        for (ServerStartedListener serverStartedListener : startedListenerSpiContext.getSpiInstances()) {
+            serverStartedListener.started(this);
+        }
         channel = channelFuture.channel();
         channel.closeFuture().addListener(future -> {
             log.info("服务优雅停机,serverName:{},端口:{}", serverName, port);
@@ -140,12 +146,16 @@ public abstract class AbstractServer implements PampasServer {
      */
     public void shutdown() {
         if (serverStateRef.compareAndSet(ServerState.Started, ServerState.Shutdown)) {
+            log.info("服务准备停机,serverName:{},端口:{}", serverName, port);
+
             if (boss != null && !boss.isShuttingDown() && !boss.isShutdown()) {
                 boss.shutdownGracefully();
             }
             if (worker != null && !worker.isShuttingDown() && !worker.isShutdown()) {
                 worker.shutdownGracefully();
             }
+            log.info("服务正常停机,serverName:{},端口:{}", serverName, port);
+
         } else {
             log.info("服务器尚未启动serverName:{},端口:{}", serverName, port);
         }
@@ -167,7 +177,7 @@ public abstract class AbstractServer implements PampasServer {
         switch (serverState) {
             case Created:
             case Starting:
-                throw new IllegalStateException("Server not started yet.");
+                throw new IllegalStateException("ServerStartedListener not started yet.");
             case Started:
                 channel.closeFuture().await();
                 break;
@@ -231,6 +241,11 @@ public abstract class AbstractServer implements PampasServer {
     }
 
     @Override
+    public Long startTimestamp() {
+        return this.startTimestamp;
+    }
+
+    @Override
     public ServerState status() {
         return serverStateRef.get();
     }
@@ -240,7 +255,6 @@ public abstract class AbstractServer implements PampasServer {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
                 .add("serverName", serverName)
-                .add("config", config)
                 .add("port", port)
                 .add("id", id)
                 .add("serverState", serverState)

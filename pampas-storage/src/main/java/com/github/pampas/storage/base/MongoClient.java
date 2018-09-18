@@ -11,7 +11,7 @@ import org.mongodb.morphia.Morphia;
 public class MongoClient {
     private static Datastore datastore;
 
-    public static Datastore getMongo() {
+    public static Datastore mongo() {
 
         if (datastore == null) {
             synchronized (MongoClient.class) {
@@ -20,7 +20,7 @@ public class MongoClient {
 
                     // 告诉Morphia在哪里找到你的类
                     // 可以为不同的包或者类进行多次的调用
-                    morphia.mapPackage("com.github.pampas.persist.entity");
+                    morphia.mapPackage("com.github.pampas.storage");
                     //创建datastore，并连接到指定数据库
                     //datastore有两个参数，第一个用来连接到MongoDB，第二个是数据库的名字。
                     datastore = morphia.createDatastore(new com.mongodb.MongoClient(), "morphia_example");

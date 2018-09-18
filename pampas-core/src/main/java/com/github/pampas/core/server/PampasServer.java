@@ -17,5 +17,7 @@ public interface PampasServer {
 
     Integer port();
 
+    Long startTimestamp();
+
     ServerState status();
 }
