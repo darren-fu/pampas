@@ -28,6 +28,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import org.bson.types.ObjectId;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
@@ -68,6 +69,7 @@ public class MongoTest {
     }
 
     @Test
+    @Ignore
     public void storeFile() throws IOException {
         File file = new File("/home/darrenfu/IdeaProjects/pampas/pampas-grpc/df/open/grpc/hello/grpc-test-229014610914606914.jar");
         GridFS gridFS = new GridFS(datastore.getDB());
