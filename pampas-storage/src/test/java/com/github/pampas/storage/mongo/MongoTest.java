@@ -107,7 +107,7 @@ public class MongoTest {
         Key<DBServiceAndInstances> save = datastore.save(serviceAndInstance);
 
         System.out.println(save);
-        serviceAndInstance.setId((ObjectId)save.getId());
+        serviceAndInstance.setId((ObjectId) save.getId());
         datastore.save(serviceAndInstance);
     }
 

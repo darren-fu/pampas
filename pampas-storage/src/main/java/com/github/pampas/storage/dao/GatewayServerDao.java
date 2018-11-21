@@ -35,4 +35,9 @@ public class GatewayServerDao extends BaseDao<DBGatewayServer> {
             }
         }
     }
+
+    @Override
+    public Class<DBGatewayServer> entityClz() {
+        return DBGatewayServer.class;
+    }
 }

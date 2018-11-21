@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 配置管理器
@@ -48,8 +49,13 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
     //VersionConfig 实例缓存    VersionConfig都保持单例
     private static ConcurrentHashMap<Class<? extends VersionConfig>, VersionConfig> configInstanceMap = new ConcurrentHashMap<>();
 
-
     private List<Configurable<T>> configurableList;
+
+    private AtomicBoolean loaded = new AtomicBoolean(false);
+
+    private volatile T config;
+
+    private Object mutx = new Object();
 
 
     @Override
@@ -87,16 +93,35 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
      */
     @Override
     public T loadConfig() {
-        Class<T> configClz = configClass();
-        log.info("开始加载配置<{}>,加载器:{}", configClz.getSimpleName(), getClass().getSimpleName());
-        T t = doConfigLoad();
-        log.info("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);
 
-        if (t != null && configurableList != null && configurableList.size() > 0) {
-            T[] arr = (T[]) Array.newInstance(configClz, 1);
-            arr[0] = t;
-            for (Configurable<T> configurable : configurableList) {
-                configurable.setupWithConfig((T[]) arr);
+        if (loaded.get()) {
+            return config;
+        }
+        T t = config;
+
+        synchronized (mutx) {
+            if (loaded.compareAndSet(false, true)) {
+                Class<T> configClz = configClass();
+                log.info("开始加载配置<{}>,加载器:{}", configClz.getSimpleName(), getClass().getSimpleName());
+                try {
+                    t = doConfigLoad();
+                } catch (Exception ex) {
+                    log.error("加载配置<{}>失败,ex:{}", configClz.getSimpleName(), ex.getMessage(), ex);
+                }
+                if (t == null) {
+                    log.warn("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);
+                    loaded.set(false);
+                    return config;
+                }
+                config = t;
+                log.info("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);
+                if (t != null && configurableList != null && configurableList.size() > 0) {
+                    T[] arr = (T[]) Array.newInstance(configClz, 1);
+                    arr[0] = t;
+                    for (Configurable<T> configurable : configurableList) {
+                        configurable.setupWithConfig((T[]) arr);
+                    }
+                }
             }
         }
         return t;
@@ -104,4 +129,9 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
 
     public abstract T doConfigLoad();
 
+    @Override
+    public T refreshConfig() {
+        this.loaded.compareAndSet(true, false);
+        return this.loadConfig();
+    }
 }

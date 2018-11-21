@@ -17,6 +17,12 @@ public interface ConfigLoader<T extends VersionConfig> {
 
     void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable);
 
+    default boolean lazy() {
+        return false;
+    }
+
     T loadConfig();
+
+    T refreshConfig();
 
 }

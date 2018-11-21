@@ -18,6 +18,7 @@
 
 package com.github.pampas.core.server;
 
+import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
 import com.github.pampas.core.server.listener.ServerStartedListener;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -114,6 +116,16 @@ public abstract class AbstractServer implements PampasServer {
         }
         log.info("准备启动网关服务器,serverName:{},端口:{}", serverName, port);
 
+        // 启动时优先启动ConfigLoader， 加载所有Config
+        List<ConfigLoader> configLoaderList = SpiContext.getContext(ConfigLoader.class).getSpiInstances();
+
+        for (ConfigLoader configLoader : configLoaderList) {
+            if (!configLoader.lazy()) {
+                configLoader.loadConfig();
+            }
+        }
+
+        // 调用start监听
         SpiContext<ServerReadyToStartListener> readyToStartListenerSpiContext = SpiContext.getContext(ServerReadyToStartListener.class);
         for (ServerReadyToStartListener readyToStartListener : readyToStartListenerSpiContext.getSpiInstances()) {
             readyToStartListener.readyToStart(this);

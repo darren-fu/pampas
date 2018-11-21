@@ -19,6 +19,11 @@
 package com.github.pampas.storage;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.stereotype.Component;
+
 /**
  * Created by darrenfu on 18-1-18.
  *
@@ -27,5 +32,38 @@ package com.github.pampas.storage;
  */
 public class Application {
 
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        System.out.println(Application.class.getPackage().getName());
+//        ConfigurableEnvironment environment =
+        applicationContext.scan(Application.class.getPackage().getName());
+        applicationContext.refresh();
+        Test test = applicationContext.getBean(Test.class);
+        test.say();
+        System.out.println("val:" + test.getVal());
+        System.out.println("----------------------------------");
+    }
+
+
+    @Component
+    public static class Test {
+
+        @Value("${abc}")
+        private Integer val;
+
+        public Integer getVal() {
+            return val;
+        }
+
+        public void setVal(Integer val) {
+            this.val = val;
+        }
+
+        public String say() {
+            System.out.println("我是Test...");
+            return "OK";
+        }
+
+    }
 
 }

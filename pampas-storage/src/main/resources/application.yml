@@ -1,0 +1,11 @@
+abc: 12345
+pampas:
+  db:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/pampas?useUnicode=true&characterEncoding=UTF-8&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+    username: root
+    password: 123456
+spring:
+  main:
+    banner-mode: "off"
+    web-environment: false

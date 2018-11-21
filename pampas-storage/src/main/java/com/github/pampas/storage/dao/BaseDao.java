@@ -27,9 +27,21 @@ public abstract class BaseDao<T extends MongoData> {
      *
      * @return the datastore
      */
-    protected Datastore mongo() {
+    public Datastore mongo() {
         return MongoClient.mongo();
     }
+
+    public abstract Class<T> entityClz();
+
+    public Query<T> createQuery() {
+        return mongo().createQuery(entityClz());
+    }
+
+
+    public long count(T example) {
+        return mongo().getCount(example);
+    }
+
 
     /**
      * Query by example list.

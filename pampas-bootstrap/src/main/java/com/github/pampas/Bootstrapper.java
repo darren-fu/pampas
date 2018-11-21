@@ -19,6 +19,7 @@
 package com.github.pampas;
 
 import com.github.pampas.core.server.GatewayServer;
+import com.github.pampas.storage.SpringStorageApp;
 
 /**
  * Created by darrenfu on 18-4-13.
@@ -29,11 +30,14 @@ import com.github.pampas.core.server.GatewayServer;
 public class Bootstrapper {
     public static void main(String[] args) {
 
-        GatewayServer server1 = new GatewayServer("server1", 9000);
-        try {
-            server1.start();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SpringStorageApp.init(args, (ctx) -> {
+            GatewayServer server1 = new GatewayServer("server1", 9000);
+            try {
+                server1.start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 }
