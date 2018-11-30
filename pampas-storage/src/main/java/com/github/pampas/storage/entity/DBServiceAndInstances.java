@@ -2,8 +2,6 @@ package com.github.pampas.storage.entity;
 
 import com.github.pampas.common.discover.ServerInstance;
 import lombok.Data;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
 
 import java.util.List;
 
@@ -12,7 +10,6 @@ import java.util.List;
  * User: darrenfu
  * Date: 2018-09-14
  */
-@Entity(value = DBServiceAndInstances.ENTITY)
 @Data
 public class DBServiceAndInstances extends MongoData {
 
@@ -20,6 +17,5 @@ public class DBServiceAndInstances extends MongoData {
 
     private String serviceName;
 
-    @Embedded
     private List<ServerInstance> instanceList;
 }

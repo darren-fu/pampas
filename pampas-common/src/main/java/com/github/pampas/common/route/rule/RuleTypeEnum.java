@@ -16,7 +16,10 @@
  *
  */
 
-package com.github.pampas.core.route.rule;
+package com.github.pampas.common.route.rule;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * 匹配规则分类枚举
@@ -27,6 +30,27 @@ package com.github.pampas.core.route.rule;
  */
 public enum RuleTypeEnum {
 
-    HTTP, DUBBO, GRPC;
+    HTTP("http"), DUBBO("dubbo"), GRPC("grpc");
+
+    private String value;
+
+    RuleTypeEnum(String value) {
+        this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
+    @JsonCreator
+    public static RuleTypeEnum getEnum(String value){
+        for (RuleTypeEnum anEnum : values()) {
+            if(anEnum.getValue().equals(value)){
+                return anEnum;
+            }
+        }
+        throw new IllegalArgumentException("不合法的数据:" + value);
+    }
 
 }

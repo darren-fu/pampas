@@ -4,13 +4,10 @@ import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.tools.TaskTools;
 import com.github.pampas.core.server.PampasServer;
 import com.github.pampas.core.server.listener.ServerStartedListener;
-import com.github.pampas.storage.dao.GatewayServerDao;
-import com.github.pampas.storage.entity.DBGatewayServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * Description:
@@ -26,14 +23,14 @@ public class StorageServerStartedListener implements ServerStartedListener {
     public void started(PampasServer pampasServer) {
         log.info("服务器{}启动完成:{}", pampasServer, LocalDateTime.now().toString());
         TaskTools.scheduledTask("gateway-refresh-timer",30_000L,()->{
-            GatewayServerDao gatewayServerDao = new GatewayServerDao();
-            DBGatewayServer dbGatewayServer = new DBGatewayServer();
-            dbGatewayServer.setServerId(pampasServer.id());
-            dbGatewayServer.setServerName(pampasServer.serverName());
-            dbGatewayServer.setPort(pampasServer.port());
-            dbGatewayServer.setStart(new Date(pampasServer.startTimestamp()));
-            dbGatewayServer.setAddress(pampasServer.address().getHostAddress());
-            gatewayServerDao.updateGatewayServerStat(dbGatewayServer);
+//            GatewayServerDao gatewayServerDao = new GatewayServerDao();
+//            DBGatewayServer dbGatewayServer = new DBGatewayServer();
+//            dbGatewayServer.setServerId(pampasServer.id());
+//            dbGatewayServer.setServerName(pampasServer.serverName());
+//            dbGatewayServer.setPort(pampasServer.port());
+//            dbGatewayServer.setStart(new Date(pampasServer.startTimestamp()));
+//            dbGatewayServer.setAddress(pampasServer.address().getHostAddress());
+//            gatewayServerDao.updateGatewayServerStat(dbGatewayServer);
             return null;
         });
     }

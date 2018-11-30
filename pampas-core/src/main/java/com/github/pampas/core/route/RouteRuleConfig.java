@@ -20,10 +20,10 @@ package com.github.pampas.core.route;
 
 import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.extension.SpiMeta;
-import com.github.pampas.core.route.rule.AbstractRule;
-import com.github.pampas.core.route.rule.DubboRule;
-import com.github.pampas.core.route.rule.GrpcRule;
-import com.github.pampas.core.route.rule.HttpRule;
+import com.github.pampas.common.route.rule.AbstractRule;
+import com.github.pampas.common.route.rule.DubboRule;
+import com.github.pampas.common.route.rule.GrpcRule;
+import com.github.pampas.common.route.rule.HttpRule;
 import lombok.Data;
 
 import java.math.BigDecimal;

@@ -16,15 +16,16 @@
  *
  */
 
-package com.github.pampas.core.route.rule;
+package com.github.pampas.common.route.rule;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.tools.AntPathMatcher;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -34,27 +35,21 @@ import org.apache.commons.lang3.StringUtils;
  * @date: 18 -3-14
  */
 
-@ToString
+@Data
 public abstract class AbstractRule {
 
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Getter
+    @JsonIgnore
     private volatile boolean inited = false;
 
+
+    private RuleTypeEnum type;
     /**
      * rule对应的service
      */
-    @Getter
-    @Setter
     private String service;
-
-    @Getter
-    @Setter
-    private Boolean stripPrefix;
-
-    @Getter
-    private String prefix;
 
     /**
      * rule可匹配的请求path
@@ -63,7 +58,43 @@ public abstract class AbstractRule {
     @Setter
     private String path;
 
+    /**
+     * path匹配策略
+     */
+    private MappingStrategyEnum mappingStrategy;
+
+    /**
+     * 匹配的path
+     */
+    private String mappingPath;
+
+    /**
+     * 服务地址匹配策略
+     */
+    private HostStrategyEnum hostStrategy;
+
+    /**
+     * 服务地址
+     */
+    private String mappingHost;
+
+    @JsonIgnore
+    private Object mutex = new Object();
+
+    /**
+     * 路由规则类型 H
+     *
+     * @return rule type enum
+     * @see RuleTypeEnum
+     */
+    @JsonIgnore
+    public RuleTypeEnum ruleType() {
+        return this.type;
+    }
+
+
     @Getter
+    @JsonIgnore
     private volatile Boolean isAntPath;
 
     /**
@@ -81,57 +112,39 @@ public abstract class AbstractRule {
     @Setter
     private String headerValue;
 
-
-    public AbstractRule(String service, String path) {
-        this(service, false, path);
+    public AbstractRule() {
     }
 
-
-    public AbstractRule(String service, Boolean stripPrefix, String path) {
-        this(service, stripPrefix, path, null, null);
-    }
-
-    public AbstractRule(String service, Boolean stripPrefix, String path,
-                        String headerName, String headerValue) {
-        this.service = service;
-        this.stripPrefix = stripPrefix;
-        this.path = path;
-        this.headerName = headerName;
-        this.headerValue = headerValue;
-    }
 
     protected AntPathMatcher antPathMatcher() {
         return antPathMatcher;
     }
 
-    /**
-     * 路由规则类型 H
-     *
-     * @return rule type enum
-     * @see RuleTypeEnum
-     */
-    public abstract RuleTypeEnum ruleType();
 
-
-    public synchronized void init() {
-        if (inited) {
-            return;
-        }
-        if (StringUtils.isNotEmpty(path)) {
-            if (!path.startsWith("/")) {
-                path = "/" + path;
+    public void init() {
+        synchronized (mutex) {
+            if (inited) {
+                return;
             }
-            int secondSlash = path.indexOf("/", 1);
+            if (StringUtils.isNotEmpty(path)) {
+                if (!path.startsWith("/")) {
+                    path = "/" + path;
+                }
 
-            if (secondSlash > 0) {
-                prefix = path.substring(0, secondSlash);
+                if (mappingStrategy == MappingStrategyEnum.APPOINT) {
+
+                }
+                if (mappingStrategy == MappingStrategyEnum.STRIP) {
+                    this.mappingPath = this.path.replaceFirst(this.mappingPath, "");
+                }
             }
+
+            if (this.isAntPath == null) {
+                this.isAntPath = antPathMatcher().isPattern(path);
+            }
+            this.inited = true;
         }
 
-        if (this.isAntPath == null) {
-            this.isAntPath = antPathMatcher().isPattern(path);
-        }
-        this.inited = true;
     }
 
 
@@ -151,8 +164,6 @@ public abstract class AbstractRule {
         if (!inited) {
             init();
         }
-
-
         return checkMatch(request);
     }
 

@@ -20,6 +20,7 @@ package com.github.pampas;
 
 import com.github.pampas.core.server.GatewayServer;
 import com.github.pampas.storage.SpringStorageApp;
+import com.github.pampas.storage.base.SystemProps;
 
 /**
  * Created by darrenfu on 18-4-13.
@@ -31,6 +32,7 @@ public class Bootstrapper {
     public static void main(String[] args) {
 
         SpringStorageApp.init(args, (ctx) -> {
+            System.out.println("SystemProps:" + SystemProps.getGatewayVersion());
             GatewayServer server1 = new GatewayServer("server1", 9000);
             try {
                 server1.start();

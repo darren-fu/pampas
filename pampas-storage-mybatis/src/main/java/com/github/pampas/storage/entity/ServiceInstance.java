@@ -88,7 +88,7 @@ public class ServiceInstance implements Serializable {
      *
      * Corresponding to the database column p_service_instance.status
      */
-    private Byte status;
+    private Integer status;
 
     /**
      * 启动时间
@@ -413,13 +413,13 @@ public class ServiceInstance implements Serializable {
      *
      * @return the value of p_service_instance.status
      */
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
     /**
      */
-    public ServiceInstance withStatus(Byte status) {
+    public ServiceInstance withStatus(Integer status) {
         this.setStatus(status);
         return this;
     }
@@ -429,7 +429,7 @@ public class ServiceInstance implements Serializable {
      *
      * @param status the value for p_service_instance.status
      */
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -769,7 +769,7 @@ public class ServiceInstance implements Serializable {
         hostName("host_name", "hostName", "VARCHAR", false),
         port("port", "port", "INTEGER", false),
         room("room", "room", "VARCHAR", false),
-        status("status", "status", "TINYINT", true),
+        status("status", "status", "INTEGER", true),
         startTime("start_time", "startTime", "TIMESTAMP", false),
         warmupSeconds("warmup_seconds", "warmupSeconds", "INTEGER", false),
         weight("weight", "weight", "INTEGER", false),

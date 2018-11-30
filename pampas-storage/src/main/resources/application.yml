@@ -1,4 +1,4 @@
-abc: 12345
+gateway.version: "@project.version@"
 pampas:
   db:
     driverClassName: com.mysql.jdbc.Driver

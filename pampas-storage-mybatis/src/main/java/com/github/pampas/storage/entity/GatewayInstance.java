@@ -35,6 +35,13 @@ public class GatewayInstance implements Serializable {
     private String group;
 
     /**
+     * 服务名称
+     *
+     * Corresponding to the database column p_gateway_instance.server_name
+     */
+    private String serverName;
+
+    /**
      * 实例host IP
      *
      * Corresponding to the database column p_gateway_instance.host
@@ -203,6 +210,31 @@ public class GatewayInstance implements Serializable {
      */
     public void setGroup(String group) {
         this.group = group;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_instance.server_name
+     *
+     * @return the value of p_gateway_instance.server_name
+     */
+    public String getServerName() {
+        return serverName;
+    }
+
+    /**
+     */
+    public GatewayInstance withServerName(String serverName) {
+        this.setServerName(serverName);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_instance.server_name
+     *
+     * @param serverName the value for p_gateway_instance.server_name
+     */
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
     }
 
     /**
@@ -541,6 +573,7 @@ public class GatewayInstance implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", instanceId=").append(instanceId);
         sb.append(", group=").append(group);
+        sb.append(", serverName=").append(serverName);
         sb.append(", host=").append(host);
         sb.append(", hostName=").append(hostName);
         sb.append(", proxyPort=").append(proxyPort);
@@ -575,6 +608,7 @@ public class GatewayInstance implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getInstanceId() == null ? other.getInstanceId() == null : this.getInstanceId().equals(other.getInstanceId()))
             && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
+            && (this.getServerName() == null ? other.getServerName() == null : this.getServerName().equals(other.getServerName()))
             && (this.getHost() == null ? other.getHost() == null : this.getHost().equals(other.getHost()))
             && (this.getHostName() == null ? other.getHostName() == null : this.getHostName().equals(other.getHostName()))
             && (this.getProxyPort() == null ? other.getProxyPort() == null : this.getProxyPort().equals(other.getProxyPort()))
@@ -599,6 +633,7 @@ public class GatewayInstance implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getInstanceId() == null) ? 0 : getInstanceId().hashCode());
         result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
+        result = prime * result + ((getServerName() == null) ? 0 : getServerName().hashCode());
         result = prime * result + ((getHost() == null) ? 0 : getHost().hashCode());
         result = prime * result + ((getHostName() == null) ? 0 : getHostName().hashCode());
         result = prime * result + ((getProxyPort() == null) ? 0 : getProxyPort().hashCode());
@@ -622,6 +657,7 @@ public class GatewayInstance implements Serializable {
         id("id", "id", "INTEGER", false),
         instanceId("instance_id", "instanceId", "VARCHAR", false),
         group("group", "group", "VARCHAR", true),
+        serverName("server_name", "serverName", "VARCHAR", true),
         host("host", "host", "VARCHAR", true),
         hostName("host_name", "hostName", "VARCHAR", false),
         proxyPort("proxy_port", "proxyPort", "INTEGER", false),

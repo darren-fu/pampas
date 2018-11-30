@@ -1,11 +1,6 @@
 package com.github.pampas.storage.entity;
 
 import lombok.Data;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Version;
-
-import java.util.Date;
 
 /**
  * Description:
@@ -16,15 +11,6 @@ import java.util.Date;
 @Data
 public abstract class MongoData {
 
-    @Id
-    private ObjectId id;
-
-    @Version
-    private Long version;
-
-    private Date createAt;
-
-    private Date updateAt;
 
 
 }

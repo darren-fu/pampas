@@ -2,7 +2,6 @@ package com.github.pampas.storage.entity;
 
 import com.github.pampas.core.server.ServerState;
 import lombok.Data;
-import org.mongodb.morphia.annotations.Entity;
 
 import java.util.Date;
 
@@ -11,7 +10,6 @@ import java.util.Date;
  * User: darrenfu
  * Date: 2018-09-18
  */
-@Entity(value = DBGatewayServer.ENTITY)
 @Data
 public class DBGatewayServer extends MongoData {
     public static final String ENTITY = "gateway_server";

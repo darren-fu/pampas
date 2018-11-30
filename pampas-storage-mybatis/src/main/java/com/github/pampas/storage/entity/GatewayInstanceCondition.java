@@ -513,6 +513,118 @@ public class GatewayInstanceCondition {
             return (Criteria) this;
         }
 
+        public Criteria andServerNameIsNull() {
+            addCriterion("`server_name` is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameIsNotNull() {
+            addCriterion("`server_name` is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameEqualTo(String value) {
+            addCriterion("`server_name` =", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameEqualToColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameNotEqualTo(String value) {
+            addCriterion("`server_name` <>", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameNotEqualToColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameGreaterThan(String value) {
+            addCriterion("`server_name` >", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameGreaterThanColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameGreaterThanOrEqualTo(String value) {
+            addCriterion("`server_name` >=", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameGreaterThanOrEqualToColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameLessThan(String value) {
+            addCriterion("`server_name` <", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameLessThanColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameLessThanOrEqualTo(String value) {
+            addCriterion("`server_name` <=", value, "serverName");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andServerNameLessThanOrEqualToColumn(GatewayInstance.Column column) {
+            addCriterion(new StringBuilder("`server_name` <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameLike(String value) {
+            addCriterion("`server_name` like", value, "serverName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameNotLike(String value) {
+            addCriterion("`server_name` not like", value, "serverName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameIn(List<String> values) {
+            addCriterion("`server_name` in", values, "serverName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameNotIn(List<String> values) {
+            addCriterion("`server_name` not in", values, "serverName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameBetween(String value1, String value2) {
+            addCriterion("`server_name` between", value1, value2, "serverName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameNotBetween(String value1, String value2) {
+            addCriterion("`server_name` not between", value1, value2, "serverName");
+            return (Criteria) this;
+        }
+
         public Criteria andHostIsNull() {
             addCriterion("`host` is null");
             return (Criteria) this;
@@ -1906,6 +2018,11 @@ public class GatewayInstanceCondition {
 
         public Criteria andGroupLikeInsensitive(String value) {
             addCriterion("upper(`group`) like", value.toUpperCase(), "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andServerNameLikeInsensitive(String value) {
+            addCriterion("upper(`server_name`) like", value.toUpperCase(), "serverName");
             return (Criteria) this;
         }
 

@@ -16,8 +16,10 @@
  *
  */
 
-package com.github.pampas.core.route.rule;
+package com.github.pampas.common.route.rule;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
@@ -29,15 +31,15 @@ import lombok.Data;
  * @date: 18-3-14
  */
 @Data
-public class GrpcRule extends AbstractRule {
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+public class DubboRule extends AbstractRule {
 
-    public GrpcRule(String service, Boolean stripPrefix, String path) {
-        super(service, stripPrefix, path);
-    }
+    String code;
+
 
     @Override
     public RuleTypeEnum ruleType() {
-        return RuleTypeEnum.GRPC;
+        return RuleTypeEnum.DUBBO;
     }
 
     @Override

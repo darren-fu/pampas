@@ -16,8 +16,10 @@
  *
  */
 
-package com.github.pampas.core.route.rule;
+package com.github.pampas.common.route.rule;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
@@ -31,23 +33,16 @@ import org.apache.commons.lang3.StringUtils;
  * @date: 18-3-14
  */
 @Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HttpRule extends AbstractRule {
 
-    private String mappedPath;
 
-    public HttpRule(String service, String path, String mappedPath) {
-        this(service, false, path, mappedPath);
+
+
+    public HttpRule() {
+
     }
 
-    public HttpRule(String service, Boolean stripPrefix, String path, String mappedPath) {
-        this(service, stripPrefix, path, mappedPath, null, null);
-    }
-
-
-    public HttpRule(String service, Boolean stripPrefix, String path, String mappedPath, String headerName, String headerValue) {
-        super(service, stripPrefix, path, headerName, headerValue);
-        this.mappedPath = mappedPath;
-    }
 
     @Override
     public RuleTypeEnum ruleType() {

@@ -11,6 +11,8 @@ public interface PampasServer {
 
     String id();
 
+    String version();
+
     String serverName();
 
     InetAddress address();

@@ -21,7 +21,7 @@ import javax.sql.DataSource;
  * Created by erhu on 2017/1/24.
  */
 @Configuration
-@MapperScan(basePackages = {"com.github.pampas.storage.**.mapper"})
+@MapperScan(basePackages = {"com.github.pampas.**.mapper"})
 @ConditionalOnBean(name = "dataSource")
 @EnableTransactionManagement(order = Ordered.LOWEST_PRECEDENCE - 100)
 public class MybatisConfig {

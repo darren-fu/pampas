@@ -5,6 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="instance_id" jdbcType="VARCHAR" property="instanceId" />
     <result column="group" jdbcType="VARCHAR" property="group" />
+    <result column="server_name" jdbcType="VARCHAR" property="serverName" />
     <result column="host" jdbcType="VARCHAR" property="host" />
     <result column="host_name" jdbcType="VARCHAR" property="hostName" />
     <result column="proxy_port" jdbcType="INTEGER" property="proxyPort" />
@@ -78,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, instance_id, `group`, `host`, host_name, proxy_port, admin_port, room, `status`, 
-    start_time, version, props, remark, insert_time, update_time, is_del
+    id, instance_id, `group`, `server_name`, `host`, host_name, proxy_port, admin_port, 
+    room, `status`, start_time, version, props, remark, insert_time, update_time, is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewayInstanceCondition" resultMap="BaseResultMap">
     select
@@ -123,18 +124,18 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_gateway_instance` (instance_id, `group`, `host`, 
-      host_name, proxy_port, admin_port, 
-      room, `status`, start_time, 
-      version, props, remark, 
-      insert_time, update_time, is_del
-      )
-    values (#{instanceId,jdbcType=VARCHAR}, #{group,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}, 
-      #{hostName,jdbcType=VARCHAR}, #{proxyPort,jdbcType=INTEGER}, #{adminPort,jdbcType=INTEGER}, 
-      #{room,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{version,jdbcType=VARCHAR}, #{props,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}
-      )
+    insert into `p_gateway_instance` (instance_id, `group`, `server_name`, 
+      `host`, host_name, proxy_port, 
+      admin_port, room, `status`, 
+      start_time, version, props, 
+      remark, insert_time, update_time, 
+      is_del)
+    values (#{instanceId,jdbcType=VARCHAR}, #{group,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, 
+      #{host,jdbcType=VARCHAR}, #{hostName,jdbcType=VARCHAR}, #{proxyPort,jdbcType=INTEGER}, 
+      #{adminPort,jdbcType=INTEGER}, #{room,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{version,jdbcType=VARCHAR}, #{props,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.GatewayInstance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -147,6 +148,9 @@
       </if>
       <if test="group != null">
         `group`,
+      </if>
+      <if test="serverName != null">
+        `server_name`,
       </if>
       <if test="host != null">
         `host`,
@@ -194,6 +198,9 @@
       </if>
       <if test="group != null">
         #{group,jdbcType=VARCHAR},
+      </if>
+      <if test="serverName != null">
+        #{serverName,jdbcType=VARCHAR},
       </if>
       <if test="host != null">
         #{host,jdbcType=VARCHAR},
@@ -254,6 +261,9 @@
       <if test="record.group != null">
         `group` = #{record.group,jdbcType=VARCHAR},
       </if>
+      <if test="record.serverName != null">
+        `server_name` = #{record.serverName,jdbcType=VARCHAR},
+      </if>
       <if test="record.host != null">
         `host` = #{record.host,jdbcType=VARCHAR},
       </if>
@@ -303,6 +313,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       instance_id = #{record.instanceId,jdbcType=VARCHAR},
       `group` = #{record.group,jdbcType=VARCHAR},
+      `server_name` = #{record.serverName,jdbcType=VARCHAR},
       `host` = #{record.host,jdbcType=VARCHAR},
       host_name = #{record.hostName,jdbcType=VARCHAR},
       proxy_port = #{record.proxyPort,jdbcType=INTEGER},
@@ -328,6 +339,9 @@
       </if>
       <if test="group != null">
         `group` = #{group,jdbcType=VARCHAR},
+      </if>
+      <if test="serverName != null">
+        `server_name` = #{serverName,jdbcType=VARCHAR},
       </if>
       <if test="host != null">
         `host` = #{host,jdbcType=VARCHAR},
@@ -375,6 +389,7 @@
     update `p_gateway_instance`
     set instance_id = #{instanceId,jdbcType=VARCHAR},
       `group` = #{group,jdbcType=VARCHAR},
+      `server_name` = #{serverName,jdbcType=VARCHAR},
       `host` = #{host,jdbcType=VARCHAR},
       host_name = #{hostName,jdbcType=VARCHAR},
       proxy_port = #{proxyPort,jdbcType=INTEGER},

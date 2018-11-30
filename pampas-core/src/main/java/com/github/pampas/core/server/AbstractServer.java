@@ -20,6 +20,7 @@ package com.github.pampas.core.server;
 
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.core.base.CoreVersion;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
 import com.github.pampas.core.server.listener.ServerStartedListener;
 import com.google.common.base.MoreObjects;
@@ -55,6 +56,7 @@ public abstract class AbstractServer implements PampasServer {
 
     protected int port;
     private String id;
+    private String version;
     private InetAddress address;
 
     private long startTimestamp;
@@ -80,7 +82,7 @@ public abstract class AbstractServer implements PampasServer {
         this.address = getLocalHostLANAddress();
         this.id = serverName + "@" + address.getHostAddress() + ":" + port;
         this.startTimestamp = System.currentTimeMillis();
-
+        this.version = CoreVersion.getVersion();
         this.serverName = serverName;
         this.port = port;
         this.config = config;
@@ -114,7 +116,7 @@ public abstract class AbstractServer implements PampasServer {
             log.error("服务器已经启动,serverName:{},端口:{}", port);
             throw new IllegalStateException("ServerStartedListener already started");
         }
-        log.info("准备启动网关服务器,serverName:{},端口:{}", serverName, port);
+        log.info("准备启动网关服务器,serverName:{},端口:{},版本:{}", serverName, port, CoreVersion.getVersion());
 
         // 启动时优先启动ConfigLoader， 加载所有Config
         List<ConfigLoader> configLoaderList = SpiContext.getContext(ConfigLoader.class).getSpiInstances();
@@ -238,6 +240,11 @@ public abstract class AbstractServer implements PampasServer {
     }
 
     @Override
+    public String version() {
+        return version;
+    }
+
+    @Override
     public String serverName() {
         return serverName;
     }
@@ -267,6 +274,7 @@ public abstract class AbstractServer implements PampasServer {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
                 .add("serverName", serverName)
+                .add("version", version)
                 .add("port", port)
                 .add("id", id)
                 .add("serverState", serverState)

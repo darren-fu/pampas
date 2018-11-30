@@ -22,7 +22,7 @@ import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.core.base.AbstractConfigLoader;
 import com.github.pampas.core.route.RouteRuleConfig;
-import com.github.pampas.core.route.rule.HttpRule;
+import com.github.pampas.common.route.rule.HttpRule;
 
 /**
  * Created by darrenfu on 18-7-2.
@@ -39,7 +39,7 @@ public class MockRouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleCon
         RouteRuleConfig config = new RouteRuleConfig();
         config.setStripPrefix(false);
         config.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
-        config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
+//        config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
         return config;
     }
 

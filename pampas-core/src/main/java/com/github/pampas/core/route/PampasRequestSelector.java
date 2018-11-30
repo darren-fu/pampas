@@ -7,9 +7,9 @@ import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
 import com.github.pampas.common.tools.CommonTools;
-import com.github.pampas.core.route.rule.DubboRule;
-import com.github.pampas.core.route.rule.GrpcRule;
-import com.github.pampas.core.route.rule.HttpRule;
+import com.github.pampas.common.route.rule.DubboRule;
+import com.github.pampas.common.route.rule.GrpcRule;
+import com.github.pampas.common.route.rule.HttpRule;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -70,7 +70,7 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
                     Locator locator = new Locator();
                     locator.setLoadBalancer(ObjectUtils.defaultIfNull(config.getLoadBalancer(), PampasConsts.LoadBalancer.RANDOM));
                     locator.setWorker(PampasConsts.Worker.HTTP);
-                    locator.setMappedPath(httpRule.getMappedPath());
+                    locator.setMappedPath(httpRule.getMappingPath());
                     locator.setServiceName(httpRule.getService());
                     return locator;
                 }

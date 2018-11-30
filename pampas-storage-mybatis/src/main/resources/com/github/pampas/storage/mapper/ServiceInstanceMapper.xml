@@ -12,7 +12,7 @@
     <result column="host_name" jdbcType="VARCHAR" property="hostName" />
     <result column="port" jdbcType="INTEGER" property="port" />
     <result column="room" jdbcType="VARCHAR" property="room" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="warmup_seconds" jdbcType="INTEGER" property="warmupSeconds" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
@@ -138,7 +138,7 @@
     values (#{instanceId,jdbcType=VARCHAR}, #{serviceId,jdbcType=INTEGER}, #{serviceName,jdbcType=VARCHAR}, 
       #{group,jdbcType=VARCHAR}, #{protocol,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}, 
       #{hostName,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, #{room,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{startTime,jdbcType=TIMESTAMP}, #{warmupSeconds,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{warmupSeconds,jdbcType=INTEGER}, 
       #{weight,jdbcType=INTEGER}, #{version,jdbcType=VARCHAR}, #{props,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=BIT})
@@ -236,7 +236,7 @@
         #{room,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -307,7 +307,7 @@
         room = #{record.room,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
-        `status` = #{record.status,jdbcType=TINYINT},
+        `status` = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.startTime != null">
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
@@ -353,7 +353,7 @@
       host_name = #{record.hostName,jdbcType=VARCHAR},
       port = #{record.port,jdbcType=INTEGER},
       room = #{record.room,jdbcType=VARCHAR},
-      `status` = #{record.status,jdbcType=TINYINT},
+      `status` = #{record.status,jdbcType=INTEGER},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       warmup_seconds = #{record.warmupSeconds,jdbcType=INTEGER},
       weight = #{record.weight,jdbcType=INTEGER},
@@ -398,7 +398,7 @@
         room = #{room,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
+        `status` = #{status,jdbcType=INTEGER},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -441,7 +441,7 @@
       host_name = #{hostName,jdbcType=VARCHAR},
       port = #{port,jdbcType=INTEGER},
       room = #{room,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=INTEGER},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       warmup_seconds = #{warmupSeconds,jdbcType=INTEGER},
       weight = #{weight,jdbcType=INTEGER},

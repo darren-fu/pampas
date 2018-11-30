@@ -34,7 +34,8 @@ public class GatewayInstanceServiceImpl implements GatewayInstanceService {
         List<GatewayInstance> gatewayInstances = gatewayInstanceMapper.selectByExample(condition);
 
         if (CollectionUtils.isEmpty(gatewayInstances)) {
-            gatewayInstanceMapper.insert(gatewayInstance);
+            gatewayInstance.setGroup(gatewayInstance.getServerName());
+            gatewayInstanceMapper.insertSelective(gatewayInstance);
             log.info("新增网关:{}", gatewayInstance);
         } else {
             AssertTools.isTrue(gatewayInstances.size() == 1, "存在重复的gateway:" + gatewayInstance.getInstanceId());

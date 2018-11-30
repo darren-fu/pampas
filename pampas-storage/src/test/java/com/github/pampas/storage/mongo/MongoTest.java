@@ -18,29 +18,19 @@
 
 package com.github.pampas.storage.mongo;
 
-import com.github.pampas.common.discover.ServerInstance;
-import com.github.pampas.storage.entity.DBServiceAndInstances;
-import com.github.pampas.storage.entity.Employee;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
-import org.bson.types.ObjectId;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
-import org.mongodb.morphia.query.UpdateResults;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by darrenfu on 18-1-18.
@@ -94,68 +84,68 @@ public class MongoTest {
     }
 
 
-    @Test
-    public void addServiceInstance() {
-
-        DBServiceAndInstances serviceAndInstance = new DBServiceAndInstances();
-
-        serviceAndInstance.setServiceName("TestService");
-        serviceAndInstance.setInstanceList(Arrays.asList(
-                ServerInstance.buildWithUri("TestService", "http://localhost:7001"),
-                ServerInstance.buildWithUri("TestService", "http://localhost:7002")
-        ));
-        Key<DBServiceAndInstances> save = datastore.save(serviceAndInstance);
-
-        System.out.println(save);
-        serviceAndInstance.setId((ObjectId) save.getId());
-        datastore.save(serviceAndInstance);
-    }
-
-
-    @Test
-    public void add() {
-        final Employee elmer = new Employee("Elmer Fudd", 50000.0);
-        datastore.save(elmer);
-        final Employee daffy = new Employee("Daffy Duck", 40000.0);
-        datastore.save(daffy);
-
-        final Employee pepe = new Employee("Pepé Le Pew", 25000.0);
-        datastore.save(pepe);
-
-        elmer.getDirectReports().add(daffy);
-        elmer.getDirectReports().add(pepe);
-
-        datastore.save(elmer);
-    }
-
-    @Test
-    public void query() {
-
-        final Query<Employee> query = datastore.createQuery(Employee.class)
-                .field("salary").lessThanOrEq(30000)
-                .filter("salary <=", 30000);
-        final List<Employee> employees = query.asList();
-        employees.forEach(System.out::println);
-    }
-
-    @Test
-    public void update() {
-        final Query<Employee> underPaidQuery = datastore.createQuery(Employee.class)
-                .filter("salary <=", 50000);
-
-        final UpdateOperations<Employee> updateOperations = datastore.createUpdateOperations(Employee.class)
-                .inc("salary", 10000);
-        final UpdateResults results = datastore.update(underPaidQuery, updateOperations);
-
-        System.out.println("results:" + results);
-
-    }
-
-    @Test
-    public void del() {
-        final Query<Employee> overPaidQuery = datastore.createQuery(Employee.class)
-                .filter("salary >", 10000);
-        datastore.delete(overPaidQuery);
-
-    }
+//    @Test
+//    public void addServiceInstance() {
+//
+//        DBServiceAndInstances serviceAndInstance = new DBServiceAndInstances();
+//
+//        serviceAndInstance.setServiceName("TestService");
+//        serviceAndInstance.setInstanceList(Arrays.asList(
+//                ServerInstance.buildWithUri("TestService", "http://localhost:7001"),
+//                ServerInstance.buildWithUri("TestService", "http://localhost:7002")
+//        ));
+//        Key<DBServiceAndInstances> save = datastore.save(serviceAndInstance);
+//
+//        System.out.println(save);
+//        serviceAndInstance.setId((ObjectId) save.getId());
+//        datastore.save(serviceAndInstance);
+//    }
+//
+//
+//    @Test
+//    public void add() {
+//        final Employee elmer = new Employee("Elmer Fudd", 50000.0);
+//        datastore.save(elmer);
+//        final Employee daffy = new Employee("Daffy Duck", 40000.0);
+//        datastore.save(daffy);
+//
+//        final Employee pepe = new Employee("Pepé Le Pew", 25000.0);
+//        datastore.save(pepe);
+//
+//        elmer.getDirectReports().add(daffy);
+//        elmer.getDirectReports().add(pepe);
+//
+//        datastore.save(elmer);
+//    }
+//
+//    @Test
+//    public void query() {
+//
+//        final Query<Employee> query = datastore.createQuery(Employee.class)
+//                .field("salary").lessThanOrEq(30000)
+//                .filter("salary <=", 30000);
+//        final List<Employee> employees = query.asList();
+//        employees.forEach(System.out::println);
+//    }
+//
+//    @Test
+//    public void update() {
+//        final Query<Employee> underPaidQuery = datastore.createQuery(Employee.class)
+//                .filter("salary <=", 50000);
+//
+//        final UpdateOperations<Employee> updateOperations = datastore.createUpdateOperations(Employee.class)
+//                .inc("salary", 10000);
+//        final UpdateResults results = datastore.update(underPaidQuery, updateOperations);
+//
+//        System.out.println("results:" + results);
+//
+//    }
+//
+//    @Test
+//    public void del() {
+//        final Query<Employee> overPaidQuery = datastore.createQuery(Employee.class)
+//                .filter("salary >", 10000);
+//        datastore.delete(overPaidQuery);
+//
+//    }
 }
