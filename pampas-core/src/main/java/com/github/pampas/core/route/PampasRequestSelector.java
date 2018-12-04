@@ -6,15 +6,16 @@ import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
+import com.github.pampas.common.route.rule.*;
+import com.github.pampas.common.tools.AntPathMatcher;
 import com.github.pampas.common.tools.CommonTools;
-import com.github.pampas.common.route.rule.DubboRule;
-import com.github.pampas.common.route.rule.GrpcRule;
-import com.github.pampas.common.route.rule.HttpRule;
 import io.netty.handler.codec.http.FullHttpRequest;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Description: 请求选择器
@@ -25,7 +26,12 @@ import java.util.List;
 @SpiMeta(name = PampasRequestSelector.SELECTOR_NAME, order = 100)
 public class PampasRequestSelector implements Selector<PampasRequest<FullHttpRequest>>, Configurable<RouteRuleConfig> {
 
+    private static final Logger log = LoggerFactory.getLogger(PampasRequestSelector.class);
+
     public static final String SELECTOR_NAME = "http-request-selector";
+
+
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     private RouteRuleConfig config;
 
@@ -61,54 +67,43 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
 
     @Override
     public Locator select(PampasRequest<FullHttpRequest> request) {
-        List<HttpRule> httpRules = config.getHttp();
-
-        if (CollectionUtils.isNotEmpty(httpRules)) {
-            for (HttpRule httpRule : httpRules) {
-                boolean match = httpRule.isMatch(request);
+        String host = request.requestData().headers().get("Host");
+        RulePackage[] rulePackages = config.getRulePackages();
+        for (RulePackage rulePackage : rulePackages) {
+            if (StringUtils.isNotEmpty(rulePackage.getMappingHost())) {
+                if (!rulePackage.getMappingHost().equals(host)) {
+                    log.debug("匹配HOST失败，RULE:{}, HOST:{}", rulePackage.getMappingHost(), host);
+                    continue;
+                }
+            }
+            for (AbstractRule rule : rulePackage.getRuleList()) {
+                boolean match = rule.isMatch(request);
                 if (match) {
-                    Locator locator = new Locator();
-                    locator.setLoadBalancer(ObjectUtils.defaultIfNull(config.getLoadBalancer(), PampasConsts.LoadBalancer.RANDOM));
-                    locator.setWorker(PampasConsts.Worker.HTTP);
-                    locator.setMappedPath(httpRule.getMappingPath());
-                    locator.setServiceName(httpRule.getService());
-                    return locator;
+                    if (rule instanceof HttpRule) {
+                        Locator locator = new Locator();
+                        locator.setServiceName(rule.getService());
+
+                        locator.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
+                        locator.setWorker(PampasConsts.Worker.HTTP);
+
+                        if (rule.getMappingStrategy() == MappingStrategyEnum.APPOINT) {
+                            locator.setMappedPath(rule.getMappingPath());
+                        } else if (rule.getMappingStrategy() == MappingStrategyEnum.STRIP) {
+                            if (rule.getMappingPath() != null && rule.getMappingPath().length() > 1) {
+                                String result = StringUtils.stripStart(request.path(), rule.getMappingPath());
+                                locator.setMappedPath(result);
+                            }
+                        }
+
+                        if (rule.getHostStrategy() == HostStrategyEnum.APPOINT) {
+                            locator.setInstanceList(ObjectUtils.defaultIfNull(rule.getMappingServerInstanceList(), Collections.emptyList()));
+                        }
+                        log.debug("匹配路由规则完成，:{}", rule, locator);
+                        return locator;
+                    }
                 }
             }
         }
-
-        //TODO: dubbo selector
-        List<DubboRule> dubboRules = config.getDubbo();
-
-        if (CollectionUtils.isNotEmpty(dubboRules)) {
-            for (DubboRule dubboRule : dubboRules) {
-                boolean match = dubboRule.isMatch(request);
-                if (match) {
-                    Locator locator = new Locator();
-                    locator.setWorker(PampasConsts.Worker.DUBBO);
-                    locator.setMappedPath("");
-                    locator.setServiceName(dubboRule.getService());
-                    return locator;
-                }
-            }
-        }
-
-        List<GrpcRule> grpcRules = config.getGrpc();
-
-        if (CollectionUtils.isNotEmpty(grpcRules)) {
-            for (GrpcRule grpcRule : grpcRules) {
-                boolean match = grpcRule.isMatch(request);
-                if (match) {
-                    Locator locator = new Locator();
-                    locator.setWorker(PampasConsts.Worker.GRPC);
-                    locator.setMappedPath("");
-                    locator.setServiceName(grpcRule.getService());
-                    return locator;
-                }
-            }
-        }
-
-
         return null;
     }
 

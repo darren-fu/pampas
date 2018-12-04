@@ -19,9 +19,12 @@
 package com.github.pampas.common.route;
 
 import com.github.pampas.common.base.PampasConsts;
+import com.github.pampas.common.discover.ServerInstance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * 标明路由的目标服务名称 和 路径
@@ -56,4 +59,7 @@ public class Locator {
      * @see PampasConsts.LoadBalancer
      */
     private String loadBalancer;
+
+
+    private List<ServerInstance> instanceList;
 }

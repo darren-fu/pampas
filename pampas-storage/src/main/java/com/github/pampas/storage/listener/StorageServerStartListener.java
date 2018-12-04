@@ -39,5 +39,7 @@ public class StorageServerStartListener implements ServerReadyToStartListener {
         instance.setStartTime(new Date(pampasServer.startTimestamp()));
         gatewayInstanceService.save(instance);
         log.info("记录网关服务启动: {}", instance);
+
+
     }
 }

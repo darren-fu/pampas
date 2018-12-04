@@ -128,4 +128,5 @@ public interface PampasRequest<T> extends Operation {
     boolean isKeepalive();
 
 
+    String shotString();
 }

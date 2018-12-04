@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ServiceCondition {
+public class ServiceRegistryCondition {
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     protected String orderByClause;
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     protected boolean distinct;
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     protected List<Criteria> oredCriteria;
 
@@ -26,7 +26,7 @@ public class ServiceCondition {
 
     /**
      */
-    public ServiceCondition() {
+    public ServiceRegistryCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -76,14 +76,14 @@ public class ServiceCondition {
 
     /**
      */
-    public ServiceCondition orderBy(String orderByClause) {
+    public ServiceRegistryCondition orderBy(String orderByClause) {
         this.setOrderByClause(orderByClause);
         return this;
     }
 
     /**
      */
-    public ServiceCondition orderBy(String ... orderByClauses) {
+    public ServiceRegistryCondition orderBy(String ... orderByClauses) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < orderByClauses.length; i++) {
             sb.append(orderByClauses[i]);
@@ -144,7 +144,7 @@ public class ServiceCondition {
     }
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -204,7 +204,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdEqualToColumn(Service.Column column) {
+        public Criteria andIdEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -216,7 +216,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdNotEqualToColumn(Service.Column column) {
+        public Criteria andIdNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -228,7 +228,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdGreaterThanColumn(Service.Column column) {
+        public Criteria andIdGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -240,7 +240,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andIdGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -252,7 +252,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdLessThanColumn(Service.Column column) {
+        public Criteria andIdLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -264,7 +264,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIdLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andIdLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("id <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -289,115 +289,115 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameIsNull() {
-            addCriterion("service_name is null");
+        public Criteria andNameIsNull() {
+            addCriterion("`name` is null");
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameIsNotNull() {
-            addCriterion("service_name is not null");
+        public Criteria andNameIsNotNull() {
+            addCriterion("`name` is not null");
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameEqualTo(String value) {
-            addCriterion("service_name =", value, "serviceName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andServiceNameEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name = ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andServiceNameNotEqualTo(String value) {
-            addCriterion("service_name <>", value, "serviceName");
+        public Criteria andNameEqualTo(String value) {
+            addCriterion("`name` =", value, "name");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andServiceNameNotEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name <> ").append(column.getEscapedColumnName()).toString());
+        public Criteria andNameEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameGreaterThan(String value) {
-            addCriterion("service_name >", value, "serviceName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andServiceNameGreaterThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name > ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andServiceNameGreaterThanOrEqualTo(String value) {
-            addCriterion("service_name >=", value, "serviceName");
+        public Criteria andNameNotEqualTo(String value) {
+            addCriterion("`name` <>", value, "name");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andServiceNameGreaterThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name >= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andNameNotEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameLessThan(String value) {
-            addCriterion("service_name <", value, "serviceName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andServiceNameLessThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name < ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andServiceNameLessThanOrEqualTo(String value) {
-            addCriterion("service_name <=", value, "serviceName");
+        public Criteria andNameGreaterThan(String value) {
+            addCriterion("`name` >", value, "name");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andServiceNameLessThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("service_name <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andNameGreaterThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameLike(String value) {
-            addCriterion("service_name like", value, "serviceName");
+        public Criteria andNameGreaterThanOrEqualTo(String value) {
+            addCriterion("`name` >=", value, "name");
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameNotLike(String value) {
-            addCriterion("service_name not like", value, "serviceName");
+        /**
+         */
+        public Criteria andNameGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameIn(List<String> values) {
-            addCriterion("service_name in", values, "serviceName");
+        public Criteria andNameLessThan(String value) {
+            addCriterion("`name` <", value, "name");
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameNotIn(List<String> values) {
-            addCriterion("service_name not in", values, "serviceName");
+        /**
+         */
+        public Criteria andNameLessThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameBetween(String value1, String value2) {
-            addCriterion("service_name between", value1, value2, "serviceName");
+        public Criteria andNameLessThanOrEqualTo(String value) {
+            addCriterion("`name` <=", value, "name");
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameNotBetween(String value1, String value2) {
-            addCriterion("service_name not between", value1, value2, "serviceName");
+        /**
+         */
+        public Criteria andNameLessThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("`name` <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLike(String value) {
+            addCriterion("`name` like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotLike(String value) {
+            addCriterion("`name` not like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameIn(List<String> values) {
+            addCriterion("`name` in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotIn(List<String> values) {
+            addCriterion("`name` not in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameBetween(String value1, String value2) {
+            addCriterion("`name` between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotBetween(String value1, String value2) {
+            addCriterion("`name` not between", value1, value2, "name");
             return (Criteria) this;
         }
 
@@ -418,7 +418,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeEqualToColumn(Service.Column column) {
+        public Criteria andTypeEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -430,7 +430,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeNotEqualToColumn(Service.Column column) {
+        public Criteria andTypeNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -442,7 +442,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeGreaterThanColumn(Service.Column column) {
+        public Criteria andTypeGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -454,7 +454,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andTypeGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -466,7 +466,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeLessThanColumn(Service.Column column) {
+        public Criteria andTypeLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -478,7 +478,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andTypeLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andTypeLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("`type` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -513,217 +513,115 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdIsNull() {
-            addCriterion("registry_id is null");
+        public Criteria andAddressIsNull() {
+            addCriterion("address is null");
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdIsNotNull() {
-            addCriterion("registry_id is not null");
+        public Criteria andAddressIsNotNull() {
+            addCriterion("address is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdEqualTo(Integer value) {
-            addCriterion("registry_id =", value, "registryId");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andRegistryIdEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id = ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdNotEqualTo(Integer value) {
-            addCriterion("registry_id <>", value, "registryId");
+        public Criteria andAddressEqualTo(String value) {
+            addCriterion("address =", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andRegistryIdNotEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id <> ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdGreaterThan(Integer value) {
-            addCriterion("registry_id >", value, "registryId");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andRegistryIdGreaterThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id > ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("registry_id >=", value, "registryId");
+        public Criteria andAddressNotEqualTo(String value) {
+            addCriterion("address <>", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andRegistryIdGreaterThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id >= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressNotEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdLessThan(Integer value) {
-            addCriterion("registry_id <", value, "registryId");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andRegistryIdLessThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id < ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdLessThanOrEqualTo(Integer value) {
-            addCriterion("registry_id <=", value, "registryId");
+        public Criteria andAddressGreaterThan(String value) {
+            addCriterion("address >", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andRegistryIdLessThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("registry_id <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressGreaterThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andRegistryIdIn(List<Integer> values) {
-            addCriterion("registry_id in", values, "registryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdNotIn(List<Integer> values) {
-            addCriterion("registry_id not in", values, "registryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdBetween(Integer value1, Integer value2) {
-            addCriterion("registry_id between", value1, value2, "registryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRegistryIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("registry_id not between", value1, value2, "registryId");
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupIsNull() {
-            addCriterion("`group` is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupIsNotNull() {
-            addCriterion("`group` is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupEqualTo(String value) {
-            addCriterion("`group` =", value, "group");
+        public Criteria andAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("address >=", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andGroupEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotEqualTo(String value) {
-            addCriterion("`group` <>", value, "group");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andGroupNotEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupGreaterThan(String value) {
-            addCriterion("`group` >", value, "group");
+        public Criteria andAddressLessThan(String value) {
+            addCriterion("address <", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andGroupGreaterThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressLessThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andGroupGreaterThanOrEqualTo(String value) {
-            addCriterion("`group` >=", value, "group");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andGroupGreaterThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupLessThan(String value) {
-            addCriterion("`group` <", value, "group");
+        public Criteria andAddressLessThanOrEqualTo(String value) {
+            addCriterion("address <=", value, "address");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andGroupLessThanColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressLessThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("address <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andGroupLessThanOrEqualTo(String value) {
-            addCriterion("`group` <=", value, "group");
+        public Criteria andAddressLike(String value) {
+            addCriterion("address like", value, "address");
             return (Criteria) this;
         }
 
-        /**
-         */
-        public Criteria andGroupLessThanOrEqualToColumn(Service.Column column) {
-            addCriterion(new StringBuilder("`group` <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andAddressNotLike(String value) {
+            addCriterion("address not like", value, "address");
             return (Criteria) this;
         }
 
-        public Criteria andGroupLike(String value) {
-            addCriterion("`group` like", value, "group");
+        public Criteria andAddressIn(List<String> values) {
+            addCriterion("address in", values, "address");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotLike(String value) {
-            addCriterion("`group` not like", value, "group");
+        public Criteria andAddressNotIn(List<String> values) {
+            addCriterion("address not in", values, "address");
             return (Criteria) this;
         }
 
-        public Criteria andGroupIn(List<String> values) {
-            addCriterion("`group` in", values, "group");
+        public Criteria andAddressBetween(String value1, String value2) {
+            addCriterion("address between", value1, value2, "address");
             return (Criteria) this;
         }
 
-        public Criteria andGroupNotIn(List<String> values) {
-            addCriterion("`group` not in", values, "group");
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupBetween(String value1, String value2) {
-            addCriterion("`group` between", value1, value2, "group");
-            return (Criteria) this;
-        }
-
-        public Criteria andGroupNotBetween(String value1, String value2) {
-            addCriterion("`group` not between", value1, value2, "group");
+        public Criteria andAddressNotBetween(String value1, String value2) {
+            addCriterion("address not between", value1, value2, "address");
             return (Criteria) this;
         }
 
@@ -744,7 +642,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkEqualToColumn(Service.Column column) {
+        public Criteria andRemarkEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -756,7 +654,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkNotEqualToColumn(Service.Column column) {
+        public Criteria andRemarkNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -768,7 +666,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkGreaterThanColumn(Service.Column column) {
+        public Criteria andRemarkGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -780,7 +678,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andRemarkGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -792,7 +690,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkLessThanColumn(Service.Column column) {
+        public Criteria andRemarkLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -804,7 +702,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andRemarkLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andRemarkLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("remark <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -856,7 +754,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeEqualToColumn(Service.Column column) {
+        public Criteria andInsertTimeEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -868,7 +766,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeNotEqualToColumn(Service.Column column) {
+        public Criteria andInsertTimeNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -880,7 +778,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeGreaterThanColumn(Service.Column column) {
+        public Criteria andInsertTimeGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -892,7 +790,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andInsertTimeGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -904,7 +802,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeLessThanColumn(Service.Column column) {
+        public Criteria andInsertTimeLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -916,7 +814,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andInsertTimeLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andInsertTimeLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("insert_time <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -958,7 +856,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeEqualToColumn(Service.Column column) {
+        public Criteria andUpdateTimeEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -970,7 +868,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeNotEqualToColumn(Service.Column column) {
+        public Criteria andUpdateTimeNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -982,7 +880,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeGreaterThanColumn(Service.Column column) {
+        public Criteria andUpdateTimeGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -994,7 +892,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andUpdateTimeGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1006,7 +904,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeLessThanColumn(Service.Column column) {
+        public Criteria andUpdateTimeLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1018,7 +916,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andUpdateTimeLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andUpdateTimeLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("update_time <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1060,7 +958,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelEqualToColumn(Service.Column column) {
+        public Criteria andIsDelEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1072,7 +970,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelNotEqualToColumn(Service.Column column) {
+        public Criteria andIsDelNotEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1084,7 +982,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelGreaterThanColumn(Service.Column column) {
+        public Criteria andIsDelGreaterThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1096,7 +994,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelGreaterThanOrEqualToColumn(Service.Column column) {
+        public Criteria andIsDelGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1108,7 +1006,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelLessThanColumn(Service.Column column) {
+        public Criteria andIsDelLessThanColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1120,7 +1018,7 @@ public class ServiceCondition {
 
         /**
          */
-        public Criteria andIsDelLessThanOrEqualToColumn(Service.Column column) {
+        public Criteria andIsDelLessThanOrEqualToColumn(ServiceRegistry.Column column) {
             addCriterion(new StringBuilder("is_del <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1145,8 +1043,8 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
-        public Criteria andServiceNameLikeInsensitive(String value) {
-            addCriterion("upper(service_name) like", value.toUpperCase(), "serviceName");
+        public Criteria andNameLikeInsensitive(String value) {
+            addCriterion("upper(`name`) like", value.toUpperCase(), "name");
             return (Criteria) this;
         }
 
@@ -1155,8 +1053,8 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
-        public Criteria andGroupLikeInsensitive(String value) {
-            addCriterion("upper(`group`) like", value.toUpperCase(), "group");
+        public Criteria andAddressLikeInsensitive(String value) {
+            addCriterion("upper(address) like", value.toUpperCase(), "address");
             return (Criteria) this;
         }
 
@@ -1167,24 +1065,24 @@ public class ServiceCondition {
     }
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     public static class Criteria extends GeneratedCriteria {
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
-        private ServiceCondition example;
+        private ServiceRegistryCondition example;
 
         /**
          */
-        protected Criteria(ServiceCondition example) {
+        protected Criteria(ServiceRegistryCondition example) {
             super();
             this.example = example;
         }
 
         /**
          */
-        public ServiceCondition example() {
+        public ServiceRegistryCondition example() {
             return this.example;
         }
 
@@ -1205,7 +1103,7 @@ public class ServiceCondition {
     }
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     public static class Criterion {
         private String condition;

@@ -23,7 +23,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
-import lombok.Setter;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,10 +36,8 @@ import java.util.Map;
  */
 public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
-    @Setter
     private ChannelHandlerContext channelHandlerContext;
 
-    @Setter
     private FullHttpRequest requestData;
 
     private String uri;
@@ -49,9 +46,19 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     private Map<String, String> parameters;
 
-    @Setter
     private String serviceName;
 
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public void setChannelHandlerContext(ChannelHandlerContext channelHandlerContext) {
+        this.channelHandlerContext = channelHandlerContext;
+    }
+
+    public void setRequestData(FullHttpRequest requestData) {
+        this.requestData = requestData;
+    }
 
     public DefaultPampasRequest(ChannelHandlerContext ctx, FullHttpRequest fullHttpRequest) {
         this.channelHandlerContext = ctx;
@@ -92,13 +99,12 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     @Override
     public FullHttpRequest requestData() {
-        this.requestData.content();
         return this.requestData;
     }
 
     @Override
     public String originUri() {
-        return this.requestData.uri();
+        return this.uri;
     }
 
     @Override
@@ -125,6 +131,11 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
     @Override
     public boolean isKeepalive() {
         return HttpUtil.isKeepAlive(requestData);
+    }
+
+    @Override
+    public String shotString() {
+        return this.path;
     }
 
 

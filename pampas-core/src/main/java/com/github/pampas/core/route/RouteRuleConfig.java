@@ -20,15 +20,10 @@ package com.github.pampas.core.route;
 
 import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.extension.SpiMeta;
-import com.github.pampas.common.route.rule.AbstractRule;
-import com.github.pampas.common.route.rule.DubboRule;
-import com.github.pampas.common.route.rule.GrpcRule;
-import com.github.pampas.common.route.rule.HttpRule;
+import com.github.pampas.common.route.rule.RulePackage;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by darrenfu on 18-2-23.
@@ -41,19 +36,7 @@ import java.util.List;
 @Data
 public class RouteRuleConfig implements VersionConfig {
 
-    private String loadBalancer;
-
-    private Boolean stripPrefix;
-
-    private String[] selectors;
-
-
-    private List<HttpRule> http;
-
-    private List<GrpcRule> grpc;
-
-    private List<DubboRule> dubbo;
-
+    private RulePackage[] rulePackages;
 
     @Override
     public BigDecimal configVersionNumber() {
@@ -67,41 +50,6 @@ public class RouteRuleConfig implements VersionConfig {
 
     @Override
     public VersionConfig setupWithDefault() {
-        this.stripPrefix = true;
-
         return this;
     }
-
-
-    public RouteRuleConfig addRules(AbstractRule... rules) {
-        if (rules == null || rules.length == 0) {
-            return this;
-        }
-
-        for (AbstractRule rule : rules) {
-            if (rule == null) {
-                continue;
-            }
-            if (rule instanceof HttpRule) {
-                if (http == null) {
-                    http = new ArrayList<>(64);
-                }
-                http.add((HttpRule) rule);
-            }
-            if (rule instanceof GrpcRule) {
-                if (grpc == null) {
-                    grpc = new ArrayList<>(64);
-                }
-                grpc.add((GrpcRule) rule);
-            }
-            if (rule instanceof DubboRule) {
-                if (dubbo == null) {
-                    dubbo = new ArrayList<>(64);
-                }
-                dubbo.add((DubboRule) rule);
-            }
-        }
-        return this;
-    }
-
 }

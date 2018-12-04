@@ -36,9 +36,6 @@ import org.apache.commons.lang3.StringUtils;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HttpRule extends AbstractRule {
 
-
-
-
     public HttpRule() {
 
     }

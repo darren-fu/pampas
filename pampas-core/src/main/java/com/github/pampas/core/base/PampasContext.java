@@ -1,12 +1,6 @@
 package com.github.pampas.core.base;
 
 import com.github.pampas.core.server.GatewayServer;
-import com.github.pampas.core.server.ServerState;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 /**
  * Description:
@@ -15,15 +9,14 @@ import java.util.WeakHashMap;
  */
 public class PampasContext {
 
-    protected static final WeakHashMap<GatewayServer, ServerState> serverMap = new WeakHashMap<>();
+    private static volatile GatewayServer CURRENT_SERVER = null;
 
-    public static void updateServerState(GatewayServer gatewayServer, ServerState serverState) {
-        serverMap.put(gatewayServer, serverState);
+    public static void setCurrentServer(GatewayServer gatewayServer) {
+        CURRENT_SERVER = gatewayServer;
     }
 
-    public static List<GatewayServer> gatewayServers() {
-        Set<GatewayServer> gatewayServers = serverMap.keySet();
-        return new ArrayList<>(gatewayServers);
+    public static GatewayServer getCurrentServer() {
+        return CURRENT_SERVER;
     }
 
 }

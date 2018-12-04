@@ -19,6 +19,7 @@
 package com.github.pampas.common.route.rule;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.pampas.common.discover.ServerInstance;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.tools.AntPathMatcher;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -27,6 +28,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by darrenfu on 18-3-14.
@@ -78,6 +82,13 @@ public abstract class AbstractRule {
      */
     private String mappingHost;
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Getter
+    @JsonIgnore
+    private List<ServerInstance> mappingServerInstanceList;
+
+
     @JsonIgnore
     private Object mutex = new Object();
 
@@ -126,6 +137,11 @@ public abstract class AbstractRule {
             if (inited) {
                 return;
             }
+            if (StringUtils.isNotEmpty(mappingPath)) {
+                if (!mappingPath.startsWith("/")) {
+                    this.mappingPath = "/" + this.mappingPath;
+                }
+            }
             if (StringUtils.isNotEmpty(path)) {
                 if (!path.startsWith("/")) {
                     path = "/" + path;
@@ -142,9 +158,17 @@ public abstract class AbstractRule {
             if (this.isAntPath == null) {
                 this.isAntPath = antPathMatcher().isPattern(path);
             }
+
+            if (hostStrategy == HostStrategyEnum.APPOINT && StringUtils.isNotEmpty(mappingHost)) {
+                String[] splitUris = mappingHost.split(",");
+                mappingServerInstanceList = new ArrayList<>();
+                for (String uri : splitUris) {
+                    ServerInstance serverInstance = ServerInstance.buildWithUri(service, uri);
+                    mappingServerInstanceList.add(serverInstance);
+                }
+            }
             this.inited = true;
         }
-
     }
 
 

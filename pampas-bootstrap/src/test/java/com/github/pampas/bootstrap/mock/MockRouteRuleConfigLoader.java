@@ -37,8 +37,8 @@ public class MockRouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleCon
     public RouteRuleConfig doConfigLoad() {
 
         RouteRuleConfig config = new RouteRuleConfig();
-        config.setStripPrefix(false);
-        config.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
+//        config.setStripPrefix(false);
+//        config.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
 //        config.addRules(new HttpRule("TestService", "/test", "/test_mapped"));
         return config;
     }

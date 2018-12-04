@@ -18,6 +18,7 @@
 
 package com.github.pampas;
 
+import com.github.pampas.core.base.PampasContext;
 import com.github.pampas.core.server.GatewayServer;
 import com.github.pampas.storage.SpringStorageApp;
 import com.github.pampas.storage.base.SystemProps;
@@ -34,6 +35,8 @@ public class Bootstrapper {
         SpringStorageApp.init(args, (ctx) -> {
             System.out.println("SystemProps:" + SystemProps.getGatewayVersion());
             GatewayServer server1 = new GatewayServer("server1", 9000);
+            PampasContext.setCurrentServer(server1);
+
             try {
                 server1.start();
             } catch (InterruptedException e) {

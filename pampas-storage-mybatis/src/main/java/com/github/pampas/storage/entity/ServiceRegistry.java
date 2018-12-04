@@ -8,83 +8,76 @@ import java.util.Date;
 /**
  * Created By MBG-GUI-EXTENSION https://github.com/spawpaw/mybatis-generator-gui-extension
  * Description:
- * 服务定义表
+ * 注册中心
  *
  * @author 
  */
-public class Service implements Serializable {
+public class ServiceRegistry implements Serializable {
     /**
-     * 主键
+     * ID
      *
-     * Corresponding to the database column p_service.id
+     * Corresponding to the database column p_service_registry.id
      */
     private Integer id;
 
     /**
-     * 服务名称
+     * 注册中心名称
      *
-     * Corresponding to the database column p_service.service_name
+     * Corresponding to the database column p_service_registry.name
      */
-    private String serviceName;
+    private String name;
 
     /**
-     * 服务类型 sc, dubbo, grpc
+     * 注册中心类型 consul、zk、etcd等
      *
-     * Corresponding to the database column p_service.type
+     * Corresponding to the database column p_service_registry.type
      */
     private String type;
 
     /**
-     * 注册中心
+     * 注册中心地址
      *
-     * Corresponding to the database column p_service.registry_id
+     * Corresponding to the database column p_service_registry.address
      */
-    private Integer registryId;
-
-    /**
-     * 服务分组
-     *
-     * Corresponding to the database column p_service.group
-     */
-    private String group;
+    private String address;
 
     /**
      * 备注
      *
-     * Corresponding to the database column p_service.remark
+     * Corresponding to the database column p_service_registry.remark
      */
     private String remark;
 
     /**
      * 创建时间
      *
-     * Corresponding to the database column p_service.insert_time
+     * Corresponding to the database column p_service_registry.insert_time
      */
     private Date insertTime;
 
     /**
      * 更新时间
      *
-     * Corresponding to the database column p_service.update_time
+     * Corresponding to the database column p_service_registry.update_time
      */
     private Date updateTime;
 
     /**
      * 是否删除 0 否 1 是
      *
-     * Corresponding to the database column p_service.is_del
+     * Corresponding to the database column p_service_registry.is_del
      */
     private Boolean isDel;
 
     /**
-     * Corresponding to the database table p_service
+     * Corresponding to the database table p_service_registry
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * This method returns the value of the database column p_service.id
+     * This method returns the value of the database column p_service_registry.id
      *
-     * @return the value of p_service.id
+     * @return the value of p_service_registry.id
      */
     public Integer getId() {
         return id;
@@ -92,49 +85,49 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withId(Integer id) {
+    public ServiceRegistry withId(Integer id) {
         this.setId(id);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.id
+     * This method sets the value of the database column p_service_registry.id
      *
-     * @param id the value for p_service.id
+     * @param id the value for p_service_registry.id
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * This method returns the value of the database column p_service.service_name
+     * This method returns the value of the database column p_service_registry.name
      *
-     * @return the value of p_service.service_name
+     * @return the value of p_service_registry.name
      */
-    public String getServiceName() {
-        return serviceName;
+    public String getName() {
+        return name;
     }
 
     /**
      */
-    public Service withServiceName(String serviceName) {
-        this.setServiceName(serviceName);
+    public ServiceRegistry withName(String name) {
+        this.setName(name);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.service_name
+     * This method sets the value of the database column p_service_registry.name
      *
-     * @param serviceName the value for p_service.service_name
+     * @param name the value for p_service_registry.name
      */
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * This method returns the value of the database column p_service.type
+     * This method returns the value of the database column p_service_registry.type
      *
-     * @return the value of p_service.type
+     * @return the value of p_service_registry.type
      */
     public String getType() {
         return type;
@@ -142,74 +135,49 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withType(String type) {
+    public ServiceRegistry withType(String type) {
         this.setType(type);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.type
+     * This method sets the value of the database column p_service_registry.type
      *
-     * @param type the value for p_service.type
+     * @param type the value for p_service_registry.type
      */
     public void setType(String type) {
         this.type = type;
     }
 
     /**
-     * This method returns the value of the database column p_service.registry_id
+     * This method returns the value of the database column p_service_registry.address
      *
-     * @return the value of p_service.registry_id
+     * @return the value of p_service_registry.address
      */
-    public Integer getRegistryId() {
-        return registryId;
+    public String getAddress() {
+        return address;
     }
 
     /**
      */
-    public Service withRegistryId(Integer registryId) {
-        this.setRegistryId(registryId);
+    public ServiceRegistry withAddress(String address) {
+        this.setAddress(address);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.registry_id
+     * This method sets the value of the database column p_service_registry.address
      *
-     * @param registryId the value for p_service.registry_id
+     * @param address the value for p_service_registry.address
      */
-    public void setRegistryId(Integer registryId) {
-        this.registryId = registryId;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**
-     * This method returns the value of the database column p_service.group
+     * This method returns the value of the database column p_service_registry.remark
      *
-     * @return the value of p_service.group
-     */
-    public String getGroup() {
-        return group;
-    }
-
-    /**
-     */
-    public Service withGroup(String group) {
-        this.setGroup(group);
-        return this;
-    }
-
-    /**
-     * This method sets the value of the database column p_service.group
-     *
-     * @param group the value for p_service.group
-     */
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    /**
-     * This method returns the value of the database column p_service.remark
-     *
-     * @return the value of p_service.remark
+     * @return the value of p_service_registry.remark
      */
     public String getRemark() {
         return remark;
@@ -217,24 +185,24 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withRemark(String remark) {
+    public ServiceRegistry withRemark(String remark) {
         this.setRemark(remark);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.remark
+     * This method sets the value of the database column p_service_registry.remark
      *
-     * @param remark the value for p_service.remark
+     * @param remark the value for p_service_registry.remark
      */
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
     /**
-     * This method returns the value of the database column p_service.insert_time
+     * This method returns the value of the database column p_service_registry.insert_time
      *
-     * @return the value of p_service.insert_time
+     * @return the value of p_service_registry.insert_time
      */
     public Date getInsertTime() {
         return insertTime;
@@ -242,24 +210,24 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withInsertTime(Date insertTime) {
+    public ServiceRegistry withInsertTime(Date insertTime) {
         this.setInsertTime(insertTime);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.insert_time
+     * This method sets the value of the database column p_service_registry.insert_time
      *
-     * @param insertTime the value for p_service.insert_time
+     * @param insertTime the value for p_service_registry.insert_time
      */
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
     }
 
     /**
-     * This method returns the value of the database column p_service.update_time
+     * This method returns the value of the database column p_service_registry.update_time
      *
-     * @return the value of p_service.update_time
+     * @return the value of p_service_registry.update_time
      */
     public Date getUpdateTime() {
         return updateTime;
@@ -267,24 +235,24 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withUpdateTime(Date updateTime) {
+    public ServiceRegistry withUpdateTime(Date updateTime) {
         this.setUpdateTime(updateTime);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.update_time
+     * This method sets the value of the database column p_service_registry.update_time
      *
-     * @param updateTime the value for p_service.update_time
+     * @param updateTime the value for p_service_registry.update_time
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
     /**
-     * This method returns the value of the database column p_service.is_del
+     * This method returns the value of the database column p_service_registry.is_del
      *
-     * @return the value of p_service.is_del
+     * @return the value of p_service_registry.is_del
      */
     public Boolean getIsDel() {
         return isDel;
@@ -292,15 +260,15 @@ public class Service implements Serializable {
 
     /**
      */
-    public Service withIsDel(Boolean isDel) {
+    public ServiceRegistry withIsDel(Boolean isDel) {
         this.setIsDel(isDel);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_service.is_del
+     * This method sets the value of the database column p_service_registry.is_del
      *
-     * @param isDel the value for p_service.is_del
+     * @param isDel the value for p_service_registry.is_del
      */
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
@@ -315,10 +283,9 @@ public class Service implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", serviceName=").append(serviceName);
+        sb.append(", name=").append(name);
         sb.append(", type=").append(type);
-        sb.append(", registryId=").append(registryId);
-        sb.append(", group=").append(group);
+        sb.append(", address=").append(address);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
         sb.append(", updateTime=").append(updateTime);
@@ -340,12 +307,11 @@ public class Service implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Service other = (Service) that;
+        ServiceRegistry other = (ServiceRegistry) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getServiceName() == null ? other.getServiceName() == null : this.getServiceName().equals(other.getServiceName()))
+            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getRegistryId() == null ? other.getRegistryId() == null : this.getRegistryId().equals(other.getRegistryId()))
-            && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
+            && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -359,10 +325,9 @@ public class Service implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getServiceName() == null) ? 0 : getServiceName().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-        result = prime * result + ((getRegistryId() == null) ? 0 : getRegistryId().hashCode());
-        result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
+        result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -371,46 +336,45 @@ public class Service implements Serializable {
     }
 
     /**
-     * corresponding to the database table p_service
+     * corresponding to the database table p_service_registry
      */
     public enum Column {
         id("id", "id", "INTEGER", false),
-        serviceName("service_name", "serviceName", "VARCHAR", false),
+        name("name", "name", "VARCHAR", true),
         type("type", "type", "VARCHAR", true),
-        registryId("registry_id", "registryId", "INTEGER", false),
-        group("group", "group", "VARCHAR", true),
+        address("address", "address", "VARCHAR", false),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false),
         isDel("is_del", "isDel", "BIT", false);
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private static final String BEGINNING_DELIMITER = "`";
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private static final String ENDING_DELIMITER = "`";
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private final String column;
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private final boolean isColumnNameDelimited;
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private final String javaProperty;
 
         /**
-         * Corresponding to the database table p_service
+         * Corresponding to the database table p_service_registry
          */
         private final String jdbcType;
 

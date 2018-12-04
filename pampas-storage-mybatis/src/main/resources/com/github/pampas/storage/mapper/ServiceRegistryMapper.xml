@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.pampas.storage.mapper.ServiceMapper">
-  <resultMap id="BaseResultMap" type="com.github.pampas.storage.entity.Service">
+<mapper namespace="com.github.pampas.storage.mapper.ServiceRegistryMapper">
+  <resultMap id="BaseResultMap" type="com.github.pampas.storage.entity.ServiceRegistry">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="registry_id" jdbcType="INTEGER" property="registryId" />
-    <result column="group" jdbcType="VARCHAR" property="group" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -71,16 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, service_name, `type`, registry_id, `group`, remark, insert_time, update_time, 
-    is_del
+    id, `name`, `type`, address, remark, insert_time, update_time, is_del
   </sql>
-  <select id="selectByExample" parameterType="com.github.pampas.storage.entity.ServiceCondition" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.github.pampas.storage.entity.ServiceRegistryCondition" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `p_service`
+    from `p_service_registry`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -99,47 +97,44 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `p_service`
+    from `p_service_registry`
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `p_service`
+    delete from `p_service_registry`
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.github.pampas.storage.entity.ServiceCondition">
-    delete from `p_service`
+  <delete id="deleteByExample" parameterType="com.github.pampas.storage.entity.ServiceRegistryCondition">
+    delete from `p_service_registry`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.github.pampas.storage.entity.Service">
+  <insert id="insert" parameterType="com.github.pampas.storage.entity.ServiceRegistry">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_service` (service_name, `type`, registry_id, 
-      `group`, remark, insert_time, 
-      update_time, is_del)
-    values (#{serviceName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{registryId,jdbcType=INTEGER}, 
-      #{group,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
+    insert into `p_service_registry` (`name`, `type`, address, 
+      remark, insert_time, update_time, 
+      is_del)
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.Service">
+  <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.ServiceRegistry">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_service`
+    insert into `p_service_registry`
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="serviceName != null">
-        service_name,
+      <if test="name != null">
+        `name`,
       </if>
       <if test="type != null">
         `type`,
       </if>
-      <if test="registryId != null">
-        registry_id,
-      </if>
-      <if test="group != null">
-        `group`,
+      <if test="address != null">
+        address,
       </if>
       <if test="remark != null">
         remark,
@@ -155,17 +150,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="serviceName != null">
-        #{serviceName,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
       </if>
-      <if test="registryId != null">
-        #{registryId,jdbcType=INTEGER},
-      </if>
-      <if test="group != null">
-        #{group,jdbcType=VARCHAR},
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -181,29 +173,26 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.github.pampas.storage.entity.ServiceCondition" resultType="java.lang.Long">
-    select count(*) from `p_service`
+  <select id="countByExample" parameterType="com.github.pampas.storage.entity.ServiceRegistryCondition" resultType="java.lang.Long">
+    select count(*) from `p_service_registry`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `p_service`
+    update `p_service_registry`
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.serviceName != null">
-        service_name = #{record.serviceName,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         `type` = #{record.type,jdbcType=VARCHAR},
       </if>
-      <if test="record.registryId != null">
-        registry_id = #{record.registryId,jdbcType=INTEGER},
-      </if>
-      <if test="record.group != null">
-        `group` = #{record.group,jdbcType=VARCHAR},
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -223,12 +212,11 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `p_service`
+    update `p_service_registry`
     set id = #{record.id,jdbcType=INTEGER},
-      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
       `type` = #{record.type,jdbcType=VARCHAR},
-      registry_id = #{record.registryId,jdbcType=INTEGER},
-      `group` = #{record.group,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -237,20 +225,17 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.github.pampas.storage.entity.Service">
-    update `p_service`
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.pampas.storage.entity.ServiceRegistry">
+    update `p_service_registry`
     <set>
-      <if test="serviceName != null">
-        service_name = #{serviceName,jdbcType=VARCHAR},
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         `type` = #{type,jdbcType=VARCHAR},
       </if>
-      <if test="registryId != null">
-        registry_id = #{registryId,jdbcType=INTEGER},
-      </if>
-      <if test="group != null">
-        `group` = #{group,jdbcType=VARCHAR},
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -267,12 +252,11 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.github.pampas.storage.entity.Service">
-    update `p_service`
-    set service_name = #{serviceName,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.github.pampas.storage.entity.ServiceRegistry">
+    update `p_service_registry`
+    set `name` = #{name,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=VARCHAR},
-      registry_id = #{registryId,jdbcType=INTEGER},
-      `group` = #{group,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
