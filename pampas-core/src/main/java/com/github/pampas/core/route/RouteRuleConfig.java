@@ -32,11 +32,11 @@ import java.math.BigDecimal;
  * @date: 18-2-23
  */
 
-@SpiMeta(name = "config-route-rule")
+@SpiMeta(name = RouteRuleConfig.SPI_META_NAME)
 @Data
 public class RouteRuleConfig implements VersionConfig {
-
-    private RulePackage[] rulePackages;
+    public static final String SPI_META_NAME = "config-route-rule";
+    private RulePackage[] rulePackages = new RulePackage[0];
 
     @Override
     public BigDecimal configVersionNumber() {

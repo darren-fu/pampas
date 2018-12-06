@@ -513,6 +513,118 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
+        public Criteria andProtocolIsNull() {
+            addCriterion("protocol is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolIsNotNull() {
+            addCriterion("protocol is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolEqualTo(String value) {
+            addCriterion("protocol =", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolNotEqualTo(String value) {
+            addCriterion("protocol <>", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolNotEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolGreaterThan(String value) {
+            addCriterion("protocol >", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolGreaterThanColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolGreaterThanOrEqualTo(String value) {
+            addCriterion("protocol >=", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolGreaterThanOrEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolLessThan(String value) {
+            addCriterion("protocol <", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolLessThanColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolLessThanOrEqualTo(String value) {
+            addCriterion("protocol <=", value, "protocol");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andProtocolLessThanOrEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("protocol <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolLike(String value) {
+            addCriterion("protocol like", value, "protocol");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolNotLike(String value) {
+            addCriterion("protocol not like", value, "protocol");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolIn(List<String> values) {
+            addCriterion("protocol in", values, "protocol");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolNotIn(List<String> values) {
+            addCriterion("protocol not in", values, "protocol");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolBetween(String value1, String value2) {
+            addCriterion("protocol between", value1, value2, "protocol");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolNotBetween(String value1, String value2) {
+            addCriterion("protocol not between", value1, value2, "protocol");
+            return (Criteria) this;
+        }
+
         public Criteria andRegistryIdIsNull() {
             addCriterion("registry_id is null");
             return (Criteria) this;
@@ -1152,6 +1264,11 @@ public class ServiceCondition {
 
         public Criteria andTypeLikeInsensitive(String value) {
             addCriterion("upper(`type`) like", value.toUpperCase(), "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andProtocolLikeInsensitive(String value) {
+            addCriterion("upper(protocol) like", value.toUpperCase(), "protocol");
             return (Criteria) this;
         }
 

@@ -33,7 +33,6 @@ public class Bootstrapper {
     public static void main(String[] args) {
 
         SpringStorageApp.init(args, (ctx) -> {
-            System.out.println("SystemProps:" + SystemProps.getGatewayVersion());
             GatewayServer server1 = new GatewayServer("server1", 9000);
             PampasContext.setCurrentServer(server1);
 

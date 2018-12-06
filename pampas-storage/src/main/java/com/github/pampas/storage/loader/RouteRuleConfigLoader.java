@@ -2,6 +2,8 @@ package com.github.pampas.storage.loader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.pampas.common.base.PampasConsts;
+import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.rule.RulePackage;
 import com.github.pampas.common.tools.JsonTools;
@@ -23,7 +25,7 @@ import java.util.Map;
  * User: darrenfu
  * Date: 2018-11-16
  */
-@SpiMeta(name = RouteRuleConfigLoader.META_NAME, key = PampasConsts.ConfigLoaderKey.ROUTE_RULE)
+@SpiMeta(name = RouteRuleConfigLoader.META_NAME, key = PampasConsts.ConfigLoaderKey.ROUTE_RULE, order = 0)
 public class RouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleConfig> {
 
     protected static final String META_NAME = "loader-route-rule-mysql";
@@ -66,7 +68,7 @@ public class RouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleConfig>
             }
         }
 
-        RouteRuleConfig routeRuleConfig = new RouteRuleConfig();
+        RouteRuleConfig routeRuleConfig = (RouteRuleConfig) SpiContext.getContext(VersionConfig.class).getSpiInstanceByName(RouteRuleConfig.SPI_META_NAME);
         if (rulePackageList.size() > 0) {
             routeRuleConfig.setRulePackages(rulePackageList.toArray(new RulePackage[0]));
         }

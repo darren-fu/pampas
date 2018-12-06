@@ -69,7 +69,7 @@ public class SpiContext<T> {
     private ConcurrentMap<String, T> singletonInstances = null;
     private static ConcurrentMap<Class, Object> singletonClzInstances = new ConcurrentHashMap();
 
-    //SpiClass缓存
+    //SpiClass缓存 <K:SPI_META_NAME,V:SPI_CLASS>
     private ConcurrentMap<String, SpiClass<T>> spiClassMap = null;
 
     //SPI interface

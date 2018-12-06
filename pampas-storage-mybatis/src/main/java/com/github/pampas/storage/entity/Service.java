@@ -28,11 +28,18 @@ public class Service implements Serializable {
     private String serviceName;
 
     /**
-     * 服务类型 sc, dubbo, grpc
+     * 服务类型 spring cloud, dubbo, grpc
      *
      * Corresponding to the database column p_service.type
      */
     private String type;
+
+    /**
+     * 协议 http dubbo grpc
+     *
+     * Corresponding to the database column p_service.protocol
+     */
+    private String protocol;
 
     /**
      * 注册中心
@@ -154,6 +161,31 @@ public class Service implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * This method returns the value of the database column p_service.protocol
+     *
+     * @return the value of p_service.protocol
+     */
+    public String getProtocol() {
+        return protocol;
+    }
+
+    /**
+     */
+    public Service withProtocol(String protocol) {
+        this.setProtocol(protocol);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_service.protocol
+     *
+     * @param protocol the value for p_service.protocol
+     */
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 
     /**
@@ -317,6 +349,7 @@ public class Service implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", serviceName=").append(serviceName);
         sb.append(", type=").append(type);
+        sb.append(", protocol=").append(protocol);
         sb.append(", registryId=").append(registryId);
         sb.append(", group=").append(group);
         sb.append(", remark=").append(remark);
@@ -344,6 +377,7 @@ public class Service implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getServiceName() == null ? other.getServiceName() == null : this.getServiceName().equals(other.getServiceName()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getProtocol() == null ? other.getProtocol() == null : this.getProtocol().equals(other.getProtocol()))
             && (this.getRegistryId() == null ? other.getRegistryId() == null : this.getRegistryId().equals(other.getRegistryId()))
             && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
@@ -361,6 +395,7 @@ public class Service implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getServiceName() == null) ? 0 : getServiceName().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getProtocol() == null) ? 0 : getProtocol().hashCode());
         result = prime * result + ((getRegistryId() == null) ? 0 : getRegistryId().hashCode());
         result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
@@ -377,6 +412,7 @@ public class Service implements Serializable {
         id("id", "id", "INTEGER", false),
         serviceName("service_name", "serviceName", "VARCHAR", false),
         type("type", "type", "VARCHAR", true),
+        protocol("protocol", "protocol", "VARCHAR", false),
         registryId("registry_id", "registryId", "INTEGER", false),
         group("group", "group", "VARCHAR", true),
         remark("remark", "remark", "VARCHAR", false),

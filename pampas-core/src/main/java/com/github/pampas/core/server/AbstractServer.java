@@ -20,6 +20,7 @@ package com.github.pampas.core.server;
 
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.tools.InetTools;
 import com.github.pampas.core.base.CoreVersion;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
 import com.github.pampas.core.server.listener.ServerStartedListener;
@@ -79,8 +80,13 @@ public abstract class AbstractServer implements PampasServer {
     }
 
     public AbstractServer(String serverName, int port, ServerConfig config) {
-        this.address = getLocalHostLANAddress();
-        this.id = serverName + "@" + address.getHostAddress() + ":" + port;
+        InetTools inetTools = new InetTools();
+        InetAddress firstNonLoopbackAddress = inetTools.findFirstNonLoopbackAddress();
+        inetTools.close();
+
+//        this.address = getLocalHostLANAddress();
+        this.address = firstNonLoopbackAddress;
+        this.id = serverName + "@" + address.getCanonicalHostName() + ":" + port;
         this.startTimestamp = System.currentTimeMillis();
         this.version = CoreVersion.getVersion();
         this.serverName = serverName;
