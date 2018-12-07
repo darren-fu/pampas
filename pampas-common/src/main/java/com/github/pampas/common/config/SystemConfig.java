@@ -40,7 +40,7 @@ public class SystemConfig implements VersionConfig {
 
     @Override
     public BigDecimal configVersionNumber() {
-        return null;
+        return BigDecimal.ONE;
     }
 
     @Override

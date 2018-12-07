@@ -44,7 +44,7 @@ import java.util.*;
  * @author Brian Clozel
  * @since 16 April 2001
  */
-public abstract class StringUtils
+public abstract class StringTools
 {
 
     private static final String FOLDER_SEPARATOR = "/";
@@ -84,10 +84,10 @@ public abstract class StringUtils
      * <p>Note: this method returns {@code true} for a {@code CharSequence}
      * that purely consists of whitespace.
      * <p><pre class="code">
-     * StringUtils.hasLength(null) = false
-     * StringUtils.hasLength("") = false
-     * StringUtils.hasLength(" ") = true
-     * StringUtils.hasLength("Hello") = true
+     * StringTools.hasLength(null) = false
+     * StringTools.hasLength("") = false
+     * StringTools.hasLength(" ") = true
+     * StringTools.hasLength("Hello") = true
      * </pre>
      *
      * @param str the {@code CharSequence} to check (may be {@code null})
@@ -120,11 +120,11 @@ public abstract class StringUtils
      * {@code CharSequence} is not {@code null}, its length is greater than
      * 0, and it contains at least one non-whitespace character.
      * <p><pre class="code">
-     * StringUtils.hasText(null) = false
-     * StringUtils.hasText("") = false
-     * StringUtils.hasText(" ") = false
-     * StringUtils.hasText("12345") = true
-     * StringUtils.hasText(" 12345 ") = true
+     * StringTools.hasText(null) = false
+     * StringTools.hasText("") = false
+     * StringTools.hasText(" ") = false
+     * StringTools.hasText("12345") = true
+     * StringTools.hasText(" 12345 ") = true
      * </pre>
      *
      * @param str the {@code CharSequence} to check (may be {@code null})

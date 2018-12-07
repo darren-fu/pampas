@@ -13,6 +13,7 @@ public interface PampasServer {
 
     String version();
 
+    String group();
     String serverName();
 
     InetAddress address();

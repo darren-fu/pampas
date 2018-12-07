@@ -33,7 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -52,47 +55,77 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
     public abstract CompletableFuture<PampasResponse<R>> doExecute(PampasRequest<Q> req, Locator locator) throws IOException;
 
     @Override
-    public Future<PampasResponse<R>> execute(PampasRequest<Q> req, Locator locator, Filter<Q, R> filter) {
+    public Future<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> execFilterList) {
+        CompletableFuture<PampasResponse> workerFuture = CompletableFuture.supplyAsync(() -> {
+            List<Filter<Q, R>> filterList = execFilterList;
+            FilterContext.CURRENT.resetChain();
 
-        CompletableFuture<PampasResponse<R>> future = null;
-        try {
-            future = doExecute(req, locator);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new PampasException(e);
-        }
-
-        String nettyThreadname = Thread.currentThread().getName();
-        future.thenApply(rsp -> {
-            try {
-                PampasResponse pampasResponse = filter == null ? rsp : filter.onSuccess(req, rsp);
-                if (rsp.success()) {
-                    log.debug("成功获取响应:{}", pampasResponse);
-                    sendResp(req.channelHandlerContext(), pampasResponse.responseData(), req.isKeepalive());
-                } else {
-                    log.error("请求失败:{}", rsp.exception());
-                    sendResp(req.channelHandlerContext(), rsp.exception().getMessage(), req.isKeepalive());
+            //执行过滤器before
+            for (Filter filter : filterList) {
+                FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
+                if (!filterChain.isFilterChainStop()) {
+                    filter.before(req, filterChain);
+                } else if (filterChain.getResponse() != null) {
+                    // filter终端 并且返回response
+                    this.sendPampasResponse(req.channelHandlerContext(), filterChain.getResponse(), req.isKeepalive());
+                    return filterChain.getResponse();
                 }
+            }
+            CompletableFuture<PampasResponse<R>> future = null;
+            try {
+                future = doExecute(req, locator);
+            } catch (Exception e) {
+                log.warn("执行失败:{},ex:{}", e.getMessage(), e);
+                throw new PampasException(e);
+            }
+
+            try {
+                String threadName = Thread.currentThread().getName();
+                PampasResponse<R> pampasResponse = future.get();
+                log.debug("获取响应:{}", pampasResponse);
+
+                //反转过滤器顺序
+                Collections.reverse(filterList);
+
+                //执行过滤器 onSuccess和onException
+                for (Filter filter : filterList) {
+                    FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
+                    if (!filterChain.isFilterChainStop()) {
+                        if (pampasResponse.success()) {
+                            filter.onSuccess(req, pampasResponse, filterChain);
+                        } else if (pampasResponse.exception() != null) {
+                            filter.onException(req, pampasResponse.exception(), filterChain);
+                        }
+                    } else if (filterChain.getResponse() != null) {
+                        // filter终端 并且返回response
+                        pampasResponse = filterChain.getResponse();
+                        break;
+                    }
+                }
+                FilterContext.CURRENT.resetChain();
+                this.sendPampasResponse(req.channelHandlerContext(), pampasResponse, req.isKeepalive());
 
                 EventExecutor executor = req.channelHandlerContext().executor();
-                executor.submit(() -> doAfter(nettyThreadname));
+                executor.submit(() -> doAfter(threadName));
                 return pampasResponse;
-            } catch (Exception ex) {
-                log.error("Abstract Worker thenApply error", ex);
-                ex.printStackTrace();
-                return rsp;
+            } catch (InterruptedException | ExecutionException e) {
+                log.error("Future error:{},ex:{}", e.getMessage(), e);
+                return new PampasResponse.ExceptionPampasResponse(e.getMessage(), e);
             } finally {
-                ReferenceCountUtil.release(req);
-            }
-        }).exceptionally(ex -> {
-            log.error("Abstract Worker error", ex);
-            try {
-                return filter == null ? PampasResponse.OK_RESP : filter.onException(req, ex);
-            } finally {
-                ReferenceCountUtil.release(req);
+                ReferenceCountUtil.release(req.requestData());
             }
         });
-        return future;
+        return workerFuture;
+    }
+
+    private void sendPampasResponse(ChannelHandlerContext ctx, PampasResponse pampasResponse, boolean keepalive) {
+        if (pampasResponse.success()) {
+            log.debug("成功获取响应:{}", pampasResponse);
+            sendResp(ctx, pampasResponse.responseData(), keepalive);
+        } else {
+            log.error("请求失败:{}", pampasResponse.exception());
+            sendResp(ctx, pampasResponse.exception().getMessage(), keepalive);
+        }
     }
 
     private void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {

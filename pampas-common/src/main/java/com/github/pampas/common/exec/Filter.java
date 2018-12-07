@@ -20,6 +20,8 @@ package com.github.pampas.common.exec;
 
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
+import com.github.pampas.common.extension.Scope;
+import com.github.pampas.common.extension.Spi;
 
 /**
  * worker回调、过滤器
@@ -30,38 +32,34 @@ import com.github.pampas.common.exec.payload.PampasResponse;
  * @author: darrenfu
  * @date: 18 -1-24
  */
+@Spi(scope = Scope.SINGLETON)
 public interface Filter<Q extends Object, R extends Object> {
-
-    /**
-     * 过滤器是否应该执行
-     *
-     * @param req the req
-     * @return the boolean
-     */
-    boolean shouldFilter(PampasRequest<Q> req);
 
     /**
      * 请求执行前运行.
      *
      * @param req the req
+     * @param filterChain
      */
-    void before(PampasRequest<Q> req);
+    void before(PampasRequest<Q> req, FilterChain filterChain);
 
     /**
      * 响应成功时执行
      *
      * @param req  the req
      * @param resp the resp
+     * @param filterChain
      * @return the response info
      */
-    PampasResponse<R> onSuccess(PampasRequest<Q> req, PampasResponse<R> resp);
+    void onSuccess(PampasRequest<Q> req, PampasResponse<R> resp, FilterChain filterChain);
 
     /**
      * 响应异常时执行
      *
      * @param req       the req
      * @param throwable the throwable
+     * @param filterChain
      * @return the response info
      */
-    PampasResponse<R> onException(PampasRequest<Q> req, Throwable throwable);
+    void onException(PampasRequest<Q> req, Throwable throwable, FilterChain filterChain);
 }

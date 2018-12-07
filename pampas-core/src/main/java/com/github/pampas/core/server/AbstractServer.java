@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class AbstractServer implements PampasServer {
     private static final Logger log = LoggerFactory.getLogger(AbstractServer.class);
 
+    private String group;
     private String serverName;
 
     protected int port;
@@ -79,7 +80,8 @@ public abstract class AbstractServer implements PampasServer {
         return sysName.contains("linux");
     }
 
-    public AbstractServer(String serverName, int port, ServerConfig config) {
+    public AbstractServer(String groupName, String serverName, int port, ServerConfig config) {
+        this.group = groupName;
         InetTools inetTools = new InetTools();
         InetAddress firstNonLoopbackAddress = inetTools.findFirstNonLoopbackAddress();
         inetTools.close();
@@ -248,6 +250,11 @@ public abstract class AbstractServer implements PampasServer {
     @Override
     public String version() {
         return version;
+    }
+
+    @Override
+    public String group() {
+        return group;
     }
 
     @Override

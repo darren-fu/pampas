@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.pampas.core.base;
+package com.github.pampas.common.exec;
 
 /**
  * Created by darrenfu on 18-2-6.
@@ -25,4 +25,25 @@ package com.github.pampas.core.base;
  * @date: 18-2-6
  */
 public class FilterContext {
+
+    public static final FilterContext CURRENT = new FilterContext();
+
+    private final ThreadLocal<FilterChain> threadLocal = ThreadLocal.withInitial(() -> new FilterChain());
+
+    private FilterContext() {
+
+    }
+
+    public FilterChain chain(String currentFilter) {
+        FilterChain filterChain = threadLocal.get();
+        filterChain.setCurrent(currentFilter);
+        filterChain.resetStatus();
+        return filterChain;
+    }
+
+    public void resetChain() {
+        FilterChain filterChain = threadLocal.get();
+        filterChain.resetAndClear();
+    }
+
 }

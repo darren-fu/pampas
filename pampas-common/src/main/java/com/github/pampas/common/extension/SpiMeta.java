@@ -30,7 +30,17 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface SpiMeta {
+
+    /**
+     * spi 的name，获取spi列表时，可根据name进行匹配
+     */
     String name() default "";
+
+    /**
+     * 描述
+     * @return
+     */
+    String desc() default "";
 
     /**
      * seq号越小，在返回的list<Instance>中的位置越靠前，尽量使用 0-100以内的数字

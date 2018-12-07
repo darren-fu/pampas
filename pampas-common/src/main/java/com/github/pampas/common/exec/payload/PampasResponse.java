@@ -34,8 +34,6 @@ public interface PampasResponse<T> extends Operation {
 
     boolean success();
 
-
-
     T responseData();
 
     Throwable exception();
@@ -78,7 +76,18 @@ public interface PampasResponse<T> extends Operation {
         }
     }
 
-    class ExceptionPampasResponse implements PampasResponse<Throwable> {
+    class ExceptionPampasResponse implements PampasResponse<String> {
+
+        private String err;
+
+        private Throwable throwable;
+
+        public ExceptionPampasResponse(String err, Throwable throwable) {
+            this.err = err;
+            this.throwable = throwable;
+        }
+
+
         @Override
         public long id() {
             return 0;
@@ -90,7 +99,7 @@ public interface PampasResponse<T> extends Operation {
         }
 
         @Override
-        public Throwable responseData() {
+        public String responseData() {
             return null;
         }
 

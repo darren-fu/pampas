@@ -61,7 +61,9 @@ public interface VersionConfig {
     }
 
 
-    VersionConfig setupWithDefault();
+    default VersionConfig setupWithDefault(){
+        return null;
+    }
 
 
 }

@@ -1,2 +1,3 @@
 com.github.pampas.storage.loader.ServiceAndInstancesLoader
 com.github.pampas.storage.loader.RouteRuleConfigLoader
+com.github.pampas.storage.loader.AuthFilterConfigLoader

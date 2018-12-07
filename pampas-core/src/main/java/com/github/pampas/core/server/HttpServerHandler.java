@@ -19,6 +19,7 @@
 package com.github.pampas.core.server;
 
 import com.github.pampas.common.exception.PampasException;
+import com.github.pampas.common.exec.Filter;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.exec.payload.DefaultPampasRequest;
 import com.github.pampas.common.extension.SpiContext;
@@ -123,7 +124,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         Worker worker = getWorker(locator.getWorker());
-        worker.execute(requestInfo, locator, null);
+        List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
+        worker.execute(requestInfo, locator, filterList);
     }
 
 

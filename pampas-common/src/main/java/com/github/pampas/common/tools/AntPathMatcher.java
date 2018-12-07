@@ -19,7 +19,7 @@
 package com.github.pampas.common.tools;
 
 import com.github.pampas.common.tools.ext.PathMatcher;
-import com.github.pampas.common.tools.ext.StringUtils;
+import com.github.pampas.common.tools.ext.StringTools;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -407,7 +407,7 @@ public class AntPathMatcher implements PathMatcher {
      * @return the tokenized requestPath parts
      */
     protected String[] tokenizePath(String path) {
-        return StringUtils.tokenizeToStringArray(path, this.pathSeparator, this.trimTokens, true);
+        return StringTools.tokenizeToStringArray(path, this.pathSeparator, this.trimTokens, true);
     }
 
     /**
@@ -472,8 +472,8 @@ public class AntPathMatcher implements PathMatcher {
      */
     @Override
     public String extractPathWithinPattern(String pattern, String path) {
-        String[] patternParts = StringUtils.tokenizeToStringArray(pattern, this.pathSeparator, this.trimTokens, true);
-        String[] pathParts = StringUtils.tokenizeToStringArray(path, this.pathSeparator, this.trimTokens, true);
+        String[] patternParts = StringTools.tokenizeToStringArray(pattern, this.pathSeparator, this.trimTokens, true);
+        String[] pathParts = StringTools.tokenizeToStringArray(path, this.pathSeparator, this.trimTokens, true);
         StringBuilder builder = new StringBuilder();
         boolean pathStarted = false;
 
@@ -534,13 +534,13 @@ public class AntPathMatcher implements PathMatcher {
      */
     @Override
     public String combine(String pattern1, String pattern2) {
-        if (!StringUtils.hasText(pattern1) && !StringUtils.hasText(pattern2)) {
+        if (!StringTools.hasText(pattern1) && !StringTools.hasText(pattern2)) {
             return "";
         }
-        if (!StringUtils.hasText(pattern1)) {
+        if (!StringTools.hasText(pattern1)) {
             return pattern2;
         }
-        if (!StringUtils.hasText(pattern2)) {
+        if (!StringTools.hasText(pattern2)) {
             return pattern1;
         }
 

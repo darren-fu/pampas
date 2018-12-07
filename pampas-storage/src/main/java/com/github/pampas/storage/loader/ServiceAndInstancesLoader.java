@@ -38,7 +38,8 @@ public class ServiceAndInstancesLoader extends AbstractConfigLoader<ServiceAndIn
         log.info("加载服务实例列表:{}", ServiceAndInstancesLoader.class.getSimpleName());
 
         Set<String> serviceNameSet = new HashSet<>(64);
-        RouteRuleConfig routeRuleConfig = (RouteRuleConfig) SpiContext.getContext(VersionConfig.class).getSpiInstanceByName(RouteRuleConfig.SPI_META_NAME);
+        RouteRuleConfig routeRuleConfig = (RouteRuleConfig) SpiContext.getContext(VersionConfig.class)
+                .getSpiInstanceByName(RouteRuleConfig.SPI_META_NAME);
         for (RulePackage rulePackage : routeRuleConfig.getRulePackages()) {
             for (AbstractRule rule : rulePackage.getRuleList()) {
                 if (rule.getHostStrategy() == HostStrategyEnum.AUTO) {

@@ -45,8 +45,12 @@ import org.slf4j.LoggerFactory;
 public class GatewayServer extends AbstractServer {
     private static final Logger log = LoggerFactory.getLogger(GatewayServer.class);
 
-    public GatewayServer(String serverName, final Integer port) {
-        super(serverName, port, ServerConfig.defaultConfig());
+    public GatewayServer(String groupName, final Integer port) {
+        super(groupName, groupName, port, ServerConfig.defaultConfig());
+    }
+
+    public GatewayServer(String groupName, String serverName, final Integer port) {
+        super(groupName, serverName, port, ServerConfig.defaultConfig());
     }
 
     static LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);

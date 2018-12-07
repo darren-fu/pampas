@@ -125,8 +125,8 @@ public abstract class ObjectUtils {
      * @param obj the object to check
      * @return {@code true} if the object is {@code null} or <em>empty</em>
      * @see ObjectUtils#isEmpty(Object[])
-     * @see StringUtils#hasLength(CharSequence)
-     * @see StringUtils#isEmpty(Object)
+     * @see StringTools#hasLength(CharSequence)
+     * @see StringTools#isEmpty(Object)
      * @since 4.2
      */
     @SuppressWarnings("rawtypes")

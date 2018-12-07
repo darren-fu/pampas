@@ -19,6 +19,8 @@
 package com.github.pampas.common.tools;
 
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
@@ -152,26 +154,31 @@ public class StreamTools {
         }
         return coll.stream().collect(Collectors.groupingBy(keyGetter));
     }
-
     /**
-     * To map map.
+     * 转化集合为Map，map的key从集合对象中抽取，不同雨groupBy，重复的key保留第一个对象
      *
-     * @param <T>         the type parameter
-     * @param <K>         the type parameter
-     * @param <V>         the type parameter
-     * @param coll        the coll
-     * @param keyGetter   the key getter
-     * @param valueGetter the value getter
-     * @return the map
+     * @param coll      集合
+     * @param keyGetter Key getter
+     * @param <K>       返回的Key类型
+     * @param <V>       要收集对象的对象类型
+     * @return MAP
      */
-    public static <T, K, V> Map<K, V> toMap(Collection<T> coll,
-                                            Function<T, K> keyGetter,
-                                            Function<T, V> valueGetter) {
-        if (CommonTools.isEmpty(coll)) {
+    public static <K, V> Map<K, V> toMap(Collection<V> coll, Function<V, K> keyGetter) {
+        if (CollectionUtils.isEmpty(coll)) {
             return Collections.emptyMap();
         }
-        return coll.stream().collect(Collectors.toMap(keyGetter, valueGetter));
+        Map<K, V> map = coll.stream().collect(Collectors.toMap(keyGetter, v -> v, (first, duplicate) -> first));
+        return map;
     }
+
+    public static <K, V, Y> Map<K, Y> toMap(Collection<V> coll, Function<V, K> keyGetter, Function<V, Y> ValGetter) {
+        if (CollectionUtils.isEmpty(coll)) {
+            return Collections.emptyMap();
+        }
+        Map<K, Y> map = coll.stream().collect(Collectors.toMap(keyGetter, ValGetter, (first, duplicate) -> first));
+        return map;
+    }
+
 
     /**
      * To map map.

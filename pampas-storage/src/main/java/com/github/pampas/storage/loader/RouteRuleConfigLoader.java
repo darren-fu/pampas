@@ -7,7 +7,7 @@ import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.rule.RulePackage;
 import com.github.pampas.common.tools.JsonTools;
-import com.github.pampas.common.tools.ext.StringUtils;
+import com.github.pampas.common.tools.ext.StringTools;
 import com.github.pampas.core.base.AbstractConfigLoader;
 import com.github.pampas.core.base.PampasContext;
 import com.github.pampas.core.route.RouteRuleConfig;
@@ -48,7 +48,7 @@ public class RouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleConfig>
             rulePackage.setName(routeRule.getName());
             rulePackage.setMappingHost(routeRule.getMappingHost());
             String ruleContent = routeRule.getContent();
-            if (StringUtils.isEmpty(ruleContent)) {
+            if (StringTools.isEmpty(ruleContent)) {
                 continue;
             }
             try {
@@ -59,7 +59,7 @@ public class RouteRuleConfigLoader extends AbstractConfigLoader<RouteRuleConfig>
                         rulePackage.addRule(ruleDetailMap);
                     }
                 }
-                if (StringUtils.isEmpty(ruleDetailMapList)) {
+                if (StringTools.isEmpty(ruleDetailMapList)) {
                     continue;
                 }
                 rulePackageList.add(rulePackage);
