@@ -20,6 +20,7 @@ package com.github.pampas.core.server;
 
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.tools.AssertTools;
 import com.github.pampas.common.tools.InetTools;
 import com.github.pampas.core.base.CoreVersion;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
@@ -38,6 +39,9 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -73,7 +77,7 @@ public abstract class AbstractServer implements PampasServer {
 
 
     protected final AtomicReference<ServerState> serverStateRef;
-
+    private Throwable throwable;
 
     private boolean useEpoll() {
         String sysName = System.getProperty("os.name");
@@ -88,7 +92,7 @@ public abstract class AbstractServer implements PampasServer {
 
 //        this.address = getLocalHostLANAddress();
         this.address = firstNonLoopbackAddress;
-        this.id = serverName + "@" + address.getCanonicalHostName() + ":" + port;
+        this.id = group + "@" + address.getCanonicalHostName() + ":" + port;
         this.startTimestamp = System.currentTimeMillis();
         this.version = CoreVersion.getVersion();
         this.serverName = serverName;
@@ -121,7 +125,7 @@ public abstract class AbstractServer implements PampasServer {
 
     public synchronized ChannelFuture start() throws InterruptedException {
         if (!serverStateRef.compareAndSet(ServerState.Created, ServerState.Starting)) {
-            log.error("服务器已经启动,serverName:{},端口:{}", port);
+            log.error("服务器状态错误,ID:{},端口:{}, 状态:{}", id, port, serverStateRef.get());
             throw new IllegalStateException("ServerStartedListener already started");
         }
         log.info("准备启动网关服务器,serverName:{},端口:{},版本:{}", serverName, port, CoreVersion.getVersion());
@@ -134,31 +138,33 @@ public abstract class AbstractServer implements PampasServer {
                 configLoader.loadConfig();
             }
         }
-
+        //校验状态
+        checkState(ServerState.Starting);
         // 调用start监听
         SpiContext<ServerReadyToStartListener> readyToStartListenerSpiContext = SpiContext.getContext(ServerReadyToStartListener.class);
         for (ServerReadyToStartListener readyToStartListener : readyToStartListenerSpiContext.getSpiInstances()) {
             readyToStartListener.readyToStart(this);
         }
-
+        //校验状态
+        checkState(ServerState.Starting);
 
         log.info("启动中:{}", this);
         ChannelFuture channelFuture = bootstrap.bind(port).sync();
-
         log.info("启动成功,serverName:{},端口:{}, soBacklog:{}, soKeepLive:{}, tcpNodDelay:{}", serverName, port,
                 config.soBacklog, config.soKeepAlive, config.tcpNoDelay);
-
-        serverStateRef.set(ServerState.Started); // It will come here only if this was the thread that transitioned to Starting
+        serverStateRef.set(ServerState.Running); // It will come here only if this was the thread that transitioned to Starting
         SpiContext<ServerStartedListener> startedListenerSpiContext = SpiContext.getContext(ServerStartedListener.class);
         for (ServerStartedListener serverStartedListener : startedListenerSpiContext.getSpiInstances()) {
             serverStartedListener.started(this);
         }
+        //校验状态
+        checkState(ServerState.Running);
+
         channel = channelFuture.channel();
         channel.closeFuture().addListener(future -> {
             log.info("服务优雅停机,serverName:{},端口:{}", serverName, port);
         });
         // 监听服务器关闭监听
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown()));
         return channelFuture;
     }
@@ -167,7 +173,7 @@ public abstract class AbstractServer implements PampasServer {
      * 优雅停机
      */
     public void shutdown() {
-        if (serverStateRef.compareAndSet(ServerState.Started, ServerState.Shutdown)) {
+        if (serverStateRef.compareAndSet(ServerState.Running, ServerState.Shutdown)) {
             log.info("服务准备停机,serverName:{},端口:{}", serverName, port);
 
             if (boss != null && !boss.isShuttingDown() && !boss.isShutdown()) {
@@ -177,10 +183,29 @@ public abstract class AbstractServer implements PampasServer {
                 worker.shutdownGracefully();
             }
             log.info("服务正常停机,serverName:{},端口:{}", serverName, port);
-
         } else {
             log.info("服务器尚未启动serverName:{},端口:{}", serverName, port);
         }
+    }
+
+    public void shutdownForcibly(Throwable throwable) {
+        AssertTools.notNull(throwable, "强行终止服务必须提供异常");
+        serverStateRef.getAndSet(ServerState.Shutdown);
+        this.throwable = throwable;
+    }
+
+    private void checkState(ServerState state) {
+        if (serverStateRef.get() == state) {
+            return;
+        }
+        if (null != this.throwable) {
+            Writer result = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(result);
+            this.throwable.printStackTrace(printWriter);
+            log.error("可能导致终止的原因:{}", result.toString());
+            this.throwable = null;
+        }
+        throw new IllegalStateException("网关服务状态错误:" + serverStateRef.get() + "，应该是:" + state);
     }
 
 
@@ -200,7 +225,7 @@ public abstract class AbstractServer implements PampasServer {
             case Created:
             case Starting:
                 throw new IllegalStateException("ServerStartedListener not started yet.");
-            case Started:
+            case Running:
                 channel.closeFuture().await();
                 break;
             case Shutdown:

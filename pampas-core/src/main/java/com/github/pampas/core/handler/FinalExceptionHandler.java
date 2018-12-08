@@ -18,6 +18,7 @@
 
 package com.github.pampas.core.handler;
 
+import com.github.pampas.common.tools.ResponseTools;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -41,6 +42,7 @@ public class FinalExceptionHandler extends ChannelDuplexHandler {
             throws Exception {
         try {
             log.error("处理消息发生异常", cause);
+            ResponseTools.sendResp(ctx, cause, false);
             ctx.close();
         } catch (Throwable ex) {
             log.warn("关闭channel失败:{}", ex);

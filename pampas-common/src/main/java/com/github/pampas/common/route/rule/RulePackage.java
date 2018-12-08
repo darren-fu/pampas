@@ -29,7 +29,7 @@ public class RulePackage {
             ruleList = new ArrayList<>(32);
         }
 
-        JsonTools jsonTools = JsonTools.nonNullMapper();
+        JsonTools jsonTools = JsonTools.NON_NULL;
         String json = jsonTools.toJson(ruleDetailMap);
         String type = ruleDetailMap.get("type");
         AbstractRule rule = null;

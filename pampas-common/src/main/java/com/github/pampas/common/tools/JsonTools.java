@@ -48,7 +48,9 @@ public class JsonTools {
     private static Logger logger = LoggerFactory.getLogger(JsonTools.class);
     private static String SIMPLE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public static final JsonTools INSTANCE = new JsonTools();
+    public static final JsonTools DEFAULT = new JsonTools();
+    public static final JsonTools NON_NULL = nonNullMapper();
+    public static final JsonTools NON_EMPTY = nonEmptyMapper();
 
     private ObjectMapper mapper;
 
@@ -104,7 +106,7 @@ public class JsonTools {
     /**
      * 创建只输出非Null的属性到Json字符串的Mapper.
      */
-    public static JsonTools nonNullMapper() {
+    private static JsonTools nonNullMapper() {
         return new JsonTools(JsonInclude.Include.NON_NULL);
     }
 
@@ -113,14 +115,14 @@ public class JsonTools {
      * <p>
      * 注意，要小心使用, 特别留意empty的情况.
      */
-    public static JsonTools nonEmptyMapper() {
+    private static JsonTools nonEmptyMapper() {
         return new JsonTools(JsonInclude.Include.NON_EMPTY);
     }
 
     /**
      * 默认的全部输出的Mapper, 区别于INSTANCE，可以做进一步的配置
      */
-    public static JsonTools defaultMapper() {
+    private static JsonTools defaultMapper() {
         return new JsonTools();
     }
 

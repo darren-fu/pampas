@@ -42,18 +42,15 @@ public class AuthFilter implements Filter, Configurable<AuthFilterConfig> {
     @Override
     public void before(PampasRequest req, FilterChain filterChain) {
         log.info("执行过滤器:{} before", getClass().getSimpleName());
-
     }
 
     @Override
     public void onSuccess(PampasRequest req, PampasResponse resp, FilterChain filterChain) {
         log.info("执行过滤器:{} onSuccess", getClass().getSimpleName());
-        return resp;
     }
 
     @Override
     public void onException(PampasRequest req, Throwable throwable, FilterChain filterChain) {
         log.info("执行过滤器:{} onException", getClass().getSimpleName());
-        return null;
     }
 }

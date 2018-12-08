@@ -18,6 +18,7 @@
 
 package com.github.pampas.common.discover;
 
+import com.github.pampas.common.extension.Scope;
 import com.github.pampas.common.extension.Spi;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * 服务实例上下文
  * Created by darrenfu on 17-6-26.
  */
-@Spi
+@Spi(scope = Scope.SINGLETON)
 public interface ServerContext {
 
 

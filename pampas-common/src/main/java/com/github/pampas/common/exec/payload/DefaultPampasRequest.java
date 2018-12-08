@@ -48,6 +48,9 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     private String serviceName;
 
+    private Boolean keepalive;
+
+
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
@@ -130,7 +133,10 @@ public class DefaultPampasRequest implements PampasRequest<FullHttpRequest> {
 
     @Override
     public boolean isKeepalive() {
-        return HttpUtil.isKeepAlive(requestData);
+        if (keepalive == null) {
+            this.keepalive = HttpUtil.isKeepAlive(requestData);
+        }
+        return this.keepalive;
     }
 
     @Override

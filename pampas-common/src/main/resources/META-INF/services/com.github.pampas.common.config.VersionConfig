@@ -1,1 +1,2 @@
 com.github.pampas.common.config.SystemConfig
+com.github.pampas.common.discover.ServiceAndInstancesConfig

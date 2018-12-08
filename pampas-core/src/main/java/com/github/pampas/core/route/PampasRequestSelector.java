@@ -82,7 +82,6 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
                     if (rule instanceof HttpRule) {
                         Locator locator = new Locator();
                         locator.setServiceName(rule.getService());
-
                         locator.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
                         locator.setWorker(PampasConsts.Worker.HTTP);
 
@@ -90,15 +89,15 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
                             locator.setMappedPath(rule.getMappingPath());
                         } else if (rule.getMappingStrategy() == MappingStrategyEnum.STRIP) {
                             if (rule.getMappingPath() != null && rule.getMappingPath().length() > 1) {
-                                String result = StringUtils.stripStart(request.path(), rule.getMappingPath());
+                                String result = StringUtils.substringAfter(request.path(), rule.getMappingPath());
                                 locator.setMappedPath(result);
                             }
                         }
-
+                        locator.setHostStrategy(rule.getHostStrategy().getValue());
                         if (rule.getHostStrategy() == HostStrategyEnum.APPOINT) {
                             locator.setInstanceList(ObjectUtils.defaultIfNull(rule.getMappingServerInstanceList(), Collections.emptyList()));
                         }
-                        log.debug("匹配路由规则完成，:{}", rule, locator);
+                        log.debug("匹配路由规则完成，rule:{}, locator:{}", rule, locator);
                         return locator;
                     }
                 }
@@ -106,6 +105,5 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
         }
         return null;
     }
-
 
 }

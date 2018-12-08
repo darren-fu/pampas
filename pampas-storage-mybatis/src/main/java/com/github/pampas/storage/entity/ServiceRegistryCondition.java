@@ -513,6 +513,118 @@ public class ServiceRegistryCondition {
             return (Criteria) this;
         }
 
+        public Criteria andPatternIsNull() {
+            addCriterion("pattern is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternIsNotNull() {
+            addCriterion("pattern is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternEqualTo(String value) {
+            addCriterion("pattern =", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternNotEqualTo(String value) {
+            addCriterion("pattern <>", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternNotEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternGreaterThan(String value) {
+            addCriterion("pattern >", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternGreaterThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternGreaterThanOrEqualTo(String value) {
+            addCriterion("pattern >=", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternGreaterThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternLessThan(String value) {
+            addCriterion("pattern <", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternLessThanColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternLessThanOrEqualTo(String value) {
+            addCriterion("pattern <=", value, "pattern");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPatternLessThanOrEqualToColumn(ServiceRegistry.Column column) {
+            addCriterion(new StringBuilder("pattern <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternLike(String value) {
+            addCriterion("pattern like", value, "pattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternNotLike(String value) {
+            addCriterion("pattern not like", value, "pattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternIn(List<String> values) {
+            addCriterion("pattern in", values, "pattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternNotIn(List<String> values) {
+            addCriterion("pattern not in", values, "pattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternBetween(String value1, String value2) {
+            addCriterion("pattern between", value1, value2, "pattern");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternNotBetween(String value1, String value2) {
+            addCriterion("pattern not between", value1, value2, "pattern");
+            return (Criteria) this;
+        }
+
         public Criteria andAddressIsNull() {
             addCriterion("address is null");
             return (Criteria) this;
@@ -1050,6 +1162,11 @@ public class ServiceRegistryCondition {
 
         public Criteria andTypeLikeInsensitive(String value) {
             addCriterion("upper(`type`) like", value.toUpperCase(), "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andPatternLikeInsensitive(String value) {
+            addCriterion("upper(pattern) like", value.toUpperCase(), "pattern");
             return (Criteria) this;
         }
 

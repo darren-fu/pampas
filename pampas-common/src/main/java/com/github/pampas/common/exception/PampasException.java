@@ -18,6 +18,9 @@
 
 package com.github.pampas.common.exception;
 
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpResponseStatus;
+
 /**
  * Created by darrenfu on 18-2-1.
  *
@@ -26,17 +29,43 @@ package com.github.pampas.common.exception;
  */
 public class PampasException extends RuntimeException {
 
+    private HttpResponseStatus status;
+
+    private String contentType;
+
     public PampasException(Throwable ex) {
-        super(ex);
+        this(HttpResponseStatus.BAD_GATEWAY, HttpHeaderValues.APPLICATION_JSON.toString(), ex.getMessage(), ex);
     }
 
     public PampasException(String message) {
-        super(message);
+        this(HttpResponseStatus.BAD_GATEWAY, message);
+    }
+
+    public PampasException(HttpResponseStatus status, String message) {
+        this(status, HttpHeaderValues.APPLICATION_JSON.toString(), message);
     }
 
     public PampasException(String message, Throwable ex) {
-        super(message, ex);
+        this(HttpResponseStatus.BAD_GATEWAY, HttpHeaderValues.APPLICATION_JSON.toString(), message, ex);
     }
 
+    public PampasException(HttpResponseStatus status, String contentType, String message) {
+        super(message);
+        this.status = status;
+        this.contentType = contentType;
+    }
 
+    public PampasException(HttpResponseStatus status, String contentType, String message, Throwable ex) {
+        super(message, ex);
+        this.status = status;
+        this.contentType = contentType;
+    }
+
+    public HttpResponseStatus getStatus() {
+        return status;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
 }

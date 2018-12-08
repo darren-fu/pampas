@@ -22,7 +22,7 @@ import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
-import com.github.pampas.common.discover.ServiceAndInstances;
+import com.github.pampas.common.discover.ServiceAndInstancesConfig;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.tools.CollectionTools;
 import com.github.pampas.common.tools.CommonTools;
@@ -44,13 +44,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 18-2-6
  */
 @SpiMeta(name = "mock-server-context", key = PampasConsts.ConfigLoaderKey.SERVER_CONTEXT)
-public class MockServerContext implements ServerContext, Configurable<ServiceAndInstances> {
+public class MockServerContext implements ServerContext, Configurable<ServiceAndInstancesConfig> {
 
     private static final Logger log = LoggerFactory.getLogger(MockServerContext.class);
 
     private volatile ConcurrentHashMap<String, List<ServerInstance>> instanceMap;
 
-    private ServiceAndInstances serviceAndInstances;
+    private ServiceAndInstancesConfig serviceAndInstancesConfig;
 
     public MockServerContext() {
         this.instanceMap = new ConcurrentHashMap<>();
@@ -103,20 +103,20 @@ public class MockServerContext implements ServerContext, Configurable<ServiceAnd
 
 
     @Override
-    public ServiceAndInstances getConfig() {
-        return this.serviceAndInstances;
+    public ServiceAndInstancesConfig getConfig() {
+        return this.serviceAndInstancesConfig;
     }
 
     @Override
-    public Class<ServiceAndInstances> configClass() {
-        return ServiceAndInstances.class;
+    public Class<ServiceAndInstancesConfig> configClass() {
+        return ServiceAndInstancesConfig.class;
     }
 
     @Override
-    public Configurable setupWithConfig(ServiceAndInstances... serviceAndInstances) {
-        this.serviceAndInstances = serviceAndInstances[0];
+    public Configurable setupWithConfig(ServiceAndInstancesConfig... serviceAndInstanceConfigs) {
+        this.serviceAndInstancesConfig = serviceAndInstanceConfigs[0];
         ConcurrentHashMap<String, List<ServerInstance>> map = new ConcurrentHashMap<>();
-        for (ServiceAndInstances serviceAndInstance : serviceAndInstances) {
+        for (ServiceAndInstancesConfig serviceAndInstance : serviceAndInstanceConfigs) {
             for (String serviceName : serviceAndInstance.getServices()) {
                 if (map.containsKey(serviceName) && CollectionUtils.isNotEmpty(map.get(serviceName))) {
                     map.get(serviceName).removeAll(serviceAndInstance.getInstances(serviceName));

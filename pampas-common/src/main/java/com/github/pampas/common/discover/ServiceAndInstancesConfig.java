@@ -1,6 +1,7 @@
 package com.github.pampas.common.discover;
 
 import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.extension.SpiMeta;
 import com.google.common.base.MoreObjects;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,20 +18,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * User: darrenfu
  * Date: 2018-09-13
  */
+@SpiMeta(name = "config-service-instances")
 @Getter
-public class ServiceAndInstances implements VersionConfig {
+public class ServiceAndInstancesConfig implements VersionConfig {
+    public static final String SPI_META_NAME = "config-service-instances";
 
     private Map<String, List<ServerInstance>> serviceMap;
 
     @Setter
     private Long timestamp;
 
-    public ServiceAndInstances() {
+    public ServiceAndInstancesConfig() {
         this.serviceMap = new ConcurrentHashMap<>();
     }
 
 
-    public ServiceAndInstances addServiceAndInstance(String serviceName, List<ServerInstance> instanceList) {
+    public ServiceAndInstancesConfig addServiceAndInstance(String serviceName, List<ServerInstance> instanceList) {
         serviceMap.put(serviceName, instanceList);
         return this;
     }

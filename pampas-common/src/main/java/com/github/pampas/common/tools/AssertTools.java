@@ -144,11 +144,11 @@ public class AssertTools {
      *
      * @param condition a boolean expression
      * @param message   the exception message to use if the assertion fails
-     * @throws IllegalArgumentException if {@code expression} is false
+     * @throws IllegalStateException if {@code expression} is false
      */
     public static void assertState(boolean condition, String message) {
         if (!condition) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalStateException(message);
         }
     }
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pampas.common.discover.ServerInstance;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.tools.AntPathMatcher;
+import com.google.common.base.MoreObjects;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 import lombok.Data;
@@ -151,7 +152,6 @@ public abstract class AbstractRule {
 
                 }
                 if (mappingStrategy == MappingStrategyEnum.STRIP) {
-                    this.mappingPath = this.path.replaceFirst(this.mappingPath, "");
                 }
             }
 
@@ -200,4 +200,18 @@ public abstract class AbstractRule {
      */
     protected abstract boolean checkMatch(PampasRequest<FullHttpRequest> request);
 
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("type", type)
+                .add("service", service)
+                .add("path", path)
+                .add("mappingStrategy", mappingStrategy)
+                .add("mappingPath", mappingPath)
+                .add("hostStrategy", hostStrategy)
+                .add("mappingHost", mappingHost)
+                .add("isAntPath", isAntPath)
+                .toString();
+    }
 }

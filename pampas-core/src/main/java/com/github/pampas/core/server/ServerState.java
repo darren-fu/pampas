@@ -6,5 +6,5 @@ package com.github.pampas.core.server;
  * Date: 2018-09-17
  */
 public enum ServerState {
-    Created, Starting, Started, Shutdown
+    Created, Starting, Running, Shutdown
 }

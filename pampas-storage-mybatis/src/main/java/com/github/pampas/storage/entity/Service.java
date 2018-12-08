@@ -28,7 +28,7 @@ public class Service implements Serializable {
     private String serviceName;
 
     /**
-     * 服务类型 spring cloud, dubbo, grpc
+     * 服务类型 RESTful, dubbo, grpc
      *
      * Corresponding to the database column p_service.type
      */
@@ -54,6 +54,13 @@ public class Service implements Serializable {
      * Corresponding to the database column p_service.group
      */
     private String group;
+
+    /**
+     * 状态1 启用 0 停用
+     *
+     * Corresponding to the database column p_service.status
+     */
+    private Boolean status;
 
     /**
      * 备注
@@ -239,6 +246,31 @@ public class Service implements Serializable {
     }
 
     /**
+     * This method returns the value of the database column p_service.status
+     *
+     * @return the value of p_service.status
+     */
+    public Boolean getStatus() {
+        return status;
+    }
+
+    /**
+     */
+    public Service withStatus(Boolean status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_service.status
+     *
+     * @param status the value for p_service.status
+     */
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    /**
      * This method returns the value of the database column p_service.remark
      *
      * @return the value of p_service.remark
@@ -352,6 +384,7 @@ public class Service implements Serializable {
         sb.append(", protocol=").append(protocol);
         sb.append(", registryId=").append(registryId);
         sb.append(", group=").append(group);
+        sb.append(", status=").append(status);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
         sb.append(", updateTime=").append(updateTime);
@@ -380,6 +413,7 @@ public class Service implements Serializable {
             && (this.getProtocol() == null ? other.getProtocol() == null : this.getProtocol().equals(other.getProtocol()))
             && (this.getRegistryId() == null ? other.getRegistryId() == null : this.getRegistryId().equals(other.getRegistryId()))
             && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -398,6 +432,7 @@ public class Service implements Serializable {
         result = prime * result + ((getProtocol() == null) ? 0 : getProtocol().hashCode());
         result = prime * result + ((getRegistryId() == null) ? 0 : getRegistryId().hashCode());
         result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -415,6 +450,7 @@ public class Service implements Serializable {
         protocol("protocol", "protocol", "VARCHAR", false),
         registryId("registry_id", "registryId", "INTEGER", false),
         group("group", "group", "VARCHAR", true),
+        status("status", "status", "BIT", true),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false),

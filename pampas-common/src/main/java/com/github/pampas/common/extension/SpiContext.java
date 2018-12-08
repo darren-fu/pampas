@@ -32,10 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -227,8 +224,14 @@ public class SpiContext<T> {
             for (ConfigLoader configLoader : configLoaders) {
                 if (configLoader.configClass() == configClass) {
                     configLoader.addListener(configurable);
-                    configLoader.loadConfig();
-                    configLoader.markConfigurable(configClass, configurable);
+                    VersionConfig versionConfig = configLoader.loadConfig();
+                    VersionConfig cast = configClass.cast(versionConfig);
+                    log.info("获取Config:{}:{}", versionConfig.getClass(), versionConfig);
+                    //使用此config配置对象
+                    VersionConfig[] arr = (VersionConfig[]) Array.newInstance(configClass, 1);
+                    arr[0] = versionConfig;
+                    configurable.setupWithConfig(arr);
+//                    configLoader.markConfigurable(configClass, configurable);
                 }
             }
         }
@@ -266,7 +269,7 @@ public class SpiContext<T> {
 
     /**
      * 有些地方需要spi的所有激活的instances，所以需要能返回一个列表的方法 注意：1 SpiMeta 中的active 为true； 2
-     * 按照spiMeta中的sequence进行排序 FIXME： 是否需要对singleton来区分对待，后面再考虑 fishermen
+     * 按照spiMeta中的sequence进行排序
      *
      * @param key the key
      * @return extensions extensions

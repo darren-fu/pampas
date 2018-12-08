@@ -15,7 +15,7 @@ public interface ConfigLoader<T extends VersionConfig> {
 
     void addListener(Configurable<T> configurable);
 
-    void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable);
+//    void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable);
 
     default boolean lazy() {
         return false;

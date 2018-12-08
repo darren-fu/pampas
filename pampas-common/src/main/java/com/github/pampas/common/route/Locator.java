@@ -60,6 +60,7 @@ public class Locator {
      */
     private String loadBalancer;
 
+    private String hostStrategy;
 
     private List<ServerInstance> instanceList;
 }

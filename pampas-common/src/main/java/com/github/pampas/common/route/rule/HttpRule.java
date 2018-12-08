@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -33,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
  * @date: 18-3-14
  */
 @Data
+@ToString(callSuper = true)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class HttpRule extends AbstractRule {
 

@@ -21,7 +21,8 @@ package com.github.pampas;
 import com.github.pampas.core.base.PampasContext;
 import com.github.pampas.core.server.GatewayServer;
 import com.github.pampas.storage.SpringStorageApp;
-import com.github.pampas.storage.base.SystemProps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by darrenfu on 18-4-13.
@@ -30,18 +31,23 @@ import com.github.pampas.storage.base.SystemProps;
  * @date: 18-4-13
  */
 public class Bootstrapper {
+
+    private static final Logger log = LoggerFactory.getLogger(Bootstrapper.class);
+
     public static void main(String[] args) {
+        try {
+            GatewayServer gatewayServer = new GatewayServer("test_server", 9000);
+            PampasContext.setCurrentServer(gatewayServer);
+            SpringStorageApp.init(args, (ctx) -> {
 
-        SpringStorageApp.init(args, (ctx) -> {
-            GatewayServer server1 = new GatewayServer("server1", 9000);
-            PampasContext.setCurrentServer(server1);
-
-            try {
-                server1.start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
+                try {
+                    gatewayServer.start();
+                } catch (InterruptedException e) {
+                    log.error("服务器中止:{}", e.getMessage());
+                }
+            });
+        } catch (Throwable throwable) {
+            log.error("启动发生错误:{}", throwable.getMessage(), throwable);
+        }
     }
 }

@@ -5,6 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="pattern" jdbcType="VARCHAR" property="pattern" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, `type`, address, remark, insert_time, update_time, is_del
+    id, `name`, `type`, pattern, address, remark, insert_time, update_time, is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.ServiceRegistryCondition" resultMap="BaseResultMap">
     select
@@ -114,12 +115,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_service_registry` (`name`, `type`, address, 
-      remark, insert_time, update_time, 
-      is_del)
-    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT})
+    insert into `p_service_registry` (`name`, `type`, pattern, 
+      address, remark, insert_time, 
+      update_time, is_del)
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{pattern,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.ServiceRegistry">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -132,6 +133,9 @@
       </if>
       <if test="type != null">
         `type`,
+      </if>
+      <if test="pattern != null">
+        pattern,
       </if>
       <if test="address != null">
         address,
@@ -155,6 +159,9 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="pattern != null">
+        #{pattern,jdbcType=VARCHAR},
       </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
@@ -191,6 +198,9 @@
       <if test="record.type != null">
         `type` = #{record.type,jdbcType=VARCHAR},
       </if>
+      <if test="record.pattern != null">
+        pattern = #{record.pattern,jdbcType=VARCHAR},
+      </if>
       <if test="record.address != null">
         address = #{record.address,jdbcType=VARCHAR},
       </if>
@@ -216,6 +226,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       `name` = #{record.name,jdbcType=VARCHAR},
       `type` = #{record.type,jdbcType=VARCHAR},
+      pattern = #{record.pattern,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
@@ -233,6 +244,9 @@
       </if>
       <if test="type != null">
         `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="pattern != null">
+        pattern = #{pattern,jdbcType=VARCHAR},
       </if>
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
@@ -256,6 +270,7 @@
     update `p_service_registry`
     set `name` = #{name,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=VARCHAR},
+      pattern = #{pattern,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},

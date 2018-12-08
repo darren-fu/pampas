@@ -1,7 +1,6 @@
 package com.github.pampas.storage.listener;
 
 import com.github.pampas.common.extension.SpiMeta;
-import com.github.pampas.common.tools.TaskTools;
 import com.github.pampas.core.server.PampasServer;
 import com.github.pampas.core.server.listener.ServerStartedListener;
 import org.slf4j.Logger;
@@ -21,8 +20,9 @@ public class StorageServerStartedListener implements ServerStartedListener {
 
     @Override
     public void started(PampasServer pampasServer) {
-        log.info("服务器{}启动完成:{}", pampasServer, LocalDateTime.now().toString());
-        TaskTools.scheduledTask("gateway-refresh-timer",30_000L,()->{
+
+        log.info("服务器启动完成[{}]，耗时[{}]秒:{}", pampasServer.id(), (System.currentTimeMillis() - pampasServer.startTimestamp()) / 1000, LocalDateTime.now().toString());
+//        TaskTools.scheduledTask("gateway-refresh-timer", 30_000L, () -> {
 //            GatewayServerDao gatewayServerDao = new GatewayServerDao();
 //            DBGatewayServer dbGatewayServer = new DBGatewayServer();
 //            dbGatewayServer.setServerId(pampasServer.id());
@@ -31,7 +31,7 @@ public class StorageServerStartedListener implements ServerStartedListener {
 //            dbGatewayServer.setStart(new Date(pampasServer.startTimestamp()));
 //            dbGatewayServer.setAddress(pampasServer.address().getHostAddress());
 //            gatewayServerDao.updateGatewayServerStat(dbGatewayServer);
-            return null;
-        });
+//            return null;
+//        });
     }
 }

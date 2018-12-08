@@ -35,6 +35,13 @@ public class ServiceRegistry implements Serializable {
     private String type;
 
     /**
+     * 模式 spring cloud, dubbo, grpc等等
+     *
+     * Corresponding to the database column p_service_registry.pattern
+     */
+    private String pattern;
+
+    /**
      * 注册中心地址
      *
      * Corresponding to the database column p_service_registry.address
@@ -147,6 +154,31 @@ public class ServiceRegistry implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * This method returns the value of the database column p_service_registry.pattern
+     *
+     * @return the value of p_service_registry.pattern
+     */
+    public String getPattern() {
+        return pattern;
+    }
+
+    /**
+     */
+    public ServiceRegistry withPattern(String pattern) {
+        this.setPattern(pattern);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_service_registry.pattern
+     *
+     * @param pattern the value for p_service_registry.pattern
+     */
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
 
     /**
@@ -285,6 +317,7 @@ public class ServiceRegistry implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", type=").append(type);
+        sb.append(", pattern=").append(pattern);
         sb.append(", address=").append(address);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
@@ -311,6 +344,7 @@ public class ServiceRegistry implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getPattern() == null ? other.getPattern() == null : this.getPattern().equals(other.getPattern()))
             && (this.getAddress() == null ? other.getAddress() == null : this.getAddress().equals(other.getAddress()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
@@ -327,6 +361,7 @@ public class ServiceRegistry implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getPattern() == null) ? 0 : getPattern().hashCode());
         result = prime * result + ((getAddress() == null) ? 0 : getAddress().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
@@ -342,6 +377,7 @@ public class ServiceRegistry implements Serializable {
         id("id", "id", "INTEGER", false),
         name("name", "name", "VARCHAR", true),
         type("type", "type", "VARCHAR", true),
+        pattern("pattern", "pattern", "VARCHAR", false),
         address("address", "address", "VARCHAR", false),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),

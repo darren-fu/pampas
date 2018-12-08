@@ -19,21 +19,20 @@
 package com.github.pampas.core.server;
 
 import com.github.pampas.common.exception.PampasException;
+import com.github.pampas.common.exception.PampasRequestException;
 import com.github.pampas.common.exec.Filter;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.exec.payload.DefaultPampasRequest;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
-import com.github.pampas.common.tracer.OpenTracingContext;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
+import com.github.pampas.common.tools.ResponseTools;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
-import io.opentracing.Tracer;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpUtil;
 import io.opentracing.propagation.TextMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,46 +85,48 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        Tracer tracer = OpenTracingContext.getTracer();
 
-        if (!(msg instanceof FullHttpRequest)) {
-            result = "未知请求!";
-            send(ctx, result, HttpResponseStatus.BAD_REQUEST);
+        if (msg == null || !(msg instanceof FullHttpRequest)) {
+            result = "非法请求";
+            ResponseTools.sendResp(ctx, HttpResponseStatus.BAD_REQUEST, result);
             return;
         }
         FullHttpRequest httpRequest = (FullHttpRequest) msg;
         if (log.isTraceEnabled()) {
-            log.trace("http request:{}", httpRequest);
+            log.trace("http请求URI:{}，详情:{}", httpRequest.uri(), httpRequest.toString());
         }
-        System.out.println(httpRequest.uri());
-//        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
-//        Span span = spanBuilder.start();
-//        span.setTag("method", httpRequest.method().name());
-//        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
-        //span.finish();
-        String path = httpRequest.uri();          //获取路径
-        //如果不是这个路径，就直接返回错误
-        DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
-
-        ///todo: Selector URI->ServiceName    map serviceName -> worker
-        SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
-        List<Selector> selectors = selectorSpiContext.getSpiInstancesByKey(null);
-        Locator locator = null;
-        for (Selector selector : selectors) {
-            locator = selector.select(requestInfo);
-            if (locator != null) {
-                break;
+        try {
+            if (GatewayRequestRouter.isGatewayRequest(httpRequest.uri())) {
+                HttpResponse httpResponse = GatewayRequestRouter.handleGatewayRequest(httpRequest);
+                ResponseTools.sendResp(ctx, httpResponse, false);
+                return;
             }
-        }
-        if (locator == null) {
-            log.warn("请求没有匹配到合适的路由:{}", requestInfo);
-            // todo: 需要返回给client
-            throw new PampasException("请求没有匹配到合适的路由:" + requestInfo.originUri());
+
+            DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
+            ///todo: Selector URI->ServiceName    map serviceName -> worker
+            SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
+            List<Selector> selectors = selectorSpiContext.getSpiInstancesByKey(null);
+            Locator locator = null;
+            for (Selector selector : selectors) {
+                locator = selector.select(requestInfo);
+                if (locator != null) {
+                    log.debug("路由匹配成功,请求路径:{},匹配结果:{}", requestInfo.originUri(), locator);
+                    break;
+                }
+            }
+            if (locator == null) {
+                log.warn("请求没有匹配到合适的路由:{}", requestInfo);
+                throw new PampasRequestException(HttpResponseStatus.NOT_FOUND, "请求没有匹配到合适的路由:" + requestInfo.originUri());
+            }
+
+            Worker worker = getWorker(locator.getWorker());
+            List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
+            worker.execute(requestInfo, locator, filterList);
+        } catch (Exception ex) {
+            log.warn("发生错误:{}", ex.getMessage(), ex);
+            ResponseTools.sendResp(ctx, ex, HttpUtil.isKeepAlive(httpRequest));
         }
 
-        Worker worker = getWorker(locator.getWorker());
-        List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
-        worker.execute(requestInfo, locator, filterList);
     }
 
 
@@ -137,29 +138,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         return workers.get(0);
     }
 
-    /**
-     * 获取body参数
-     *
-     * @param request
-     * @return
-     */
-    private String getBody(FullHttpRequest request) {
-        ByteBuf buf = request.content();
-        return buf.toString(CharsetUtil.UTF_8);
-    }
-
-    /**
-     * 发送的返回值
-     *
-     * @param ctx     返回
-     * @param context 消息
-     * @param status  状态
-     */
-    private void send(ChannelHandlerContext ctx, String context, HttpResponseStatus status) {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status, Unpooled.copiedBuffer(context, CharsetUtil.UTF_8));
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
-    }
 
     /*
      * 建立连接时，返回消息
@@ -178,9 +156,28 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
 
+    //todo: tracer
     private static class InjectTextMap implements TextMap {
         FullHttpRequest httpRequest;
 
+        /****
+         *
+         *
+         *
+         * //        Tracer tracer = OpenTracingContext.getTracer();
+         * //        Tracer.SpanBuilder spanBuilder = tracer.buildSpan(httpRequest.uri());
+         * //        Span span = spanBuilder.start();
+         * //        span.setTag("method", httpRequest.method().name());
+         * //        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new InjectTextMap(httpRequest));
+         *         //span.finish();
+         * //        String path = httpRequest.uri();          //获取路径
+         *
+         *
+         */
+
+        /**
+         * @param httpRequest
+         */
         InjectTextMap(FullHttpRequest httpRequest) {
             this.httpRequest = httpRequest;
         }

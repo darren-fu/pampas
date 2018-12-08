@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.pampas.common.exec.payload.PampasRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by darrenfu on 18-3-14.
@@ -31,6 +32,7 @@ import lombok.Data;
  * @date: 18-3-14
  */
 @Data
+@ToString(callSuper = true)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class DubboRule extends AbstractRule {
 

@@ -23,6 +23,7 @@ import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
 import com.github.pampas.common.exception.NoServiceInstanceFoundException;
+import com.github.pampas.common.exception.PampasException;
 import com.github.pampas.common.exec.AbstractWorker;
 import com.github.pampas.common.exec.payload.DefaultPampasResponse;
 import com.github.pampas.common.exec.payload.PampasRequest;
@@ -82,7 +83,6 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
             if (serverList != null && serverList.size() > 0) {
 
                 log.debug("服务<{}>,实例<{}>个列表:{}", locator.getServiceName(), serverList.size(), serverList);
-
                 if (loadBalancer == null) {
                     return serverList.get(0);
                 }
@@ -101,8 +101,11 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         FullHttpRequest requestData = req.requestData();
         // 负载均衡
         ServerInstance serverInstance = this.doLoadBalance(locator);
+        if (serverInstance == null) {
+            throw new PampasException("没有可用服务:" + locator.getServiceName());
+        }
 
-        AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, req.originUri());
+        AsyncHttpRequest asyncHttpRequest = new AsyncHttpRequest(requestData, locator.getMappedPath());
         CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);
 
         CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {

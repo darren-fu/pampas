@@ -21,6 +21,7 @@ package com.github.pampas.core.base;
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.core.server.ServerState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,23 +69,23 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
         }
     }
 
-    /**
-     * 缓存VersionConfig和Configurable的关系
-     *
-     * @param configClz    the config clz
-     * @param configurable the configurable
-     */
-    @Override
-    public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
-        if (configAndConfigurableMap.contains(configClz)) {
-            WeakHashMap<Configurable, Byte> instanceMap = configAndConfigurableMap.get(configClz);
-            instanceMap.put(configurable, ONE);
-        } else {
-            WeakHashMap<Configurable, Byte> instanceMap = new WeakHashMap<>();
-            instanceMap.put(configurable, ONE);
-            configAndConfigurableMap.putIfAbsent(configClz, instanceMap);
-        }
-    }
+//    /**
+//     * 缓存VersionConfig和Configurable的关系
+//     *
+//     * @param configClz    the config clz
+//     * @param configurable the configurable
+//     */
+//    @Override
+//    public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
+//        if (configAndConfigurableMap.contains(configClz)) {
+//            WeakHashMap<Configurable, Byte> instanceMap = configAndConfigurableMap.get(configClz);
+//            instanceMap.put(configurable, ONE);
+//        } else {
+//            WeakHashMap<Configurable, Byte> instanceMap = new WeakHashMap<>();
+//            instanceMap.put(configurable, ONE);
+//            configAndConfigurableMap.putIfAbsent(configClz, instanceMap);
+//        }
+//    }
 
     /**
      * Load config t.
@@ -107,6 +108,10 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
                     t = doConfigLoad();
                 } catch (Exception ex) {
                     log.error("加载配置<{}>失败,ex:{}", configClz.getSimpleName(), ex.getMessage(), ex);
+                    ServerState status = PampasContext.getCurrentServer().status();
+                    if (status == ServerState.Created || status == ServerState.Starting) {
+                        PampasContext.getCurrentServer().shutdownForcibly(ex);
+                    }
                 }
                 if (t == null) {
                     log.warn("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);

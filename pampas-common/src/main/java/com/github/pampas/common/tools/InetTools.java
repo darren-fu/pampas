@@ -64,7 +64,7 @@ public class InetTools implements Closeable {
                     .getNetworkInterfaces(); nics.hasMoreElements(); ) {
                 NetworkInterface ifc = nics.nextElement();
                 if (ifc.isUp()) {
-                    log.trace("Testing interface: " + ifc.getDisplayName());
+//                    log.trace("Testing interface: " + ifc.getDisplayName());
                     if (ifc.getIndex() < lowest || result == null) {
                         lowest = ifc.getIndex();
                     } else if (result != null) {
@@ -76,11 +76,8 @@ public class InetTools implements Closeable {
                         for (Enumeration<InetAddress> addrs = ifc
                                 .getInetAddresses(); addrs.hasMoreElements(); ) {
                             InetAddress address = addrs.nextElement();
-                            if (address instanceof Inet4Address
-                                    && !address.isLoopbackAddress()
-                                    && !ignoreAddress(address)) {
-                                log.trace("Found non-loopback interface: "
-                                        + ifc.getDisplayName());
+                            if (address instanceof Inet4Address && !address.isLoopbackAddress() && !ignoreAddress(address)) {
+//                                log.trace("Found non-loopback interface: " + ifc.getDisplayName());
                                 result = address;
                             }
                         }
