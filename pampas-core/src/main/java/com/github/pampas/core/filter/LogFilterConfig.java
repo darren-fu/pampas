@@ -1,6 +1,6 @@
 package com.github.pampas.core.filter;
 
-import com.github.pampas.common.config.ListableConfig;
+import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.common.extension.SpiMeta;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @SpiMeta(name = LogFilterConfig.SPI_META_NAME)
 @Data
-public class LogFilterConfig implements ListableConfig {
+public class LogFilterConfig implements DefinableConfig {
 
     public static final String SPI_META_NAME = "config-log-filter";
 

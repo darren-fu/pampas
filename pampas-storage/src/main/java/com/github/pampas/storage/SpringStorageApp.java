@@ -1,7 +1,9 @@
 package com.github.pampas.storage;
 
+import com.github.pampas.storage.base.ServerProperties;
 import com.github.pampas.storage.config.DataSourceConfig;
 import com.github.pampas.storage.config.MybatisConfig;
+import com.github.pampas.storage.config.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -20,7 +22,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * Description:
@@ -46,17 +48,13 @@ public class SpringStorageApp implements ApplicationContextAware {
     public static ApplicationContext applicationContext;
 
 
-    public static void init(String[] args, Consumer listener) {
-        long start = System.currentTimeMillis();
-
+    public static void init(String[] args, BiConsumer<ApplicationContext, ServerProperties> listener) {
         SpringApplication springApplication = new SpringApplication(SpringStorageApp.class);
-        springApplication.addListeners(new ApplicationListener<ContextRefreshedEvent>() {
-            @Override
-            public void onApplicationEvent(ContextRefreshedEvent event) {
-                log.info("网关存储层启动完成");
-                if (listener != null) {
-                    listener.accept(applicationContext);
-                }
+        springApplication.addListeners((ApplicationListener<ContextRefreshedEvent>) event -> {
+            log.info("网关存储层启动完成");
+            ServerProperties properties = SpringContextHolder.getBean(ServerProperties.class);
+            if (listener != null) {
+                listener.accept(applicationContext, properties);
             }
         });
         springApplication.run(args);

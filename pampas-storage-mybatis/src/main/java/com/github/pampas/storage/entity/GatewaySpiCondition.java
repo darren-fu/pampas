@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class GatewayConfigCondition {
+public class GatewaySpiCondition {
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     protected String orderByClause;
 
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     protected boolean distinct;
 
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     protected List<Criteria> oredCriteria;
 
@@ -26,7 +26,7 @@ public class GatewayConfigCondition {
 
     /**
      */
-    public GatewayConfigCondition() {
+    public GatewaySpiCondition() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -76,14 +76,14 @@ public class GatewayConfigCondition {
 
     /**
      */
-    public GatewayConfigCondition orderBy(String orderByClause) {
+    public GatewaySpiCondition orderBy(String orderByClause) {
         this.setOrderByClause(orderByClause);
         return this;
     }
 
     /**
      */
-    public GatewayConfigCondition orderBy(String ... orderByClauses) {
+    public GatewaySpiCondition orderBy(String ... orderByClauses) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < orderByClauses.length; i++) {
             sb.append(orderByClauses[i]);
@@ -144,7 +144,7 @@ public class GatewayConfigCondition {
     }
 
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -204,7 +204,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIdEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -216,7 +216,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIdNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -228,7 +228,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andIdGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -240,7 +240,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIdGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -252,7 +252,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andIdLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -264,7 +264,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIdLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIdLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("id <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -306,7 +306,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -318,7 +318,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -330,7 +330,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -342,7 +342,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -354,7 +354,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -366,7 +366,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayGroupLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayGroupLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_group <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -418,7 +418,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -430,7 +430,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -442,7 +442,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -454,7 +454,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -466,7 +466,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -478,7 +478,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andGatewayInstanceIdLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andGatewayInstanceIdLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("gateway_instance_id <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -513,899 +513,451 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceIsNull() {
-            addCriterion("config_spi_interface is null");
+        public Criteria andSpiInterfaceIsNull() {
+            addCriterion("spi_interface is null");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceIsNotNull() {
-            addCriterion("config_spi_interface is not null");
+        public Criteria andSpiInterfaceIsNotNull() {
+            addCriterion("spi_interface is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceEqualTo(String value) {
-            addCriterion("config_spi_interface =", value, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiInterfaceEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface = ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceNotEqualTo(String value) {
-            addCriterion("config_spi_interface <>", value, "configSpiInterface");
+        public Criteria andSpiInterfaceEqualTo(String value) {
+            addCriterion("spi_interface =", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiInterfaceNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface <> ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceGreaterThan(String value) {
-            addCriterion("config_spi_interface >", value, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiInterfaceGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface > ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceGreaterThanOrEqualTo(String value) {
-            addCriterion("config_spi_interface >=", value, "configSpiInterface");
+        public Criteria andSpiInterfaceNotEqualTo(String value) {
+            addCriterion("spi_interface <>", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiInterfaceGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface >= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceLessThan(String value) {
-            addCriterion("config_spi_interface <", value, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiInterfaceLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface < ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceLessThanOrEqualTo(String value) {
-            addCriterion("config_spi_interface <=", value, "configSpiInterface");
+        public Criteria andSpiInterfaceGreaterThan(String value) {
+            addCriterion("spi_interface >", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiInterfaceLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_interface <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceLike(String value) {
-            addCriterion("config_spi_interface like", value, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceNotLike(String value) {
-            addCriterion("config_spi_interface not like", value, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceIn(List<String> values) {
-            addCriterion("config_spi_interface in", values, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceNotIn(List<String> values) {
-            addCriterion("config_spi_interface not in", values, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceBetween(String value1, String value2) {
-            addCriterion("config_spi_interface between", value1, value2, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiInterfaceNotBetween(String value1, String value2) {
-            addCriterion("config_spi_interface not between", value1, value2, "configSpiInterface");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiClassIsNull() {
-            addCriterion("config_spi_class is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiClassIsNotNull() {
-            addCriterion("config_spi_class is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiClassEqualTo(String value) {
-            addCriterion("config_spi_class =", value, "configSpiClass");
+        public Criteria andSpiInterfaceGreaterThanOrEqualTo(String value) {
+            addCriterion("spi_interface >=", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiClassEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassNotEqualTo(String value) {
-            addCriterion("config_spi_class <>", value, "configSpiClass");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiClassNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiClassGreaterThan(String value) {
-            addCriterion("config_spi_class >", value, "configSpiClass");
+        public Criteria andSpiInterfaceLessThan(String value) {
+            addCriterion("spi_interface <", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiClassGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassGreaterThanOrEqualTo(String value) {
-            addCriterion("config_spi_class >=", value, "configSpiClass");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiClassGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiClassLessThan(String value) {
-            addCriterion("config_spi_class <", value, "configSpiClass");
+        public Criteria andSpiInterfaceLessThanOrEqualTo(String value) {
+            addCriterion("spi_interface <=", value, "spiInterface");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiClassLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_interface <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassLessThanOrEqualTo(String value) {
-            addCriterion("config_spi_class <=", value, "configSpiClass");
+        public Criteria andSpiInterfaceLike(String value) {
+            addCriterion("spi_interface like", value, "spiInterface");
             return (Criteria) this;
         }
 
-        /**
-         */
-        public Criteria andConfigSpiClassLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_class <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiInterfaceNotLike(String value) {
+            addCriterion("spi_interface not like", value, "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassLike(String value) {
-            addCriterion("config_spi_class like", value, "configSpiClass");
+        public Criteria andSpiInterfaceIn(List<String> values) {
+            addCriterion("spi_interface in", values, "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassNotLike(String value) {
-            addCriterion("config_spi_class not like", value, "configSpiClass");
+        public Criteria andSpiInterfaceNotIn(List<String> values) {
+            addCriterion("spi_interface not in", values, "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassIn(List<String> values) {
-            addCriterion("config_spi_class in", values, "configSpiClass");
+        public Criteria andSpiInterfaceBetween(String value1, String value2) {
+            addCriterion("spi_interface between", value1, value2, "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassNotIn(List<String> values) {
-            addCriterion("config_spi_class not in", values, "configSpiClass");
+        public Criteria andSpiInterfaceNotBetween(String value1, String value2) {
+            addCriterion("spi_interface not between", value1, value2, "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassBetween(String value1, String value2) {
-            addCriterion("config_spi_class between", value1, value2, "configSpiClass");
+        public Criteria andSpiClassIsNull() {
+            addCriterion("spi_class is null");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassNotBetween(String value1, String value2) {
-            addCriterion("config_spi_class not between", value1, value2, "configSpiClass");
+        public Criteria andSpiClassIsNotNull() {
+            addCriterion("spi_class is not null");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiNameIsNull() {
-            addCriterion("config_spi_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameIsNotNull() {
-            addCriterion("config_spi_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameEqualTo(String value) {
-            addCriterion("config_spi_name =", value, "configSpiName");
+        public Criteria andSpiClassEqualTo(String value) {
+            addCriterion("spi_class =", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiNameEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiNameNotEqualTo(String value) {
-            addCriterion("config_spi_name <>", value, "configSpiName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiNameNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameGreaterThan(String value) {
-            addCriterion("config_spi_name >", value, "configSpiName");
+        public Criteria andSpiClassNotEqualTo(String value) {
+            addCriterion("spi_class <>", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiNameGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiNameGreaterThanOrEqualTo(String value) {
-            addCriterion("config_spi_name >=", value, "configSpiName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiNameGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameLessThan(String value) {
-            addCriterion("config_spi_name <", value, "configSpiName");
+        public Criteria andSpiClassGreaterThan(String value) {
+            addCriterion("spi_class >", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiNameLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiNameLessThanOrEqualTo(String value) {
-            addCriterion("config_spi_name <=", value, "configSpiName");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiNameLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_name <= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameLike(String value) {
-            addCriterion("config_spi_name like", value, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameNotLike(String value) {
-            addCriterion("config_spi_name not like", value, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameIn(List<String> values) {
-            addCriterion("config_spi_name in", values, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameNotIn(List<String> values) {
-            addCriterion("config_spi_name not in", values, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameBetween(String value1, String value2) {
-            addCriterion("config_spi_name between", value1, value2, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiNameNotBetween(String value1, String value2) {
-            addCriterion("config_spi_name not between", value1, value2, "configSpiName");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiDescIsNull() {
-            addCriterion("config_spi_desc is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiDescIsNotNull() {
-            addCriterion("config_spi_desc is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiDescEqualTo(String value) {
-            addCriterion("config_spi_desc =", value, "configSpiDesc");
+        public Criteria andSpiClassGreaterThanOrEqualTo(String value) {
+            addCriterion("spi_class >=", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiDescEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescNotEqualTo(String value) {
-            addCriterion("config_spi_desc <>", value, "configSpiDesc");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiDescNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiDescGreaterThan(String value) {
-            addCriterion("config_spi_desc >", value, "configSpiDesc");
+        public Criteria andSpiClassLessThan(String value) {
+            addCriterion("spi_class <", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiDescGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescGreaterThanOrEqualTo(String value) {
-            addCriterion("config_spi_desc >=", value, "configSpiDesc");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andConfigSpiDescGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andConfigSpiDescLessThan(String value) {
-            addCriterion("config_spi_desc <", value, "configSpiDesc");
+        public Criteria andSpiClassLessThanOrEqualTo(String value) {
+            addCriterion("spi_class <=", value, "spiClass");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andConfigSpiDescLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_class <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescLessThanOrEqualTo(String value) {
-            addCriterion("config_spi_desc <=", value, "configSpiDesc");
+        public Criteria andSpiClassLike(String value) {
+            addCriterion("spi_class like", value, "spiClass");
             return (Criteria) this;
         }
 
-        /**
-         */
-        public Criteria andConfigSpiDescLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("config_spi_desc <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiClassNotLike(String value) {
+            addCriterion("spi_class not like", value, "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescLike(String value) {
-            addCriterion("config_spi_desc like", value, "configSpiDesc");
+        public Criteria andSpiClassIn(List<String> values) {
+            addCriterion("spi_class in", values, "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescNotLike(String value) {
-            addCriterion("config_spi_desc not like", value, "configSpiDesc");
+        public Criteria andSpiClassNotIn(List<String> values) {
+            addCriterion("spi_class not in", values, "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescIn(List<String> values) {
-            addCriterion("config_spi_desc in", values, "configSpiDesc");
+        public Criteria andSpiClassBetween(String value1, String value2) {
+            addCriterion("spi_class between", value1, value2, "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescNotIn(List<String> values) {
-            addCriterion("config_spi_desc not in", values, "configSpiDesc");
+        public Criteria andSpiClassNotBetween(String value1, String value2) {
+            addCriterion("spi_class not between", value1, value2, "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescBetween(String value1, String value2) {
-            addCriterion("config_spi_desc between", value1, value2, "configSpiDesc");
+        public Criteria andSpiNameIsNull() {
+            addCriterion("spi_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescNotBetween(String value1, String value2) {
-            addCriterion("config_spi_desc not between", value1, value2, "configSpiDesc");
+        public Criteria andSpiNameIsNotNull() {
+            addCriterion("spi_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyIsNull() {
-            addCriterion("`key` is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyIsNotNull() {
-            addCriterion("`key` is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyEqualTo(String value) {
-            addCriterion("`key` =", value, "key");
+        public Criteria andSpiNameEqualTo(String value) {
+            addCriterion("spi_name =", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andKeyEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andKeyNotEqualTo(String value) {
-            addCriterion("`key` <>", value, "key");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andKeyNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyGreaterThan(String value) {
-            addCriterion("`key` >", value, "key");
+        public Criteria andSpiNameNotEqualTo(String value) {
+            addCriterion("spi_name <>", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andKeyGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("`key` >=", value, "key");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andKeyGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyLessThan(String value) {
-            addCriterion("`key` <", value, "key");
+        public Criteria andSpiNameGreaterThan(String value) {
+            addCriterion("spi_name >", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andKeyLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andKeyLessThanOrEqualTo(String value) {
-            addCriterion("`key` <=", value, "key");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andKeyLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`key` <= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyLike(String value) {
-            addCriterion("`key` like", value, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyNotLike(String value) {
-            addCriterion("`key` not like", value, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyIn(List<String> values) {
-            addCriterion("`key` in", values, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyNotIn(List<String> values) {
-            addCriterion("`key` not in", values, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyBetween(String value1, String value2) {
-            addCriterion("`key` between", value1, value2, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyNotBetween(String value1, String value2) {
-            addCriterion("`key` not between", value1, value2, "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIsNull() {
-            addCriterion("`label` is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelIsNotNull() {
-            addCriterion("`label` is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelEqualTo(String value) {
-            addCriterion("`label` =", value, "label");
+        public Criteria andSpiNameGreaterThanOrEqualTo(String value) {
+            addCriterion("spi_name >=", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andLabelEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andLabelNotEqualTo(String value) {
-            addCriterion("`label` <>", value, "label");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andLabelNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelGreaterThan(String value) {
-            addCriterion("`label` >", value, "label");
+        public Criteria andSpiNameLessThan(String value) {
+            addCriterion("spi_name <", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andLabelGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andLabelGreaterThanOrEqualTo(String value) {
-            addCriterion("`label` >=", value, "label");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andLabelGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelLessThan(String value) {
-            addCriterion("`label` <", value, "label");
+        public Criteria andSpiNameLessThanOrEqualTo(String value) {
+            addCriterion("spi_name <=", value, "spiName");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andLabelLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_name <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andLabelLessThanOrEqualTo(String value) {
-            addCriterion("`label` <=", value, "label");
+        public Criteria andSpiNameLike(String value) {
+            addCriterion("spi_name like", value, "spiName");
             return (Criteria) this;
         }
 
-        /**
-         */
-        public Criteria andLabelLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`label` <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiNameNotLike(String value) {
+            addCriterion("spi_name not like", value, "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andLabelLike(String value) {
-            addCriterion("`label` like", value, "label");
+        public Criteria andSpiNameIn(List<String> values) {
+            addCriterion("spi_name in", values, "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andLabelNotLike(String value) {
-            addCriterion("`label` not like", value, "label");
+        public Criteria andSpiNameNotIn(List<String> values) {
+            addCriterion("spi_name not in", values, "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andLabelIn(List<String> values) {
-            addCriterion("`label` in", values, "label");
+        public Criteria andSpiNameBetween(String value1, String value2) {
+            addCriterion("spi_name between", value1, value2, "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andLabelNotIn(List<String> values) {
-            addCriterion("`label` not in", values, "label");
+        public Criteria andSpiNameNotBetween(String value1, String value2) {
+            addCriterion("spi_name not between", value1, value2, "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andLabelBetween(String value1, String value2) {
-            addCriterion("`label` between", value1, value2, "label");
+        public Criteria andSpiDescIsNull() {
+            addCriterion("spi_desc is null");
             return (Criteria) this;
         }
 
-        public Criteria andLabelNotBetween(String value1, String value2) {
-            addCriterion("`label` not between", value1, value2, "label");
+        public Criteria andSpiDescIsNotNull() {
+            addCriterion("spi_desc is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDefaultValueIsNull() {
-            addCriterion("default_value is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueIsNotNull() {
-            addCriterion("default_value is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueEqualTo(String value) {
-            addCriterion("default_value =", value, "defaultValue");
+        public Criteria andSpiDescEqualTo(String value) {
+            addCriterion("spi_desc =", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andDefaultValueEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andDefaultValueNotEqualTo(String value) {
-            addCriterion("default_value <>", value, "defaultValue");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andDefaultValueNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueGreaterThan(String value) {
-            addCriterion("default_value >", value, "defaultValue");
+        public Criteria andSpiDescNotEqualTo(String value) {
+            addCriterion("spi_desc <>", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andDefaultValueGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andDefaultValueGreaterThanOrEqualTo(String value) {
-            addCriterion("default_value >=", value, "defaultValue");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andDefaultValueGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueLessThan(String value) {
-            addCriterion("default_value <", value, "defaultValue");
+        public Criteria andSpiDescGreaterThan(String value) {
+            addCriterion("spi_desc >", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andDefaultValueLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andDefaultValueLessThanOrEqualTo(String value) {
-            addCriterion("default_value <=", value, "defaultValue");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andDefaultValueLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("default_value <= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueLike(String value) {
-            addCriterion("default_value like", value, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueNotLike(String value) {
-            addCriterion("default_value not like", value, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueIn(List<String> values) {
-            addCriterion("default_value in", values, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueNotIn(List<String> values) {
-            addCriterion("default_value not in", values, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueBetween(String value1, String value2) {
-            addCriterion("default_value between", value1, value2, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueNotBetween(String value1, String value2) {
-            addCriterion("default_value not between", value1, value2, "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueIsNull() {
-            addCriterion("`value` is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueIsNotNull() {
-            addCriterion("`value` is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueEqualTo(String value) {
-            addCriterion("`value` =", value, "value");
+        public Criteria andSpiDescGreaterThanOrEqualTo(String value) {
+            addCriterion("spi_desc >=", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andValueEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` = ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andValueNotEqualTo(String value) {
-            addCriterion("`value` <>", value, "value");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andValueNotEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` <> ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andValueGreaterThan(String value) {
-            addCriterion("`value` >", value, "value");
+        public Criteria andSpiDescLessThan(String value) {
+            addCriterion("spi_desc <", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andValueGreaterThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` > ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andValueGreaterThanOrEqualTo(String value) {
-            addCriterion("`value` >=", value, "value");
-            return (Criteria) this;
-        }
-
-        /**
-         */
-        public Criteria andValueGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` >= ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andValueLessThan(String value) {
-            addCriterion("`value` <", value, "value");
+        public Criteria andSpiDescLessThanOrEqualTo(String value) {
+            addCriterion("spi_desc <=", value, "spiDesc");
             return (Criteria) this;
         }
 
         /**
          */
-        public Criteria andValueLessThanColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` < ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("spi_desc <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andValueLessThanOrEqualTo(String value) {
-            addCriterion("`value` <=", value, "value");
+        public Criteria andSpiDescLike(String value) {
+            addCriterion("spi_desc like", value, "spiDesc");
             return (Criteria) this;
         }
 
-        /**
-         */
-        public Criteria andValueLessThanOrEqualToColumn(GatewayConfig.Column column) {
-            addCriterion(new StringBuilder("`value` <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andSpiDescNotLike(String value) {
+            addCriterion("spi_desc not like", value, "spiDesc");
             return (Criteria) this;
         }
 
-        public Criteria andValueLike(String value) {
-            addCriterion("`value` like", value, "value");
+        public Criteria andSpiDescIn(List<String> values) {
+            addCriterion("spi_desc in", values, "spiDesc");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotLike(String value) {
-            addCriterion("`value` not like", value, "value");
+        public Criteria andSpiDescNotIn(List<String> values) {
+            addCriterion("spi_desc not in", values, "spiDesc");
             return (Criteria) this;
         }
 
-        public Criteria andValueIn(List<String> values) {
-            addCriterion("`value` in", values, "value");
+        public Criteria andSpiDescBetween(String value1, String value2) {
+            addCriterion("spi_desc between", value1, value2, "spiDesc");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotIn(List<String> values) {
-            addCriterion("`value` not in", values, "value");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueBetween(String value1, String value2) {
-            addCriterion("`value` between", value1, value2, "value");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueNotBetween(String value1, String value2) {
-            addCriterion("`value` not between", value1, value2, "value");
+        public Criteria andSpiDescNotBetween(String value1, String value2) {
+            addCriterion("spi_desc not between", value1, value2, "spiDesc");
             return (Criteria) this;
         }
 
@@ -1426,7 +978,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andStatusEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1438,7 +990,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andStatusNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1450,7 +1002,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andStatusGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1462,7 +1014,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andStatusGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1474,7 +1026,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andStatusLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1486,7 +1038,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andStatusLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andStatusLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("`status` <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1528,7 +1080,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1540,7 +1092,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1552,7 +1104,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1564,7 +1116,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1576,7 +1128,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1588,7 +1140,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andRemarkLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andRemarkLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("remark <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1640,7 +1192,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1652,7 +1204,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1664,7 +1216,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1676,7 +1228,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1688,7 +1240,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1700,7 +1252,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andInsertTimeLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andInsertTimeLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("insert_time <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1742,7 +1294,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1754,7 +1306,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1766,7 +1318,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1778,7 +1330,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1790,7 +1342,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1802,7 +1354,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andUpdateTimeLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andUpdateTimeLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("update_time <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1844,7 +1396,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1856,7 +1408,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelNotEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelNotEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1868,7 +1420,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelGreaterThanColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelGreaterThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1880,7 +1432,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1892,7 +1444,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelLessThanColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelLessThanColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1904,7 +1456,7 @@ public class GatewayConfigCondition {
 
         /**
          */
-        public Criteria andIsDelLessThanOrEqualToColumn(GatewayConfig.Column column) {
+        public Criteria andIsDelLessThanOrEqualToColumn(GatewaySpi.Column column) {
             addCriterion(new StringBuilder("is_del <= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
@@ -1939,43 +1491,23 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiInterfaceLikeInsensitive(String value) {
-            addCriterion("upper(config_spi_interface) like", value.toUpperCase(), "configSpiInterface");
+        public Criteria andSpiInterfaceLikeInsensitive(String value) {
+            addCriterion("upper(spi_interface) like", value.toUpperCase(), "spiInterface");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiClassLikeInsensitive(String value) {
-            addCriterion("upper(config_spi_class) like", value.toUpperCase(), "configSpiClass");
+        public Criteria andSpiClassLikeInsensitive(String value) {
+            addCriterion("upper(spi_class) like", value.toUpperCase(), "spiClass");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiNameLikeInsensitive(String value) {
-            addCriterion("upper(config_spi_name) like", value.toUpperCase(), "configSpiName");
+        public Criteria andSpiNameLikeInsensitive(String value) {
+            addCriterion("upper(spi_name) like", value.toUpperCase(), "spiName");
             return (Criteria) this;
         }
 
-        public Criteria andConfigSpiDescLikeInsensitive(String value) {
-            addCriterion("upper(config_spi_desc) like", value.toUpperCase(), "configSpiDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andKeyLikeInsensitive(String value) {
-            addCriterion("upper(`key`) like", value.toUpperCase(), "key");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelLikeInsensitive(String value) {
-            addCriterion("upper(`label`) like", value.toUpperCase(), "label");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultValueLikeInsensitive(String value) {
-            addCriterion("upper(default_value) like", value.toUpperCase(), "defaultValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueLikeInsensitive(String value) {
-            addCriterion("upper(`value`) like", value.toUpperCase(), "value");
+        public Criteria andSpiDescLikeInsensitive(String value) {
+            addCriterion("upper(spi_desc) like", value.toUpperCase(), "spiDesc");
             return (Criteria) this;
         }
 
@@ -1986,24 +1518,24 @@ public class GatewayConfigCondition {
     }
 
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     public static class Criteria extends GeneratedCriteria {
         /**
-         * Corresponding to the database table p_gateway_config
+         * Corresponding to the database table p_gateway_spi
          */
-        private GatewayConfigCondition example;
+        private GatewaySpiCondition example;
 
         /**
          */
-        protected Criteria(GatewayConfigCondition example) {
+        protected Criteria(GatewaySpiCondition example) {
             super();
             this.example = example;
         }
 
         /**
          */
-        public GatewayConfigCondition example() {
+        public GatewaySpiCondition example() {
             return this.example;
         }
 
@@ -2024,7 +1556,7 @@ public class GatewayConfigCondition {
     }
 
     /**
-     * Corresponding to the database table p_gateway_config
+     * Corresponding to the database table p_gateway_spi
      */
     public static class Criterion {
         private String condition;

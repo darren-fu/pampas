@@ -1,6 +1,6 @@
 package com.github.pampas.core.filter;
 
-import com.github.pampas.common.config.ListableConfig;
+import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.common.extension.SpiMeta;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @SpiMeta(name = AuthFilterConfig.SPI_META_NAME)
 @Data
-public class AuthFilterConfig implements ListableConfig {
+public class AuthFilterConfig implements DefinableConfig {
 
     public static final String SPI_META_NAME = "config-auth-filter";
 

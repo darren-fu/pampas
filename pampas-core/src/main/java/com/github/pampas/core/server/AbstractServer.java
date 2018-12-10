@@ -36,6 +36,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.NettyRuntime;
+import io.netty.util.internal.SystemPropertyUtil;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +64,11 @@ public abstract class AbstractServer implements PampasServer {
     private String serverName;
 
     protected int port;
+
     private String id;
+
     private String version;
+
     private InetAddress address;
 
     private long startTimestamp;
@@ -85,22 +91,33 @@ public abstract class AbstractServer implements PampasServer {
     }
 
     public AbstractServer(String groupName, String serverName, int port, ServerConfig config) {
+        this(null, groupName, serverName, port, config);
+    }
+
+    public AbstractServer(String id, String groupName, String serverName, int port, ServerConfig config) {
         this.group = groupName;
         InetTools inetTools = new InetTools();
         InetAddress firstNonLoopbackAddress = inetTools.findFirstNonLoopbackAddress();
         inetTools.close();
-
 //        this.address = getLocalHostLANAddress();
         this.address = firstNonLoopbackAddress;
-        this.id = group + "@" + address.getCanonicalHostName() + ":" + port;
+        this.id = id == null ? group + "@" + address.getHostName() + ":" + port : id;
         this.startTimestamp = System.currentTimeMillis();
         this.version = CoreVersion.getVersion();
         this.serverName = serverName;
         this.port = port;
         this.config = config;
         serverStateRef = new AtomicReference<>(ServerState.Created);
-        boss = useEpoll() ? new EpollEventLoopGroup(1) : new NioEventLoopGroup(1);
-        worker = useEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+
+        int bossThreads = ObjectUtils.defaultIfNull(config.getBoss(), 1);
+
+        int defaultWorks = Math.max(1, SystemPropertyUtil.getInt(
+                "io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2));
+
+        int workThreads = ObjectUtils.defaultIfNull(config.getWorker(), defaultWorks);
+
+        boss = useEpoll() ? new EpollEventLoopGroup(bossThreads) : new NioEventLoopGroup(bossThreads);
+        worker = useEpoll() ? new EpollEventLoopGroup(workThreads) : new NioEventLoopGroup(workThreads);
         bootstrap = new ServerBootstrap();
 
         bootstrap.group(boss, worker).channel(useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
@@ -300,6 +317,10 @@ public abstract class AbstractServer implements PampasServer {
     @Override
     public Long startTimestamp() {
         return this.startTimestamp;
+    }
+
+    protected void setStartTimestamp(Long startTimestamp) {
+        this.startTimestamp = startTimestamp;
     }
 
     @Override

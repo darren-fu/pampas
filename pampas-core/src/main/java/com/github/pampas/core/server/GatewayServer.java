@@ -46,12 +46,22 @@ public class GatewayServer extends AbstractServer {
     private static final Logger log = LoggerFactory.getLogger(GatewayServer.class);
 
     public GatewayServer(String groupName, final Integer port) {
-        super(groupName, groupName, port, ServerConfig.defaultConfig());
+        this(null, groupName, groupName, port, ServerConfig.defaultConfig());
     }
 
     public GatewayServer(String groupName, String serverName, final Integer port) {
-        super(groupName, serverName, port, ServerConfig.defaultConfig());
+        this(null, groupName, serverName, port, ServerConfig.defaultConfig());
     }
+
+    public GatewayServer(String id, String groupName, final Integer port, ServerConfig config) {
+        this(id, groupName, groupName, port, config);
+    }
+
+    public GatewayServer(String id, String groupName, String serverName, final Integer port, ServerConfig config) {
+        super(id, groupName, serverName, port, config);
+
+    }
+
 
     static LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
 
@@ -62,9 +72,12 @@ public class GatewayServer extends AbstractServer {
             100,
             RejectedExecutionHandlers.reject());
 
+    public void setStartTimestamp(Long startTimestamp) {
+        super.setStartTimestamp(startTimestamp);
+    }
+
 
     @Override
-
     public ChannelInitializer<SocketChannel> newChannelInitializer() {
 
         return new ChannelInitializer<SocketChannel>() {

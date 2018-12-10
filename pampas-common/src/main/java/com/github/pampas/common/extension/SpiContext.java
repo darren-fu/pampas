@@ -406,6 +406,11 @@ public class SpiContext<T> {
         return (spiMeta != null && !"".equals(spiMeta.name())) ? spiMeta.name() : clz.getSimpleName();
     }
 
+    public static String getSpiDesc(Class<?> clz) {
+        SpiMeta spiMeta = clz.getAnnotation(SpiMeta.class);
+        return (spiMeta != null && !"".equals(spiMeta.desc())) ? spiMeta.desc() : clz.getSimpleName();
+    }
+
     /**
      * Gets spi meta.
      *

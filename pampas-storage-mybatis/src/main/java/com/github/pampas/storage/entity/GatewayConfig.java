@@ -23,9 +23,9 @@ public class GatewayConfig implements Serializable {
     /**
      * 网关分组
      *
-     * Corresponding to the database column p_gateway_config.group
+     * Corresponding to the database column p_gateway_config.gateway_group
      */
-    private String group;
+    private String gatewayGroup;
 
     /**
      * 网关ID
@@ -36,9 +36,27 @@ public class GatewayConfig implements Serializable {
 
     /**
      *
-     * Corresponding to the database column p_gateway_config.type
+     * Corresponding to the database column p_gateway_config.config_spi_interface
      */
-    private String type;
+    private String configSpiInterface;
+
+    /**
+     *
+     * Corresponding to the database column p_gateway_config.config_spi_class
+     */
+    private String configSpiClass;
+
+    /**
+     *
+     * Corresponding to the database column p_gateway_config.config_spi_name
+     */
+    private String configSpiName;
+
+    /**
+     *
+     * Corresponding to the database column p_gateway_config.config_spi_desc
+     */
+    private String configSpiDesc;
 
     /**
      * KEY
@@ -131,28 +149,28 @@ public class GatewayConfig implements Serializable {
     }
 
     /**
-     * This method returns the value of the database column p_gateway_config.group
+     * This method returns the value of the database column p_gateway_config.gateway_group
      *
-     * @return the value of p_gateway_config.group
+     * @return the value of p_gateway_config.gateway_group
      */
-    public String getGroup() {
-        return group;
+    public String getGatewayGroup() {
+        return gatewayGroup;
     }
 
     /**
      */
-    public GatewayConfig withGroup(String group) {
-        this.setGroup(group);
+    public GatewayConfig withGatewayGroup(String gatewayGroup) {
+        this.setGatewayGroup(gatewayGroup);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_gateway_config.group
+     * This method sets the value of the database column p_gateway_config.gateway_group
      *
-     * @param group the value for p_gateway_config.group
+     * @param gatewayGroup the value for p_gateway_config.gateway_group
      */
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGatewayGroup(String gatewayGroup) {
+        this.gatewayGroup = gatewayGroup;
     }
 
     /**
@@ -181,28 +199,103 @@ public class GatewayConfig implements Serializable {
     }
 
     /**
-     * This method returns the value of the database column p_gateway_config.type
+     * This method returns the value of the database column p_gateway_config.config_spi_interface
      *
-     * @return the value of p_gateway_config.type
+     * @return the value of p_gateway_config.config_spi_interface
      */
-    public String getType() {
-        return type;
+    public String getConfigSpiInterface() {
+        return configSpiInterface;
     }
 
     /**
      */
-    public GatewayConfig withType(String type) {
-        this.setType(type);
+    public GatewayConfig withConfigSpiInterface(String configSpiInterface) {
+        this.setConfigSpiInterface(configSpiInterface);
         return this;
     }
 
     /**
-     * This method sets the value of the database column p_gateway_config.type
+     * This method sets the value of the database column p_gateway_config.config_spi_interface
      *
-     * @param type the value for p_gateway_config.type
+     * @param configSpiInterface the value for p_gateway_config.config_spi_interface
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setConfigSpiInterface(String configSpiInterface) {
+        this.configSpiInterface = configSpiInterface;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.config_spi_class
+     *
+     * @return the value of p_gateway_config.config_spi_class
+     */
+    public String getConfigSpiClass() {
+        return configSpiClass;
+    }
+
+    /**
+     */
+    public GatewayConfig withConfigSpiClass(String configSpiClass) {
+        this.setConfigSpiClass(configSpiClass);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.config_spi_class
+     *
+     * @param configSpiClass the value for p_gateway_config.config_spi_class
+     */
+    public void setConfigSpiClass(String configSpiClass) {
+        this.configSpiClass = configSpiClass;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.config_spi_name
+     *
+     * @return the value of p_gateway_config.config_spi_name
+     */
+    public String getConfigSpiName() {
+        return configSpiName;
+    }
+
+    /**
+     */
+    public GatewayConfig withConfigSpiName(String configSpiName) {
+        this.setConfigSpiName(configSpiName);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.config_spi_name
+     *
+     * @param configSpiName the value for p_gateway_config.config_spi_name
+     */
+    public void setConfigSpiName(String configSpiName) {
+        this.configSpiName = configSpiName;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.config_spi_desc
+     *
+     * @return the value of p_gateway_config.config_spi_desc
+     */
+    public String getConfigSpiDesc() {
+        return configSpiDesc;
+    }
+
+    /**
+     */
+    public GatewayConfig withConfigSpiDesc(String configSpiDesc) {
+        this.setConfigSpiDesc(configSpiDesc);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.config_spi_desc
+     *
+     * @param configSpiDesc the value for p_gateway_config.config_spi_desc
+     */
+    public void setConfigSpiDesc(String configSpiDesc) {
+        this.configSpiDesc = configSpiDesc;
     }
 
     /**
@@ -439,9 +532,12 @@ public class GatewayConfig implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", group=").append(group);
+        sb.append(", gatewayGroup=").append(gatewayGroup);
         sb.append(", gatewayInstanceId=").append(gatewayInstanceId);
-        sb.append(", type=").append(type);
+        sb.append(", configSpiInterface=").append(configSpiInterface);
+        sb.append(", configSpiClass=").append(configSpiClass);
+        sb.append(", configSpiName=").append(configSpiName);
+        sb.append(", configSpiDesc=").append(configSpiDesc);
         sb.append(", key=").append(key);
         sb.append(", label=").append(label);
         sb.append(", defaultValue=").append(defaultValue);
@@ -470,9 +566,12 @@ public class GatewayConfig implements Serializable {
         }
         GatewayConfig other = (GatewayConfig) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
+            && (this.getGatewayGroup() == null ? other.getGatewayGroup() == null : this.getGatewayGroup().equals(other.getGatewayGroup()))
             && (this.getGatewayInstanceId() == null ? other.getGatewayInstanceId() == null : this.getGatewayInstanceId().equals(other.getGatewayInstanceId()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getConfigSpiInterface() == null ? other.getConfigSpiInterface() == null : this.getConfigSpiInterface().equals(other.getConfigSpiInterface()))
+            && (this.getConfigSpiClass() == null ? other.getConfigSpiClass() == null : this.getConfigSpiClass().equals(other.getConfigSpiClass()))
+            && (this.getConfigSpiName() == null ? other.getConfigSpiName() == null : this.getConfigSpiName().equals(other.getConfigSpiName()))
+            && (this.getConfigSpiDesc() == null ? other.getConfigSpiDesc() == null : this.getConfigSpiDesc().equals(other.getConfigSpiDesc()))
             && (this.getKey() == null ? other.getKey() == null : this.getKey().equals(other.getKey()))
             && (this.getLabel() == null ? other.getLabel() == null : this.getLabel().equals(other.getLabel()))
             && (this.getDefaultValue() == null ? other.getDefaultValue() == null : this.getDefaultValue().equals(other.getDefaultValue()))
@@ -491,9 +590,12 @@ public class GatewayConfig implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
+        result = prime * result + ((getGatewayGroup() == null) ? 0 : getGatewayGroup().hashCode());
         result = prime * result + ((getGatewayInstanceId() == null) ? 0 : getGatewayInstanceId().hashCode());
-        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getConfigSpiInterface() == null) ? 0 : getConfigSpiInterface().hashCode());
+        result = prime * result + ((getConfigSpiClass() == null) ? 0 : getConfigSpiClass().hashCode());
+        result = prime * result + ((getConfigSpiName() == null) ? 0 : getConfigSpiName().hashCode());
+        result = prime * result + ((getConfigSpiDesc() == null) ? 0 : getConfigSpiDesc().hashCode());
         result = prime * result + ((getKey() == null) ? 0 : getKey().hashCode());
         result = prime * result + ((getLabel() == null) ? 0 : getLabel().hashCode());
         result = prime * result + ((getDefaultValue() == null) ? 0 : getDefaultValue().hashCode());
@@ -511,9 +613,12 @@ public class GatewayConfig implements Serializable {
      */
     public enum Column {
         id("id", "id", "INTEGER", false),
-        group("group", "group", "VARCHAR", true),
+        gatewayGroup("gateway_group", "gatewayGroup", "VARCHAR", false),
         gatewayInstanceId("gateway_instance_id", "gatewayInstanceId", "VARCHAR", false),
-        type("type", "type", "VARCHAR", true),
+        configSpiInterface("config_spi_interface", "configSpiInterface", "VARCHAR", false),
+        configSpiClass("config_spi_class", "configSpiClass", "VARCHAR", false),
+        configSpiName("config_spi_name", "configSpiName", "VARCHAR", false),
+        configSpiDesc("config_spi_desc", "configSpiDesc", "VARCHAR", false),
         key("key", "key", "VARCHAR", true),
         label("label", "label", "VARCHAR", true),
         defaultValue("default_value", "defaultValue", "VARCHAR", false),

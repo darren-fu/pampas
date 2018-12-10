@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.pampas.storage.mapper.GatewayConfigMapper">
-  <resultMap id="BaseResultMap" type="com.github.pampas.storage.entity.GatewayConfig">
+<mapper namespace="com.github.pampas.storage.mapper.GatewaySpiMapper">
+  <resultMap id="BaseResultMap" type="com.github.pampas.storage.entity.GatewaySpi">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="gateway_group" jdbcType="VARCHAR" property="gatewayGroup" />
     <result column="gateway_instance_id" jdbcType="VARCHAR" property="gatewayInstanceId" />
-    <result column="config_spi_interface" jdbcType="VARCHAR" property="configSpiInterface" />
-    <result column="config_spi_class" jdbcType="VARCHAR" property="configSpiClass" />
-    <result column="config_spi_name" jdbcType="VARCHAR" property="configSpiName" />
-    <result column="config_spi_desc" jdbcType="VARCHAR" property="configSpiDesc" />
-    <result column="key" jdbcType="VARCHAR" property="key" />
-    <result column="label" jdbcType="VARCHAR" property="label" />
-    <result column="default_value" jdbcType="VARCHAR" property="defaultValue" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="spi_interface" jdbcType="VARCHAR" property="spiInterface" />
+    <result column="spi_class" jdbcType="VARCHAR" property="spiClass" />
+    <result column="spi_name" jdbcType="VARCHAR" property="spiName" />
+    <result column="spi_desc" jdbcType="VARCHAR" property="spiDesc" />
     <result column="status" jdbcType="BIT" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
@@ -78,17 +74,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, gateway_group, gateway_instance_id, config_spi_interface, config_spi_class, config_spi_name, 
-    config_spi_desc, `key`, `label`, default_value, `value`, `status`, remark, insert_time, 
-    update_time, is_del
+    id, gateway_group, gateway_instance_id, spi_interface, spi_class, spi_name, spi_desc, 
+    `status`, remark, insert_time, update_time, is_del
   </sql>
-  <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewayConfigCondition" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewaySpiCondition" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `p_gateway_config`
+    from `p_gateway_spi`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -107,41 +102,39 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `p_gateway_config`
+    from `p_gateway_spi`
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `p_gateway_config`
+    delete from `p_gateway_spi`
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.github.pampas.storage.entity.GatewayConfigCondition">
-    delete from `p_gateway_config`
+  <delete id="deleteByExample" parameterType="com.github.pampas.storage.entity.GatewaySpiCondition">
+    delete from `p_gateway_spi`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.github.pampas.storage.entity.GatewayConfig">
+  <insert id="insert" parameterType="com.github.pampas.storage.entity.GatewaySpi">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_gateway_config` (gateway_group, gateway_instance_id, 
-      config_spi_interface, config_spi_class, config_spi_name, 
-      config_spi_desc, `key`, `label`, 
-      default_value, `value`, `status`, 
-      remark, insert_time, update_time, 
-      is_del)
+    insert into `p_gateway_spi` (gateway_group, gateway_instance_id, 
+      spi_interface, spi_class, spi_name, 
+      spi_desc, `status`, remark, 
+      insert_time, update_time, is_del
+      )
     values (#{gatewayGroup,jdbcType=VARCHAR}, #{gatewayInstanceId,jdbcType=VARCHAR}, 
-      #{configSpiInterface,jdbcType=VARCHAR}, #{configSpiClass,jdbcType=VARCHAR}, #{configSpiName,jdbcType=VARCHAR}, 
-      #{configSpiDesc,jdbcType=VARCHAR}, #{key,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, 
-      #{defaultValue,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
-      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT})
+      #{spiInterface,jdbcType=VARCHAR}, #{spiClass,jdbcType=VARCHAR}, #{spiName,jdbcType=VARCHAR}, 
+      #{spiDesc,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.GatewayConfig">
+  <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.GatewaySpi">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `p_gateway_config`
+    insert into `p_gateway_spi`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="gatewayGroup != null">
         gateway_group,
@@ -149,29 +142,17 @@
       <if test="gatewayInstanceId != null">
         gateway_instance_id,
       </if>
-      <if test="configSpiInterface != null">
-        config_spi_interface,
+      <if test="spiInterface != null">
+        spi_interface,
       </if>
-      <if test="configSpiClass != null">
-        config_spi_class,
+      <if test="spiClass != null">
+        spi_class,
       </if>
-      <if test="configSpiName != null">
-        config_spi_name,
+      <if test="spiName != null">
+        spi_name,
       </if>
-      <if test="configSpiDesc != null">
-        config_spi_desc,
-      </if>
-      <if test="key != null">
-        `key`,
-      </if>
-      <if test="label != null">
-        `label`,
-      </if>
-      <if test="defaultValue != null">
-        default_value,
-      </if>
-      <if test="value != null">
-        `value`,
+      <if test="spiDesc != null">
+        spi_desc,
       </if>
       <if test="status != null">
         `status`,
@@ -196,29 +177,17 @@
       <if test="gatewayInstanceId != null">
         #{gatewayInstanceId,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiInterface != null">
-        #{configSpiInterface,jdbcType=VARCHAR},
+      <if test="spiInterface != null">
+        #{spiInterface,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiClass != null">
-        #{configSpiClass,jdbcType=VARCHAR},
+      <if test="spiClass != null">
+        #{spiClass,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiName != null">
-        #{configSpiName,jdbcType=VARCHAR},
+      <if test="spiName != null">
+        #{spiName,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiDesc != null">
-        #{configSpiDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="key != null">
-        #{key,jdbcType=VARCHAR},
-      </if>
-      <if test="label != null">
-        #{label,jdbcType=VARCHAR},
-      </if>
-      <if test="defaultValue != null">
-        #{defaultValue,jdbcType=VARCHAR},
-      </if>
-      <if test="value != null">
-        #{value,jdbcType=VARCHAR},
+      <if test="spiDesc != null">
+        #{spiDesc,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=BIT},
@@ -237,14 +206,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.github.pampas.storage.entity.GatewayConfigCondition" resultType="java.lang.Long">
-    select count(*) from `p_gateway_config`
+  <select id="countByExample" parameterType="com.github.pampas.storage.entity.GatewaySpiCondition" resultType="java.lang.Long">
+    select count(*) from `p_gateway_spi`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `p_gateway_config`
+    update `p_gateway_spi`
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -255,29 +224,17 @@
       <if test="record.gatewayInstanceId != null">
         gateway_instance_id = #{record.gatewayInstanceId,jdbcType=VARCHAR},
       </if>
-      <if test="record.configSpiInterface != null">
-        config_spi_interface = #{record.configSpiInterface,jdbcType=VARCHAR},
+      <if test="record.spiInterface != null">
+        spi_interface = #{record.spiInterface,jdbcType=VARCHAR},
       </if>
-      <if test="record.configSpiClass != null">
-        config_spi_class = #{record.configSpiClass,jdbcType=VARCHAR},
+      <if test="record.spiClass != null">
+        spi_class = #{record.spiClass,jdbcType=VARCHAR},
       </if>
-      <if test="record.configSpiName != null">
-        config_spi_name = #{record.configSpiName,jdbcType=VARCHAR},
+      <if test="record.spiName != null">
+        spi_name = #{record.spiName,jdbcType=VARCHAR},
       </if>
-      <if test="record.configSpiDesc != null">
-        config_spi_desc = #{record.configSpiDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.key != null">
-        `key` = #{record.key,jdbcType=VARCHAR},
-      </if>
-      <if test="record.label != null">
-        `label` = #{record.label,jdbcType=VARCHAR},
-      </if>
-      <if test="record.defaultValue != null">
-        default_value = #{record.defaultValue,jdbcType=VARCHAR},
-      </if>
-      <if test="record.value != null">
-        `value` = #{record.value,jdbcType=VARCHAR},
+      <if test="record.spiDesc != null">
+        spi_desc = #{record.spiDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=BIT},
@@ -300,18 +257,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `p_gateway_config`
+    update `p_gateway_spi`
     set id = #{record.id,jdbcType=INTEGER},
       gateway_group = #{record.gatewayGroup,jdbcType=VARCHAR},
       gateway_instance_id = #{record.gatewayInstanceId,jdbcType=VARCHAR},
-      config_spi_interface = #{record.configSpiInterface,jdbcType=VARCHAR},
-      config_spi_class = #{record.configSpiClass,jdbcType=VARCHAR},
-      config_spi_name = #{record.configSpiName,jdbcType=VARCHAR},
-      config_spi_desc = #{record.configSpiDesc,jdbcType=VARCHAR},
-      `key` = #{record.key,jdbcType=VARCHAR},
-      `label` = #{record.label,jdbcType=VARCHAR},
-      default_value = #{record.defaultValue,jdbcType=VARCHAR},
-      `value` = #{record.value,jdbcType=VARCHAR},
+      spi_interface = #{record.spiInterface,jdbcType=VARCHAR},
+      spi_class = #{record.spiClass,jdbcType=VARCHAR},
+      spi_name = #{record.spiName,jdbcType=VARCHAR},
+      spi_desc = #{record.spiDesc,jdbcType=VARCHAR},
       `status` = #{record.status,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
@@ -321,8 +274,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.github.pampas.storage.entity.GatewayConfig">
-    update `p_gateway_config`
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.pampas.storage.entity.GatewaySpi">
+    update `p_gateway_spi`
     <set>
       <if test="gatewayGroup != null">
         gateway_group = #{gatewayGroup,jdbcType=VARCHAR},
@@ -330,29 +283,17 @@
       <if test="gatewayInstanceId != null">
         gateway_instance_id = #{gatewayInstanceId,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiInterface != null">
-        config_spi_interface = #{configSpiInterface,jdbcType=VARCHAR},
+      <if test="spiInterface != null">
+        spi_interface = #{spiInterface,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiClass != null">
-        config_spi_class = #{configSpiClass,jdbcType=VARCHAR},
+      <if test="spiClass != null">
+        spi_class = #{spiClass,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiName != null">
-        config_spi_name = #{configSpiName,jdbcType=VARCHAR},
+      <if test="spiName != null">
+        spi_name = #{spiName,jdbcType=VARCHAR},
       </if>
-      <if test="configSpiDesc != null">
-        config_spi_desc = #{configSpiDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="key != null">
-        `key` = #{key,jdbcType=VARCHAR},
-      </if>
-      <if test="label != null">
-        `label` = #{label,jdbcType=VARCHAR},
-      </if>
-      <if test="defaultValue != null">
-        default_value = #{defaultValue,jdbcType=VARCHAR},
-      </if>
-      <if test="value != null">
-        `value` = #{value,jdbcType=VARCHAR},
+      <if test="spiDesc != null">
+        spi_desc = #{spiDesc,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=BIT},
@@ -372,18 +313,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.github.pampas.storage.entity.GatewayConfig">
-    update `p_gateway_config`
+  <update id="updateByPrimaryKey" parameterType="com.github.pampas.storage.entity.GatewaySpi">
+    update `p_gateway_spi`
     set gateway_group = #{gatewayGroup,jdbcType=VARCHAR},
       gateway_instance_id = #{gatewayInstanceId,jdbcType=VARCHAR},
-      config_spi_interface = #{configSpiInterface,jdbcType=VARCHAR},
-      config_spi_class = #{configSpiClass,jdbcType=VARCHAR},
-      config_spi_name = #{configSpiName,jdbcType=VARCHAR},
-      config_spi_desc = #{configSpiDesc,jdbcType=VARCHAR},
-      `key` = #{key,jdbcType=VARCHAR},
-      `label` = #{label,jdbcType=VARCHAR},
-      default_value = #{defaultValue,jdbcType=VARCHAR},
-      `value` = #{value,jdbcType=VARCHAR},
+      spi_interface = #{spiInterface,jdbcType=VARCHAR},
+      spi_class = #{spiClass,jdbcType=VARCHAR},
+      spi_name = #{spiName,jdbcType=VARCHAR},
+      spi_desc = #{spiDesc,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},

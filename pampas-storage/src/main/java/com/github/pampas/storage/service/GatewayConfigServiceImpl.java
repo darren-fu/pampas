@@ -1,6 +1,7 @@
 package com.github.pampas.storage.service;
 
-import com.github.pampas.common.config.ListableConfig;
+import com.github.pampas.common.config.DefinableConfig;
+import com.github.pampas.common.tools.AssertTools;
 import com.github.pampas.common.tools.StreamTools;
 import com.github.pampas.storage.entity.GatewayConfig;
 import com.github.pampas.storage.entity.GatewayConfigCondition;
@@ -28,23 +29,33 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
     private GatewayConfigMapper gatewayConfigMapper;
 
     @Override
-    public void save(String group, String gatewayInstanceId, String type, List<ListableConfig.PropDefine> configList) {
+    public void save(String group, String gatewayInstanceId,
+                     String spiInterface, String spiClass, String spiName, String spiDesc,
+                     List<DefinableConfig.PropDefine> configList) {
+        AssertTools.notNull(group, "网关分组不能为空");
+        AssertTools.notNull(spiInterface, "spiInterface不能为空");
+        AssertTools.notNull(spiClass, "spiClass不能为空");
+
         GatewayConfigCondition configCondition = new GatewayConfigCondition();
         GatewayConfigCondition.Criteria criteria = configCondition.createCriteria();
-        criteria.andGroupEqualTo(group);
+        criteria.andGatewayGroupEqualTo(group);
+        criteria.andConfigSpiClassEqualTo(spiClass);
         List<GatewayConfig> gatewayConfigList = gatewayConfigMapper.selectByExample(configCondition);
 
         Map<String, GatewayConfig> configMap = StreamTools.toMap(gatewayConfigList, GatewayConfig::getKey);
 
-        for (ListableConfig.PropDefine config : configList) {
+        for (DefinableConfig.PropDefine config : configList) {
             if (!configMap.containsKey(config.getKey())) {
                 GatewayConfig gatewayConfig = new GatewayConfig();
-                gatewayConfig.setType(type);
+                gatewayConfig.setGatewayInstanceId(config.getLevel() == DefinableConfig.ConfigLevelEnum.INSTANCE ? gatewayInstanceId : null);
+                gatewayConfig.setGatewayGroup(group);
+                gatewayConfig.setConfigSpiInterface(spiInterface);
+                gatewayConfig.setConfigSpiClass(spiClass);
+                gatewayConfig.setConfigSpiName(spiName);
+                gatewayConfig.setConfigSpiDesc(spiDesc);
                 gatewayConfig.setKey(config.getKey());
                 gatewayConfig.setLabel(config.getLabel());
                 gatewayConfig.setDefaultValue(config.getDefaultValue());
-                gatewayConfig.setGroup(group);
-                gatewayConfig.setGatewayInstanceId(config.getLevel() == ListableConfig.ConfigLevelEnum.INSTANCE ? gatewayInstanceId : null);
                 gatewayConfigMapper.insertSelective(gatewayConfig);
                 log.info("新增网关配置项:{}", config);
             }
@@ -52,12 +63,12 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
     }
 
     @Override
-    public List<GatewayConfig> getGatewayConfig(String group, String gatewayInstanceId, String type) {
+    public List<GatewayConfig> getGatewayConfig(String group, String gatewayInstanceId, String spiClass) {
         GatewayConfigCondition configCondition = new GatewayConfigCondition();
         GatewayConfigCondition.Criteria criteria = configCondition.createCriteria();
-        criteria.andGroupEqualTo(group);
-        if (StringUtils.isNotEmpty(type)) {
-            criteria.andTypeEqualTo(type);
+        criteria.andGatewayGroupEqualTo(group);
+        if (StringUtils.isNotEmpty(spiClass)) {
+            criteria.andConfigSpiClassEqualTo(spiClass);
         }
         List<GatewayConfig> gatewayConfigList = gatewayConfigMapper.selectByExample(configCondition);
         log.info("查询获取当前网关配置项{}条:{}", gatewayConfigList.size(), gatewayConfigList);

@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 2018-12-06
  */
 @Spi(scope = Scope.SINGLETON)
-public interface ListableConfig extends VersionConfig {
+public interface DefinableConfig extends VersionConfig {
 
 
     List<PropDefine> propDefines();

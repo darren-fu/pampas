@@ -33,7 +33,7 @@ public class DubboWorker extends AbstractWorker<FullHttpRequest, FullHttpRespons
     @Override
     public CompletableFuture<PampasResponse<FullHttpResponse>> doExecute(PampasRequest<FullHttpRequest> req, Locator locator) throws IOException {
         String content = req.requestData().content().toString(Charset.forName("UTF-8"));
-        DubboRequest dubboRequest = JsonTools.INSTANCE.fromJson(content,DubboRequest.class);
+        DubboRequest dubboRequest = JsonTools.NON_NULL.fromJson(content,DubboRequest.class);
         return caller.asyncCall(dubboRequest,null);
     }
 

@@ -30,9 +30,11 @@ import lombok.Data;
 @Data
 public class ServerConfig {
 
-    public String basePackage;
-
     // *********************system configuration*********************
+
+    private Integer boss;
+    private Integer worker;
+
 
     public boolean tcpNoDelay = true;
 
@@ -47,10 +49,8 @@ public class ServerConfig {
 
     public int maxThreads = 200;
 
-
     public static ServerConfig defaultConfig() {
         ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setBasePackage("com.github");
         return serverConfig;
     }
 

@@ -1,6 +1,6 @@
 package com.github.pampas.storage.service;
 
-import com.github.pampas.common.config.ListableConfig;
+import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.storage.entity.GatewayConfig;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface GatewayConfigService {
 
-    void save(String group, String gatewayInstanceId, String type, List<ListableConfig.PropDefine> configList);
+    void save(String group, String gatewayInstanceId, String spiInterface, String spiClass, String spiName, String spiDesc, List<DefinableConfig.PropDefine> configList);
 
 
-    List<GatewayConfig> getGatewayConfig(String group, String gatewayInstanceId, String type);
+    List<GatewayConfig> getGatewayConfig(String group, String gatewayInstanceId, String spiClass);
 }

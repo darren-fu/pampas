@@ -1,7 +1,6 @@
 package com.github.pampas.storage.loader;
 
-import com.github.pampas.common.config.ListableConfig;
-import com.github.pampas.common.config.VersionConfig;
+import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.core.base.AbstractConfigLoader;
@@ -29,8 +28,8 @@ public class AuthFilterConfigLoader extends AbstractConfigLoader<AuthFilterConfi
     public AuthFilterConfig doConfigLoad() {
         GatewayConfigService gatewayConfigService = SpringContextHolder.getBean(GatewayConfigService.class);
         List<GatewayConfig> gatewayConfigList = gatewayConfigService.getGatewayConfig(PampasContext.getCurrentServer().group(),
-                PampasContext.getCurrentServer().id(), AuthFilterConfig.class.getSimpleName());
-        AuthFilterConfig config = (AuthFilterConfig) SpiContext.getContext(ListableConfig.class).getSpiInstanceByName(AuthFilterConfig.SPI_META_NAME);
+                PampasContext.getCurrentServer().id(), AuthFilterConfig.class.getName());
+        AuthFilterConfig config = (AuthFilterConfig) SpiContext.getContext(DefinableConfig.class).getSpiInstanceByName(AuthFilterConfig.SPI_META_NAME);
         ConcurrentHashMap<String, String> propMap = config.getPropMap();
         for (GatewayConfig gatewayConfig : gatewayConfigList) {
             propMap.put(gatewayConfig.getKey(), gatewayConfig.getValue());
