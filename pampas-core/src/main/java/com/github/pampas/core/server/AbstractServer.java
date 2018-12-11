@@ -149,10 +149,12 @@ public abstract class AbstractServer implements PampasServer {
 
         // 启动时优先启动ConfigLoader， 加载所有Config
         List<ConfigLoader> configLoaderList = SpiContext.getContext(ConfigLoader.class).getSpiInstances();
-
+        log.info("待执行的ConfigLoader:{}", configLoaderList);
         for (ConfigLoader configLoader : configLoaderList) {
             if (!configLoader.lazy()) {
                 configLoader.loadConfig();
+                log.info("ConfigLoader加载完成:{}", configLoader.getClass().getSimpleName());
+
             }
         }
         //校验状态

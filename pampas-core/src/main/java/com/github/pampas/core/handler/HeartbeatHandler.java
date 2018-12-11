@@ -56,7 +56,7 @@ public class HeartbeatHandler extends ChannelDuplexHandler {
 
 //            ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate()).addListener(
 //                    ChannelFutureListener.CLOSE_ON_FAILURE);
-            log.info("{}超时类型：{}", ctx.channel().remoteAddress(), type);
+//            log.info("{}超时类型：{}", ctx.channel().remoteAddress(), type);
         } else {
             super.userEventTriggered(ctx, evt);
         }
