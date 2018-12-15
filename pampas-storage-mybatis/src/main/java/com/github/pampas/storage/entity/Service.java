@@ -56,6 +56,13 @@ public class Service implements Serializable {
     private String group;
 
     /**
+     * 负载均衡器-spi_name
+     *
+     * Corresponding to the database column p_service.loadbalancer
+     */
+    private String loadbalancer;
+
+    /**
      * 状态1 启用 0 停用
      *
      * Corresponding to the database column p_service.status
@@ -246,6 +253,31 @@ public class Service implements Serializable {
     }
 
     /**
+     * This method returns the value of the database column p_service.loadbalancer
+     *
+     * @return the value of p_service.loadbalancer
+     */
+    public String getLoadbalancer() {
+        return loadbalancer;
+    }
+
+    /**
+     */
+    public Service withLoadbalancer(String loadbalancer) {
+        this.setLoadbalancer(loadbalancer);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_service.loadbalancer
+     *
+     * @param loadbalancer the value for p_service.loadbalancer
+     */
+    public void setLoadbalancer(String loadbalancer) {
+        this.loadbalancer = loadbalancer;
+    }
+
+    /**
      * This method returns the value of the database column p_service.status
      *
      * @return the value of p_service.status
@@ -384,6 +416,7 @@ public class Service implements Serializable {
         sb.append(", protocol=").append(protocol);
         sb.append(", registryId=").append(registryId);
         sb.append(", group=").append(group);
+        sb.append(", loadbalancer=").append(loadbalancer);
         sb.append(", status=").append(status);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
@@ -413,6 +446,7 @@ public class Service implements Serializable {
             && (this.getProtocol() == null ? other.getProtocol() == null : this.getProtocol().equals(other.getProtocol()))
             && (this.getRegistryId() == null ? other.getRegistryId() == null : this.getRegistryId().equals(other.getRegistryId()))
             && (this.getGroup() == null ? other.getGroup() == null : this.getGroup().equals(other.getGroup()))
+            && (this.getLoadbalancer() == null ? other.getLoadbalancer() == null : this.getLoadbalancer().equals(other.getLoadbalancer()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
@@ -432,6 +466,7 @@ public class Service implements Serializable {
         result = prime * result + ((getProtocol() == null) ? 0 : getProtocol().hashCode());
         result = prime * result + ((getRegistryId() == null) ? 0 : getRegistryId().hashCode());
         result = prime * result + ((getGroup() == null) ? 0 : getGroup().hashCode());
+        result = prime * result + ((getLoadbalancer() == null) ? 0 : getLoadbalancer().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
@@ -450,6 +485,7 @@ public class Service implements Serializable {
         protocol("protocol", "protocol", "VARCHAR", false),
         registryId("registry_id", "registryId", "INTEGER", false),
         group("group", "group", "VARCHAR", true),
+        loadbalancer("loadbalancer", "loadbalancer", "VARCHAR", false),
         status("status", "status", "BIT", true),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),

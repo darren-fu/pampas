@@ -12,7 +12,7 @@ import java.util.Set;
  * 负载均衡接口
  * Created by darrenfu on 17-6-26.
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "负载均衡器")
 public interface LoadBalancer {
 
     /**

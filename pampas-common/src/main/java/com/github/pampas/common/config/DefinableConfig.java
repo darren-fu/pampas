@@ -13,7 +13,7 @@ import java.util.List;
  * User: darrenfu
  * Date: 2018-12-06
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "可定义配置")
 public interface DefinableConfig extends VersionConfig {
 
 

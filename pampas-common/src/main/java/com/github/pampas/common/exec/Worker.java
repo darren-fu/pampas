@@ -38,7 +38,7 @@ import java.util.concurrent.Future;
  * @author: darrenfu
  * @date: 18 -1-24
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "请求处理器")
 public interface Worker<Q extends Object, R extends Object> {
 
     /**
@@ -55,7 +55,7 @@ public interface Worker<Q extends Object, R extends Object> {
     /**
      * 执行请求和过滤器，返回Future
      *
-     * @param req    the req
+     * @param req        the req
      * @param locator
      * @param filterList the filter
      * @return the future

@@ -625,6 +625,118 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
+        public Criteria andConfigSpiInterfaceDescIsNull() {
+            addCriterion("config_spi_interface_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescIsNotNull() {
+            addCriterion("config_spi_interface_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescEqualTo(String value) {
+            addCriterion("config_spi_interface_desc =", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescNotEqualTo(String value) {
+            addCriterion("config_spi_interface_desc <>", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescNotEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescGreaterThan(String value) {
+            addCriterion("config_spi_interface_desc >", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescGreaterThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescGreaterThanOrEqualTo(String value) {
+            addCriterion("config_spi_interface_desc >=", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescLessThan(String value) {
+            addCriterion("config_spi_interface_desc <", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescLessThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescLessThanOrEqualTo(String value) {
+            addCriterion("config_spi_interface_desc <=", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andConfigSpiInterfaceDescLessThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("config_spi_interface_desc <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescLike(String value) {
+            addCriterion("config_spi_interface_desc like", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescNotLike(String value) {
+            addCriterion("config_spi_interface_desc not like", value, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescIn(List<String> values) {
+            addCriterion("config_spi_interface_desc in", values, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescNotIn(List<String> values) {
+            addCriterion("config_spi_interface_desc not in", values, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescBetween(String value1, String value2) {
+            addCriterion("config_spi_interface_desc between", value1, value2, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescNotBetween(String value1, String value2) {
+            addCriterion("config_spi_interface_desc not between", value1, value2, "configSpiInterfaceDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andConfigSpiClassIsNull() {
             addCriterion("config_spi_class is null");
             return (Criteria) this;
@@ -1941,6 +2053,11 @@ public class GatewayConfigCondition {
 
         public Criteria andConfigSpiInterfaceLikeInsensitive(String value) {
             addCriterion("upper(config_spi_interface) like", value.toUpperCase(), "configSpiInterface");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigSpiInterfaceDescLikeInsensitive(String value) {
+            addCriterion("upper(config_spi_interface_desc) like", value.toUpperCase(), "configSpiInterfaceDesc");
             return (Criteria) this;
         }
 

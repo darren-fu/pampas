@@ -22,8 +22,10 @@ public class LogFilterConfig implements DefinableConfig {
     private List<PropDefine> propDefineList = new ArrayList<>();
 
     public LogFilterConfig() {
-        PropDefine propDefine = new PropDefine("log.path", "级别", "warn");
+        PropDefine propDefine = new PropDefine("log.level", "级别", "warn");
+        PropDefine propDefine2 = new PropDefine("log.path", "路径", "/var/log");
         propDefineList.add(propDefine);
+        propDefineList.add(propDefine2);
     }
 
 

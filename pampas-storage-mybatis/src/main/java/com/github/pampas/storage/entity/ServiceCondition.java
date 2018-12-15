@@ -839,6 +839,118 @@ public class ServiceCondition {
             return (Criteria) this;
         }
 
+        public Criteria andLoadbalancerIsNull() {
+            addCriterion("loadbalancer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerIsNotNull() {
+            addCriterion("loadbalancer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerEqualTo(String value) {
+            addCriterion("loadbalancer =", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerNotEqualTo(String value) {
+            addCriterion("loadbalancer <>", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerNotEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerGreaterThan(String value) {
+            addCriterion("loadbalancer >", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerGreaterThanColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerGreaterThanOrEqualTo(String value) {
+            addCriterion("loadbalancer >=", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerGreaterThanOrEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerLessThan(String value) {
+            addCriterion("loadbalancer <", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerLessThanColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerLessThanOrEqualTo(String value) {
+            addCriterion("loadbalancer <=", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andLoadbalancerLessThanOrEqualToColumn(Service.Column column) {
+            addCriterion(new StringBuilder("loadbalancer <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerLike(String value) {
+            addCriterion("loadbalancer like", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerNotLike(String value) {
+            addCriterion("loadbalancer not like", value, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerIn(List<String> values) {
+            addCriterion("loadbalancer in", values, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerNotIn(List<String> values) {
+            addCriterion("loadbalancer not in", values, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerBetween(String value1, String value2) {
+            addCriterion("loadbalancer between", value1, value2, "loadbalancer");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerNotBetween(String value1, String value2) {
+            addCriterion("loadbalancer not between", value1, value2, "loadbalancer");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("`status` is null");
             return (Criteria) this;
@@ -1376,6 +1488,11 @@ public class ServiceCondition {
 
         public Criteria andGroupLikeInsensitive(String value) {
             addCriterion("upper(`group`) like", value.toUpperCase(), "group");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoadbalancerLikeInsensitive(String value) {
+            addCriterion("upper(loadbalancer) like", value.toUpperCase(), "loadbalancer");
             return (Criteria) this;
         }
 

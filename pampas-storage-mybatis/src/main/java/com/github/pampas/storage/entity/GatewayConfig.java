@@ -42,6 +42,12 @@ public class GatewayConfig implements Serializable {
 
     /**
      *
+     * Corresponding to the database column p_gateway_config.config_spi_interface_desc
+     */
+    private String configSpiInterfaceDesc;
+
+    /**
+     *
      * Corresponding to the database column p_gateway_config.config_spi_class
      */
     private String configSpiClass;
@@ -221,6 +227,31 @@ public class GatewayConfig implements Serializable {
      */
     public void setConfigSpiInterface(String configSpiInterface) {
         this.configSpiInterface = configSpiInterface;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.config_spi_interface_desc
+     *
+     * @return the value of p_gateway_config.config_spi_interface_desc
+     */
+    public String getConfigSpiInterfaceDesc() {
+        return configSpiInterfaceDesc;
+    }
+
+    /**
+     */
+    public GatewayConfig withConfigSpiInterfaceDesc(String configSpiInterfaceDesc) {
+        this.setConfigSpiInterfaceDesc(configSpiInterfaceDesc);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.config_spi_interface_desc
+     *
+     * @param configSpiInterfaceDesc the value for p_gateway_config.config_spi_interface_desc
+     */
+    public void setConfigSpiInterfaceDesc(String configSpiInterfaceDesc) {
+        this.configSpiInterfaceDesc = configSpiInterfaceDesc;
     }
 
     /**
@@ -535,6 +566,7 @@ public class GatewayConfig implements Serializable {
         sb.append(", gatewayGroup=").append(gatewayGroup);
         sb.append(", gatewayInstanceId=").append(gatewayInstanceId);
         sb.append(", configSpiInterface=").append(configSpiInterface);
+        sb.append(", configSpiInterfaceDesc=").append(configSpiInterfaceDesc);
         sb.append(", configSpiClass=").append(configSpiClass);
         sb.append(", configSpiName=").append(configSpiName);
         sb.append(", configSpiDesc=").append(configSpiDesc);
@@ -569,6 +601,7 @@ public class GatewayConfig implements Serializable {
             && (this.getGatewayGroup() == null ? other.getGatewayGroup() == null : this.getGatewayGroup().equals(other.getGatewayGroup()))
             && (this.getGatewayInstanceId() == null ? other.getGatewayInstanceId() == null : this.getGatewayInstanceId().equals(other.getGatewayInstanceId()))
             && (this.getConfigSpiInterface() == null ? other.getConfigSpiInterface() == null : this.getConfigSpiInterface().equals(other.getConfigSpiInterface()))
+            && (this.getConfigSpiInterfaceDesc() == null ? other.getConfigSpiInterfaceDesc() == null : this.getConfigSpiInterfaceDesc().equals(other.getConfigSpiInterfaceDesc()))
             && (this.getConfigSpiClass() == null ? other.getConfigSpiClass() == null : this.getConfigSpiClass().equals(other.getConfigSpiClass()))
             && (this.getConfigSpiName() == null ? other.getConfigSpiName() == null : this.getConfigSpiName().equals(other.getConfigSpiName()))
             && (this.getConfigSpiDesc() == null ? other.getConfigSpiDesc() == null : this.getConfigSpiDesc().equals(other.getConfigSpiDesc()))
@@ -593,6 +626,7 @@ public class GatewayConfig implements Serializable {
         result = prime * result + ((getGatewayGroup() == null) ? 0 : getGatewayGroup().hashCode());
         result = prime * result + ((getGatewayInstanceId() == null) ? 0 : getGatewayInstanceId().hashCode());
         result = prime * result + ((getConfigSpiInterface() == null) ? 0 : getConfigSpiInterface().hashCode());
+        result = prime * result + ((getConfigSpiInterfaceDesc() == null) ? 0 : getConfigSpiInterfaceDesc().hashCode());
         result = prime * result + ((getConfigSpiClass() == null) ? 0 : getConfigSpiClass().hashCode());
         result = prime * result + ((getConfigSpiName() == null) ? 0 : getConfigSpiName().hashCode());
         result = prime * result + ((getConfigSpiDesc() == null) ? 0 : getConfigSpiDesc().hashCode());
@@ -616,6 +650,7 @@ public class GatewayConfig implements Serializable {
         gatewayGroup("gateway_group", "gatewayGroup", "VARCHAR", false),
         gatewayInstanceId("gateway_instance_id", "gatewayInstanceId", "VARCHAR", false),
         configSpiInterface("config_spi_interface", "configSpiInterface", "VARCHAR", false),
+        configSpiInterfaceDesc("config_spi_interface_desc", "configSpiInterfaceDesc", "VARCHAR", false),
         configSpiClass("config_spi_class", "configSpiClass", "VARCHAR", false),
         configSpiName("config_spi_name", "configSpiName", "VARCHAR", false),
         configSpiDesc("config_spi_desc", "configSpiDesc", "VARCHAR", false),

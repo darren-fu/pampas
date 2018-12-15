@@ -8,6 +8,7 @@
     <result column="protocol" jdbcType="VARCHAR" property="protocol" />
     <result column="registry_id" jdbcType="INTEGER" property="registryId" />
     <result column="group" jdbcType="VARCHAR" property="group" />
+    <result column="loadbalancer" jdbcType="VARCHAR" property="loadbalancer" />
     <result column="status" jdbcType="BIT" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, service_name, `type`, protocol, registry_id, `group`, `status`, remark, insert_time, 
-    update_time, is_del
+    id, service_name, `type`, protocol, registry_id, `group`, loadbalancer, `status`, 
+    remark, insert_time, update_time, is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.ServiceCondition" resultMap="BaseResultMap">
     select
@@ -119,13 +120,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `p_service` (service_name, `type`, protocol, 
-      registry_id, `group`, `status`, 
-      remark, insert_time, update_time, 
-      is_del)
+      registry_id, `group`, loadbalancer, 
+      `status`, remark, insert_time, 
+      update_time, is_del)
     values (#{serviceName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{protocol,jdbcType=VARCHAR}, 
-      #{registryId,jdbcType=INTEGER}, #{group,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
-      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT})
+      #{registryId,jdbcType=INTEGER}, #{group,jdbcType=VARCHAR}, #{loadbalancer,jdbcType=VARCHAR}, 
+      #{status,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.Service">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -147,6 +148,9 @@
       </if>
       <if test="group != null">
         `group`,
+      </if>
+      <if test="loadbalancer != null">
+        loadbalancer,
       </if>
       <if test="status != null">
         `status`,
@@ -179,6 +183,9 @@
       </if>
       <if test="group != null">
         #{group,jdbcType=VARCHAR},
+      </if>
+      <if test="loadbalancer != null">
+        #{loadbalancer,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=BIT},
@@ -224,6 +231,9 @@
       <if test="record.group != null">
         `group` = #{record.group,jdbcType=VARCHAR},
       </if>
+      <if test="record.loadbalancer != null">
+        loadbalancer = #{record.loadbalancer,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=BIT},
       </if>
@@ -252,6 +262,7 @@
       protocol = #{record.protocol,jdbcType=VARCHAR},
       registry_id = #{record.registryId,jdbcType=INTEGER},
       `group` = #{record.group,jdbcType=VARCHAR},
+      loadbalancer = #{record.loadbalancer,jdbcType=VARCHAR},
       `status` = #{record.status,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
@@ -279,6 +290,9 @@
       <if test="group != null">
         `group` = #{group,jdbcType=VARCHAR},
       </if>
+      <if test="loadbalancer != null">
+        loadbalancer = #{loadbalancer,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         `status` = #{status,jdbcType=BIT},
       </if>
@@ -304,6 +318,7 @@
       protocol = #{protocol,jdbcType=VARCHAR},
       registry_id = #{registryId,jdbcType=INTEGER},
       `group` = #{group,jdbcType=VARCHAR},
+      loadbalancer = #{loadbalancer,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},

@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
@@ -183,20 +184,28 @@ public class SpiContext<T> {
 
 
     private T getSingletonInstance(String name) throws InstantiationException, IllegalAccessException {
+        SpiClass<T> spiClass = spiClassMap.getOrDefault(name, SpiClass.EMPTY_SPI);
+        SpiMeta spiMeta = spiClass.getSpiMeta();
+        if (spiMeta == null || !spiMeta.active()) {
+            log.warn("{},{}不可用", name, spiMeta);
+            return null;
+        }
+
         T obj = singletonInstances.get(name);
 
         if (obj != null) {
             return obj;
         }
 
-        SpiClass<T> spiClass = spiClassMap.getOrDefault(name, SpiClass.EMPTY_SPI);
+//        SpiClass<T> spiClass = spiClassMap.getOrDefault(name, SpiClass.EMPTY_SPI);
         Class<T> clz = spiClass.getClz();
 
         if (clz == null) {
             return null;
         }
 
-        SpiMeta spiMeta = getSpiMeta(clz);
+//        SpiMeta spiMeta = getSpiMeta(clz);
+//        SpiMeta spiMeta = spiClass.getSpiMeta();
         if (spiMeta != null && !"".equals(spiMeta.factoryMethod())) {
             try {
                 Method initMethod = clz.getMethod(spiMeta.factoryMethod(), null);
@@ -208,7 +217,6 @@ public class SpiContext<T> {
         } else {
             obj = clz.newInstance();
         }
-
 
         singletonInstances.putIfAbsent(name, obj);
         obj = singletonInstances.get(name);
@@ -302,8 +310,13 @@ public class SpiContext<T> {
 
         // 多个实现，按优先级排序返回
         for (Map.Entry<String, SpiClass<T>> entry : spiClassMap.entrySet()) {
-            Class<T> clz = entry.getValue().getClz();
-            SpiMeta spiCondition = clz.getAnnotation(SpiMeta.class);
+            SpiClass<T> spiClass = entry.getValue();
+            Class<T> clz = spiClass.getClz();
+            SpiMeta spiCondition = spiClass.getSpiMeta();
+            if (spiCondition == null || !spiCondition.active()) {
+                log.warn("{}不可用", spiClass);
+                continue;
+            }
             if (StringUtils.isBlank(key)) {
                 exts.add(clz);
             } else if (spiCondition != null && spiCondition.key() != null) {
@@ -419,6 +432,17 @@ public class SpiContext<T> {
      */
     public static SpiMeta getSpiMeta(Class<?> clz) {
         return clz.getAnnotation(SpiMeta.class);
+    }
+
+    /**
+     * Gets scope.
+     *
+     * @param clz the clz
+     * @return the scope
+     */
+    public static Spi getSpi(Class<?> clz) {
+        Spi spi = clz.getAnnotation(Spi.class);
+        return spi;
     }
 
     /**
@@ -645,6 +669,27 @@ public class SpiContext<T> {
         private String typeName(Class type) {
             return type == null ? "" : type.getName();
         }
+    }
+
+
+    public static Object changeAnnotationValue(Annotation annotation, String key, Object newValue) throws Exception {
+        InvocationHandler handler = Proxy.getInvocationHandler(annotation);
+        Field f;
+        try {
+            f = handler.getClass().getDeclaredField("memberValues");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+        f.setAccessible(true);
+        Map<String, Object> memberValues;
+        memberValues = (Map<String, Object>) f.get(handler);
+        Object oldValue = memberValues.get(key);
+        if (oldValue == null || oldValue.getClass() != newValue.getClass()) {
+            throw new IllegalArgumentException();
+        }
+        memberValues.put(key, newValue);
+        return oldValue;
     }
 
 

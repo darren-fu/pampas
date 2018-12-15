@@ -6,6 +6,7 @@
     <result column="gateway_group" jdbcType="VARCHAR" property="gatewayGroup" />
     <result column="gateway_instance_id" jdbcType="VARCHAR" property="gatewayInstanceId" />
     <result column="config_spi_interface" jdbcType="VARCHAR" property="configSpiInterface" />
+    <result column="config_spi_interface_desc" jdbcType="VARCHAR" property="configSpiInterfaceDesc" />
     <result column="config_spi_class" jdbcType="VARCHAR" property="configSpiClass" />
     <result column="config_spi_name" jdbcType="VARCHAR" property="configSpiName" />
     <result column="config_spi_desc" jdbcType="VARCHAR" property="configSpiDesc" />
@@ -78,9 +79,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, gateway_group, gateway_instance_id, config_spi_interface, config_spi_class, config_spi_name, 
-    config_spi_desc, `key`, `label`, default_value, `value`, `status`, remark, insert_time, 
-    update_time, is_del
+    id, gateway_group, gateway_instance_id, config_spi_interface, config_spi_interface_desc, 
+    config_spi_class, config_spi_name, config_spi_desc, `key`, `label`, default_value, 
+    `value`, `status`, remark, insert_time, update_time, is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewayConfigCondition" resultMap="BaseResultMap">
     select
@@ -125,17 +126,19 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `p_gateway_config` (gateway_group, gateway_instance_id, 
-      config_spi_interface, config_spi_class, config_spi_name, 
-      config_spi_desc, `key`, `label`, 
-      default_value, `value`, `status`, 
-      remark, insert_time, update_time, 
-      is_del)
+      config_spi_interface, config_spi_interface_desc, 
+      config_spi_class, config_spi_name, config_spi_desc, 
+      `key`, `label`, default_value, 
+      `value`, `status`, remark, 
+      insert_time, update_time, is_del
+      )
     values (#{gatewayGroup,jdbcType=VARCHAR}, #{gatewayInstanceId,jdbcType=VARCHAR}, 
-      #{configSpiInterface,jdbcType=VARCHAR}, #{configSpiClass,jdbcType=VARCHAR}, #{configSpiName,jdbcType=VARCHAR}, 
-      #{configSpiDesc,jdbcType=VARCHAR}, #{key,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, 
-      #{defaultValue,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
-      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT})
+      #{configSpiInterface,jdbcType=VARCHAR}, #{configSpiInterfaceDesc,jdbcType=VARCHAR}, 
+      #{configSpiClass,jdbcType=VARCHAR}, #{configSpiName,jdbcType=VARCHAR}, #{configSpiDesc,jdbcType=VARCHAR}, 
+      #{key,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{defaultValue,jdbcType=VARCHAR}, 
+      #{value,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.GatewayConfig">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -151,6 +154,9 @@
       </if>
       <if test="configSpiInterface != null">
         config_spi_interface,
+      </if>
+      <if test="configSpiInterfaceDesc != null">
+        config_spi_interface_desc,
       </if>
       <if test="configSpiClass != null">
         config_spi_class,
@@ -198,6 +204,9 @@
       </if>
       <if test="configSpiInterface != null">
         #{configSpiInterface,jdbcType=VARCHAR},
+      </if>
+      <if test="configSpiInterfaceDesc != null">
+        #{configSpiInterfaceDesc,jdbcType=VARCHAR},
       </if>
       <if test="configSpiClass != null">
         #{configSpiClass,jdbcType=VARCHAR},
@@ -258,6 +267,9 @@
       <if test="record.configSpiInterface != null">
         config_spi_interface = #{record.configSpiInterface,jdbcType=VARCHAR},
       </if>
+      <if test="record.configSpiInterfaceDesc != null">
+        config_spi_interface_desc = #{record.configSpiInterfaceDesc,jdbcType=VARCHAR},
+      </if>
       <if test="record.configSpiClass != null">
         config_spi_class = #{record.configSpiClass,jdbcType=VARCHAR},
       </if>
@@ -305,6 +317,7 @@
       gateway_group = #{record.gatewayGroup,jdbcType=VARCHAR},
       gateway_instance_id = #{record.gatewayInstanceId,jdbcType=VARCHAR},
       config_spi_interface = #{record.configSpiInterface,jdbcType=VARCHAR},
+      config_spi_interface_desc = #{record.configSpiInterfaceDesc,jdbcType=VARCHAR},
       config_spi_class = #{record.configSpiClass,jdbcType=VARCHAR},
       config_spi_name = #{record.configSpiName,jdbcType=VARCHAR},
       config_spi_desc = #{record.configSpiDesc,jdbcType=VARCHAR},
@@ -332,6 +345,9 @@
       </if>
       <if test="configSpiInterface != null">
         config_spi_interface = #{configSpiInterface,jdbcType=VARCHAR},
+      </if>
+      <if test="configSpiInterfaceDesc != null">
+        config_spi_interface_desc = #{configSpiInterfaceDesc,jdbcType=VARCHAR},
       </if>
       <if test="configSpiClass != null">
         config_spi_class = #{configSpiClass,jdbcType=VARCHAR},
@@ -377,6 +393,7 @@
     set gateway_group = #{gatewayGroup,jdbcType=VARCHAR},
       gateway_instance_id = #{gatewayInstanceId,jdbcType=VARCHAR},
       config_spi_interface = #{configSpiInterface,jdbcType=VARCHAR},
+      config_spi_interface_desc = #{configSpiInterfaceDesc,jdbcType=VARCHAR},
       config_spi_class = #{configSpiClass,jdbcType=VARCHAR},
       config_spi_name = #{configSpiName,jdbcType=VARCHAR},
       config_spi_desc = #{configSpiDesc,jdbcType=VARCHAR},

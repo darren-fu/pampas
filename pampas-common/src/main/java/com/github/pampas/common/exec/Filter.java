@@ -32,13 +32,13 @@ import com.github.pampas.common.extension.Spi;
  * @author: darrenfu
  * @date: 18 -1-24
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "过滤器")
 public interface Filter<Q extends Object, R extends Object> {
 
     /**
      * 请求执行前运行.
      *
-     * @param req the req
+     * @param req         the req
      * @param filterChain
      */
     void before(PampasRequest<Q> req, FilterChain filterChain);
@@ -46,8 +46,8 @@ public interface Filter<Q extends Object, R extends Object> {
     /**
      * 响应成功时执行
      *
-     * @param req  the req
-     * @param resp the resp
+     * @param req         the req
+     * @param resp        the resp
      * @param filterChain
      * @return the response info
      */
@@ -56,8 +56,8 @@ public interface Filter<Q extends Object, R extends Object> {
     /**
      * 响应异常时执行
      *
-     * @param req       the req
-     * @param throwable the throwable
+     * @param req         the req
+     * @param throwable   the throwable
      * @param filterChain
      * @return the response info
      */

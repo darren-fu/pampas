@@ -57,6 +57,12 @@ public @interface SpiMeta {
      */
     boolean retry() default true;
 
+    /**
+     * 是否启用
+     *
+     * @return
+     */
+    boolean active() default true;
 
     /**
      * static 构造函数名称

@@ -1,6 +1,7 @@
 package com.github.pampas.storage.service;
 
 import com.github.pampas.common.config.DefinableConfig;
+import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.tools.AssertTools;
 import com.github.pampas.common.tools.StreamTools;
 import com.github.pampas.storage.entity.GatewayConfig;
@@ -29,8 +30,8 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
     private GatewayConfigMapper gatewayConfigMapper;
 
     @Override
-    public void save(String group, String gatewayInstanceId,
-                     String spiInterface, String spiClass, String spiName, String spiDesc,
+    public void save(String group, String gatewayInstanceId, Class spiInterface,
+                     String spiClass, String spiName, String spiDesc,
                      List<DefinableConfig.PropDefine> configList) {
         AssertTools.notNull(group, "网关分组不能为空");
         AssertTools.notNull(spiInterface, "spiInterface不能为空");
@@ -49,7 +50,8 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
                 GatewayConfig gatewayConfig = new GatewayConfig();
                 gatewayConfig.setGatewayInstanceId(config.getLevel() == DefinableConfig.ConfigLevelEnum.INSTANCE ? gatewayInstanceId : null);
                 gatewayConfig.setGatewayGroup(group);
-                gatewayConfig.setConfigSpiInterface(spiInterface);
+                gatewayConfig.setConfigSpiInterface(spiInterface.getSimpleName());
+                gatewayConfig.setConfigSpiInterfaceDesc(SpiContext.getSpi(spiInterface).desc());
                 gatewayConfig.setConfigSpiClass(spiClass);
                 gatewayConfig.setConfigSpiName(spiName);
                 gatewayConfig.setConfigSpiDesc(spiDesc);

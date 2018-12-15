@@ -41,6 +41,12 @@ public class GatewaySpi implements Serializable {
 
     /**
      *
+     * Corresponding to the database column p_gateway_spi.spi_interface_desc
+     */
+    private String spiInterfaceDesc;
+
+    /**
+     *
      * Corresponding to the database column p_gateway_spi.spi_class
      */
     private String spiClass;
@@ -195,6 +201,31 @@ public class GatewaySpi implements Serializable {
      */
     public void setSpiInterface(String spiInterface) {
         this.spiInterface = spiInterface;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_spi.spi_interface_desc
+     *
+     * @return the value of p_gateway_spi.spi_interface_desc
+     */
+    public String getSpiInterfaceDesc() {
+        return spiInterfaceDesc;
+    }
+
+    /**
+     */
+    public GatewaySpi withSpiInterfaceDesc(String spiInterfaceDesc) {
+        this.setSpiInterfaceDesc(spiInterfaceDesc);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_spi.spi_interface_desc
+     *
+     * @param spiInterfaceDesc the value for p_gateway_spi.spi_interface_desc
+     */
+    public void setSpiInterfaceDesc(String spiInterfaceDesc) {
+        this.spiInterfaceDesc = spiInterfaceDesc;
     }
 
     /**
@@ -409,6 +440,7 @@ public class GatewaySpi implements Serializable {
         sb.append(", gatewayGroup=").append(gatewayGroup);
         sb.append(", gatewayInstanceId=").append(gatewayInstanceId);
         sb.append(", spiInterface=").append(spiInterface);
+        sb.append(", spiInterfaceDesc=").append(spiInterfaceDesc);
         sb.append(", spiClass=").append(spiClass);
         sb.append(", spiName=").append(spiName);
         sb.append(", spiDesc=").append(spiDesc);
@@ -439,6 +471,7 @@ public class GatewaySpi implements Serializable {
             && (this.getGatewayGroup() == null ? other.getGatewayGroup() == null : this.getGatewayGroup().equals(other.getGatewayGroup()))
             && (this.getGatewayInstanceId() == null ? other.getGatewayInstanceId() == null : this.getGatewayInstanceId().equals(other.getGatewayInstanceId()))
             && (this.getSpiInterface() == null ? other.getSpiInterface() == null : this.getSpiInterface().equals(other.getSpiInterface()))
+            && (this.getSpiInterfaceDesc() == null ? other.getSpiInterfaceDesc() == null : this.getSpiInterfaceDesc().equals(other.getSpiInterfaceDesc()))
             && (this.getSpiClass() == null ? other.getSpiClass() == null : this.getSpiClass().equals(other.getSpiClass()))
             && (this.getSpiName() == null ? other.getSpiName() == null : this.getSpiName().equals(other.getSpiName()))
             && (this.getSpiDesc() == null ? other.getSpiDesc() == null : this.getSpiDesc().equals(other.getSpiDesc()))
@@ -459,6 +492,7 @@ public class GatewaySpi implements Serializable {
         result = prime * result + ((getGatewayGroup() == null) ? 0 : getGatewayGroup().hashCode());
         result = prime * result + ((getGatewayInstanceId() == null) ? 0 : getGatewayInstanceId().hashCode());
         result = prime * result + ((getSpiInterface() == null) ? 0 : getSpiInterface().hashCode());
+        result = prime * result + ((getSpiInterfaceDesc() == null) ? 0 : getSpiInterfaceDesc().hashCode());
         result = prime * result + ((getSpiClass() == null) ? 0 : getSpiClass().hashCode());
         result = prime * result + ((getSpiName() == null) ? 0 : getSpiName().hashCode());
         result = prime * result + ((getSpiDesc() == null) ? 0 : getSpiDesc().hashCode());
@@ -478,6 +512,7 @@ public class GatewaySpi implements Serializable {
         gatewayGroup("gateway_group", "gatewayGroup", "VARCHAR", false),
         gatewayInstanceId("gateway_instance_id", "gatewayInstanceId", "VARCHAR", false),
         spiInterface("spi_interface", "spiInterface", "VARCHAR", false),
+        spiInterfaceDesc("spi_interface_desc", "spiInterfaceDesc", "VARCHAR", false),
         spiClass("spi_class", "spiClass", "VARCHAR", false),
         spiName("spi_name", "spiName", "VARCHAR", false),
         spiDesc("spi_desc", "spiDesc", "VARCHAR", false),

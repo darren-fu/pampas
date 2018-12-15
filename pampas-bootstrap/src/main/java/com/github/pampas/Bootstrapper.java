@@ -37,7 +37,18 @@ public class Bootstrapper {
 
     private static final Logger log = LoggerFactory.getLogger(Bootstrapper.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+//        SpiContext<LoadBalancer> context = SpiContext.getContext(LoadBalancer.class);
+//        LoadBalancer spiInstanceByName = context.getSpiInstanceByName(PampasConsts.LoadBalancer.RANDOM);
+//
+//        System.out.println("-------------------------------------");
+//        SpiContext.changeAnnotationValue(spiInstanceByName.getClass().getAnnotation(SpiMeta.class),"active",false);
+//        SpiContext.changeAnnotationValue(spiInstanceByName.getClass().getAnnotation(SpiMeta.class),"order",300);
+
+
+//        LoadBalancer instance2 = context.getSpiInstanceByName(PampasConsts.LoadBalancer.RANDOM);
+
+
         try {
             Long start = System.currentTimeMillis();
             SpringStorageApp.init(args, (ctx, serverProperties) -> {
