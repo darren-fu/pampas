@@ -1409,6 +1409,118 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
+        public Criteria andPlaceholderIsNull() {
+            addCriterion("placeholder is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderIsNotNull() {
+            addCriterion("placeholder is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderEqualTo(String value) {
+            addCriterion("placeholder =", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderNotEqualTo(String value) {
+            addCriterion("placeholder <>", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderNotEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderGreaterThan(String value) {
+            addCriterion("placeholder >", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderGreaterThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderGreaterThanOrEqualTo(String value) {
+            addCriterion("placeholder >=", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderLessThan(String value) {
+            addCriterion("placeholder <", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderLessThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderLessThanOrEqualTo(String value) {
+            addCriterion("placeholder <=", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPlaceholderLessThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("placeholder <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderLike(String value) {
+            addCriterion("placeholder like", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderNotLike(String value) {
+            addCriterion("placeholder not like", value, "placeholder");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderIn(List<String> values) {
+            addCriterion("placeholder in", values, "placeholder");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderNotIn(List<String> values) {
+            addCriterion("placeholder not in", values, "placeholder");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderBetween(String value1, String value2) {
+            addCriterion("placeholder between", value1, value2, "placeholder");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceholderNotBetween(String value1, String value2) {
+            addCriterion("placeholder not between", value1, value2, "placeholder");
+            return (Criteria) this;
+        }
+
         public Criteria andValueIsNull() {
             addCriterion("`value` is null");
             return (Criteria) this;
@@ -1521,6 +1633,210 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
+        public Criteria andRequiredIsNull() {
+            addCriterion("required is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredIsNotNull() {
+            addCriterion("required is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredEqualTo(Boolean value) {
+            addCriterion("required =", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredNotEqualTo(Boolean value) {
+            addCriterion("required <>", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredNotEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredGreaterThan(Boolean value) {
+            addCriterion("required >", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredGreaterThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("required >=", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredLessThan(Boolean value) {
+            addCriterion("required <", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredLessThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredLessThanOrEqualTo(Boolean value) {
+            addCriterion("required <=", value, "required");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andRequiredLessThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("required <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredIn(List<Boolean> values) {
+            addCriterion("required in", values, "required");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredNotIn(List<Boolean> values) {
+            addCriterion("required not in", values, "required");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredBetween(Boolean value1, Boolean value2) {
+            addCriterion("required between", value1, value2, "required");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequiredNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("required not between", value1, value2, "required");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiIsNull() {
+            addCriterion("multi is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiIsNotNull() {
+            addCriterion("multi is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiEqualTo(Boolean value) {
+            addCriterion("multi =", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiNotEqualTo(Boolean value) {
+            addCriterion("multi <>", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiNotEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiGreaterThan(Boolean value) {
+            addCriterion("multi >", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiGreaterThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("multi >=", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiLessThan(Boolean value) {
+            addCriterion("multi <", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiLessThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiLessThanOrEqualTo(Boolean value) {
+            addCriterion("multi <=", value, "multi");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andMultiLessThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("multi <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiIn(List<Boolean> values) {
+            addCriterion("multi in", values, "multi");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiNotIn(List<Boolean> values) {
+            addCriterion("multi not in", values, "multi");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiBetween(Boolean value1, Boolean value2) {
+            addCriterion("multi between", value1, value2, "multi");
+            return (Criteria) this;
+        }
+
+        public Criteria andMultiNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("multi not between", value1, value2, "multi");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("`status` is null");
             return (Criteria) this;
@@ -1620,6 +1936,118 @@ public class GatewayConfigCondition {
 
         public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
             addCriterion("`status` not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIsNull() {
+            addCriterion("push is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIsNotNull() {
+            addCriterion("push is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEqualTo(String value) {
+            addCriterion("push =", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotEqualTo(String value) {
+            addCriterion("push <>", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushNotEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushGreaterThan(String value) {
+            addCriterion("push >", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushGreaterThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushGreaterThanOrEqualTo(String value) {
+            addCriterion("push >=", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushGreaterThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLessThan(String value) {
+            addCriterion("push <", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushLessThanColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLessThanOrEqualTo(String value) {
+            addCriterion("push <=", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushLessThanOrEqualToColumn(GatewayConfig.Column column) {
+            addCriterion(new StringBuilder("push <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLike(String value) {
+            addCriterion("push like", value, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotLike(String value) {
+            addCriterion("push not like", value, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIn(List<String> values) {
+            addCriterion("push in", values, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotIn(List<String> values) {
+            addCriterion("push not in", values, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushBetween(String value1, String value2) {
+            addCriterion("push between", value1, value2, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotBetween(String value1, String value2) {
+            addCriterion("push not between", value1, value2, "push");
             return (Criteria) this;
         }
 
@@ -2091,8 +2519,18 @@ public class GatewayConfigCondition {
             return (Criteria) this;
         }
 
+        public Criteria andPlaceholderLikeInsensitive(String value) {
+            addCriterion("upper(placeholder) like", value.toUpperCase(), "placeholder");
+            return (Criteria) this;
+        }
+
         public Criteria andValueLikeInsensitive(String value) {
             addCriterion("upper(`value`) like", value.toUpperCase(), "value");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLikeInsensitive(String value) {
+            addCriterion("upper(push) like", value.toUpperCase(), "push");
             return (Criteria) this;
         }
 

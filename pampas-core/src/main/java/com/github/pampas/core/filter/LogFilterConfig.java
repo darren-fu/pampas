@@ -13,7 +13,7 @@ import java.util.List;
  * User: darrenfu
  * Date: 2018-12-06
  */
-@SpiMeta(name = LogFilterConfig.SPI_META_NAME)
+@SpiMeta(name = LogFilterConfig.SPI_META_NAME, desc = "日志记录配置项")
 @Data
 public class LogFilterConfig implements DefinableConfig {
 

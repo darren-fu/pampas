@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * User: darrenfu
  * Date: 2018-12-06
  */
-@SpiMeta(name = AuthFilterConfig.SPI_META_NAME)
+@SpiMeta(name = AuthFilterConfig.SPI_META_NAME,desc = "鉴权过滤配置项")
 @Data
 public class AuthFilterConfig implements DefinableConfig {
 

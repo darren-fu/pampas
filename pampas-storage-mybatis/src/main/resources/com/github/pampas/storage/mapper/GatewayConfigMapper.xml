@@ -13,8 +13,12 @@
     <result column="key" jdbcType="VARCHAR" property="key" />
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="default_value" jdbcType="VARCHAR" property="defaultValue" />
+    <result column="placeholder" jdbcType="VARCHAR" property="placeholder" />
     <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="required" jdbcType="BIT" property="required" />
+    <result column="multi" jdbcType="BIT" property="multi" />
     <result column="status" jdbcType="BIT" property="status" />
+    <result column="push" jdbcType="VARCHAR" property="push" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -81,7 +85,8 @@
   <sql id="Base_Column_List">
     id, gateway_group, gateway_instance_id, config_spi_interface, config_spi_interface_desc, 
     config_spi_class, config_spi_name, config_spi_desc, `key`, `label`, default_value, 
-    `value`, `status`, remark, insert_time, update_time, is_del
+    placeholder, `value`, required, multi, `status`, push, remark, insert_time, update_time, 
+    is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewayConfigCondition" resultMap="BaseResultMap">
     select
@@ -129,14 +134,16 @@
       config_spi_interface, config_spi_interface_desc, 
       config_spi_class, config_spi_name, config_spi_desc, 
       `key`, `label`, default_value, 
-      `value`, `status`, remark, 
+      placeholder, `value`, required, 
+      multi, `status`, push, remark, 
       insert_time, update_time, is_del
       )
     values (#{gatewayGroup,jdbcType=VARCHAR}, #{gatewayInstanceId,jdbcType=VARCHAR}, 
       #{configSpiInterface,jdbcType=VARCHAR}, #{configSpiInterfaceDesc,jdbcType=VARCHAR}, 
       #{configSpiClass,jdbcType=VARCHAR}, #{configSpiName,jdbcType=VARCHAR}, #{configSpiDesc,jdbcType=VARCHAR}, 
       #{key,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{defaultValue,jdbcType=VARCHAR}, 
-      #{value,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, 
+      #{placeholder,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{required,jdbcType=BIT}, 
+      #{multi,jdbcType=BIT}, #{status,jdbcType=BIT}, #{push,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT}
       )
   </insert>
@@ -176,11 +183,23 @@
       <if test="defaultValue != null">
         default_value,
       </if>
+      <if test="placeholder != null">
+        placeholder,
+      </if>
       <if test="value != null">
         `value`,
       </if>
+      <if test="required != null">
+        required,
+      </if>
+      <if test="multi != null">
+        multi,
+      </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="push != null">
+        push,
       </if>
       <if test="remark != null">
         remark,
@@ -226,11 +245,23 @@
       <if test="defaultValue != null">
         #{defaultValue,jdbcType=VARCHAR},
       </if>
+      <if test="placeholder != null">
+        #{placeholder,jdbcType=VARCHAR},
+      </if>
       <if test="value != null">
         #{value,jdbcType=VARCHAR},
       </if>
+      <if test="required != null">
+        #{required,jdbcType=BIT},
+      </if>
+      <if test="multi != null">
+        #{multi,jdbcType=BIT},
+      </if>
       <if test="status != null">
         #{status,jdbcType=BIT},
+      </if>
+      <if test="push != null">
+        #{push,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -288,11 +319,23 @@
       <if test="record.defaultValue != null">
         default_value = #{record.defaultValue,jdbcType=VARCHAR},
       </if>
+      <if test="record.placeholder != null">
+        placeholder = #{record.placeholder,jdbcType=VARCHAR},
+      </if>
       <if test="record.value != null">
         `value` = #{record.value,jdbcType=VARCHAR},
       </if>
+      <if test="record.required != null">
+        required = #{record.required,jdbcType=BIT},
+      </if>
+      <if test="record.multi != null">
+        multi = #{record.multi,jdbcType=BIT},
+      </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.push != null">
+        push = #{record.push,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -324,8 +367,12 @@
       `key` = #{record.key,jdbcType=VARCHAR},
       `label` = #{record.label,jdbcType=VARCHAR},
       default_value = #{record.defaultValue,jdbcType=VARCHAR},
+      placeholder = #{record.placeholder,jdbcType=VARCHAR},
       `value` = #{record.value,jdbcType=VARCHAR},
+      required = #{record.required,jdbcType=BIT},
+      multi = #{record.multi,jdbcType=BIT},
       `status` = #{record.status,jdbcType=BIT},
+      push = #{record.push,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -367,11 +414,23 @@
       <if test="defaultValue != null">
         default_value = #{defaultValue,jdbcType=VARCHAR},
       </if>
+      <if test="placeholder != null">
+        placeholder = #{placeholder,jdbcType=VARCHAR},
+      </if>
       <if test="value != null">
         `value` = #{value,jdbcType=VARCHAR},
       </if>
+      <if test="required != null">
+        required = #{required,jdbcType=BIT},
+      </if>
+      <if test="multi != null">
+        multi = #{multi,jdbcType=BIT},
+      </if>
       <if test="status != null">
         `status` = #{status,jdbcType=BIT},
+      </if>
+      <if test="push != null">
+        push = #{push,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -400,8 +459,12 @@
       `key` = #{key,jdbcType=VARCHAR},
       `label` = #{label,jdbcType=VARCHAR},
       default_value = #{defaultValue,jdbcType=VARCHAR},
+      placeholder = #{placeholder,jdbcType=VARCHAR},
       `value` = #{value,jdbcType=VARCHAR},
+      required = #{required,jdbcType=BIT},
+      multi = #{multi,jdbcType=BIT},
       `status` = #{status,jdbcType=BIT},
+      push = #{push,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

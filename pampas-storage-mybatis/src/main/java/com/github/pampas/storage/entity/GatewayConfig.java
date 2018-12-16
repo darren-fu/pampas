@@ -86,15 +86,42 @@ public class GatewayConfig implements Serializable {
 
     /**
      *
+     * Corresponding to the database column p_gateway_config.placeholder
+     */
+    private String placeholder;
+
+    /**
+     *
      * Corresponding to the database column p_gateway_config.value
      */
     private String value;
+
+    /**
+     * 是否必须
+     *
+     * Corresponding to the database column p_gateway_config.required
+     */
+    private Boolean required;
+
+    /**
+     * 多行
+     *
+     * Corresponding to the database column p_gateway_config.multi
+     */
+    private Boolean multi;
 
     /**
      *
      * Corresponding to the database column p_gateway_config.status
      */
     private Boolean status;
+
+    /**
+     * 推送
+     *
+     * Corresponding to the database column p_gateway_config.push
+     */
+    private String push;
 
     /**
      * 备注
@@ -405,6 +432,31 @@ public class GatewayConfig implements Serializable {
     }
 
     /**
+     * This method returns the value of the database column p_gateway_config.placeholder
+     *
+     * @return the value of p_gateway_config.placeholder
+     */
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    /**
+     */
+    public GatewayConfig withPlaceholder(String placeholder) {
+        this.setPlaceholder(placeholder);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.placeholder
+     *
+     * @param placeholder the value for p_gateway_config.placeholder
+     */
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+    }
+
+    /**
      * This method returns the value of the database column p_gateway_config.value
      *
      * @return the value of p_gateway_config.value
@@ -430,6 +482,56 @@ public class GatewayConfig implements Serializable {
     }
 
     /**
+     * This method returns the value of the database column p_gateway_config.required
+     *
+     * @return the value of p_gateway_config.required
+     */
+    public Boolean getRequired() {
+        return required;
+    }
+
+    /**
+     */
+    public GatewayConfig withRequired(Boolean required) {
+        this.setRequired(required);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.required
+     *
+     * @param required the value for p_gateway_config.required
+     */
+    public void setRequired(Boolean required) {
+        this.required = required;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.multi
+     *
+     * @return the value of p_gateway_config.multi
+     */
+    public Boolean getMulti() {
+        return multi;
+    }
+
+    /**
+     */
+    public GatewayConfig withMulti(Boolean multi) {
+        this.setMulti(multi);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.multi
+     *
+     * @param multi the value for p_gateway_config.multi
+     */
+    public void setMulti(Boolean multi) {
+        this.multi = multi;
+    }
+
+    /**
      * This method returns the value of the database column p_gateway_config.status
      *
      * @return the value of p_gateway_config.status
@@ -452,6 +554,31 @@ public class GatewayConfig implements Serializable {
      */
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_config.push
+     *
+     * @return the value of p_gateway_config.push
+     */
+    public String getPush() {
+        return push;
+    }
+
+    /**
+     */
+    public GatewayConfig withPush(String push) {
+        this.setPush(push);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_config.push
+     *
+     * @param push the value for p_gateway_config.push
+     */
+    public void setPush(String push) {
+        this.push = push;
     }
 
     /**
@@ -573,8 +700,12 @@ public class GatewayConfig implements Serializable {
         sb.append(", key=").append(key);
         sb.append(", label=").append(label);
         sb.append(", defaultValue=").append(defaultValue);
+        sb.append(", placeholder=").append(placeholder);
         sb.append(", value=").append(value);
+        sb.append(", required=").append(required);
+        sb.append(", multi=").append(multi);
         sb.append(", status=").append(status);
+        sb.append(", push=").append(push);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
         sb.append(", updateTime=").append(updateTime);
@@ -608,8 +739,12 @@ public class GatewayConfig implements Serializable {
             && (this.getKey() == null ? other.getKey() == null : this.getKey().equals(other.getKey()))
             && (this.getLabel() == null ? other.getLabel() == null : this.getLabel().equals(other.getLabel()))
             && (this.getDefaultValue() == null ? other.getDefaultValue() == null : this.getDefaultValue().equals(other.getDefaultValue()))
+            && (this.getPlaceholder() == null ? other.getPlaceholder() == null : this.getPlaceholder().equals(other.getPlaceholder()))
             && (this.getValue() == null ? other.getValue() == null : this.getValue().equals(other.getValue()))
+            && (this.getRequired() == null ? other.getRequired() == null : this.getRequired().equals(other.getRequired()))
+            && (this.getMulti() == null ? other.getMulti() == null : this.getMulti().equals(other.getMulti()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getPush() == null ? other.getPush() == null : this.getPush().equals(other.getPush()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -633,8 +768,12 @@ public class GatewayConfig implements Serializable {
         result = prime * result + ((getKey() == null) ? 0 : getKey().hashCode());
         result = prime * result + ((getLabel() == null) ? 0 : getLabel().hashCode());
         result = prime * result + ((getDefaultValue() == null) ? 0 : getDefaultValue().hashCode());
+        result = prime * result + ((getPlaceholder() == null) ? 0 : getPlaceholder().hashCode());
         result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
+        result = prime * result + ((getRequired() == null) ? 0 : getRequired().hashCode());
+        result = prime * result + ((getMulti() == null) ? 0 : getMulti().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getPush() == null) ? 0 : getPush().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -657,8 +796,12 @@ public class GatewayConfig implements Serializable {
         key("key", "key", "VARCHAR", true),
         label("label", "label", "VARCHAR", true),
         defaultValue("default_value", "defaultValue", "VARCHAR", false),
+        placeholder("placeholder", "placeholder", "VARCHAR", false),
         value("value", "value", "VARCHAR", true),
+        required("required", "required", "BIT", false),
+        multi("multi", "multi", "BIT", false),
         status("status", "status", "BIT", true),
+        push("push", "push", "VARCHAR", false),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false),

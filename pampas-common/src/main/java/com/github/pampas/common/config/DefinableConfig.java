@@ -30,15 +30,15 @@ public interface DefinableConfig extends VersionConfig {
             this(ConfigLevelEnum.GROUP, key, label, null);
         }
 
-        public PropDefine(String key, String label, String defaultValue) {
-            this(ConfigLevelEnum.GROUP, key, label, defaultValue);
+        public PropDefine(String key, String label, String placeholder) {
+            this(ConfigLevelEnum.GROUP, key, label, placeholder);
         }
 
-        public PropDefine(ConfigLevelEnum level, String key, String label, String defaultValue) {
+        public PropDefine(ConfigLevelEnum level, String key, String label, String placeholder) {
             this.level = level;
             this.key = key;
             this.label = label;
-            this.defaultValue = defaultValue;
+            this.placeholder = placeholder;
         }
 
 
@@ -48,7 +48,11 @@ public interface DefinableConfig extends VersionConfig {
 
         private String label;
 
-        private String defaultValue;
+        private String placeholder;
+
+        private boolean required = true;
+
+        private boolean multi = false;
     }
 
     enum ConfigLevelEnum {

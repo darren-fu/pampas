@@ -57,7 +57,9 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
                 gatewayConfig.setConfigSpiDesc(spiDesc);
                 gatewayConfig.setKey(config.getKey());
                 gatewayConfig.setLabel(config.getLabel());
-                gatewayConfig.setDefaultValue(config.getDefaultValue());
+                gatewayConfig.setPlaceholder(config.getPlaceholder());
+                gatewayConfig.setRequired(config.isRequired());
+                gatewayConfig.setMulti(config.isMulti());
                 gatewayConfigMapper.insertSelective(gatewayConfig);
                 log.info("新增网关配置项:{}", config);
             }
