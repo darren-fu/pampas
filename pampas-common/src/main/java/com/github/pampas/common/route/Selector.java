@@ -30,7 +30,7 @@ import com.github.pampas.common.extension.Spi;
  * @author: darrenfu
  * @date: 18-2-10
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON,desc = "路由选择器")
 public interface Selector<R extends PampasRequest> {
 
     String name();

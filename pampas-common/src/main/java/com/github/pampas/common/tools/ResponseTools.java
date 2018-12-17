@@ -42,10 +42,8 @@ public class ResponseTools {
         EMPTY.headers().add(HttpHeaderNames.CONTENT_LENGTH, 0);
         EMPTY.headers().add(HttpHeaderNames.CONTENT_TYPE, TEXT_PLAIN);
 
-        EMPTY = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer("OK", CharsetUtil.UTF_8));
-        EMPTY.headers().add(HttpHeaderNames.CONTENT_LENGTH, "OK".getBytes().length);
-        EMPTY.headers().add(HttpHeaderNames.CONTENT_TYPE, TEXT_PLAIN);
     }
+
 
     public static void sendResp(ChannelHandlerContext ctx, Object resp, boolean keepalive) {
         HttpResponse objToFlush = ResponseTools.buildResponse(resp);

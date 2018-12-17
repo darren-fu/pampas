@@ -27,7 +27,7 @@ import java.util.List;
  * 服务实例上下文
  * Created by darrenfu on 17-6-26.
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON,desc = "服务发现容器")
 public interface ServerContext {
 
 

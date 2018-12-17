@@ -31,8 +31,9 @@ public class PampasConsts {
     public static final String GATEWAY_REQ_PREFIX = "/_gateway_";
 
     public static final class GatewayOperation {
-        public static final String RERRESH_CONFIG_BY_KEY = "spi_config_loader_key";
-        public static final String RERRESH_CONFIG_BY_NAME= "spi_config_loader_name";
+        public static final String REFRESH_CONFIG_BY_KEY = "refresh_spi_config_loader_key";
+        public static final String REFRESH_CONFIG_BY_NAME = "refresh_spi_config_loader_name";
+        public static final String REFRESH_DEFINABLE_CONFIG_BY_CLASS_NAME = "refresh_definable_config_by_name";
     }
 
 

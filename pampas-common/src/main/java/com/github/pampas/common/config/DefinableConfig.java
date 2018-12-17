@@ -19,9 +19,6 @@ public interface DefinableConfig extends VersionConfig {
 
     List<PropDefine> propDefines();
 
-    default ConfigLevelEnum configLevel() {
-        return ConfigLevelEnum.GROUP;
-    }
 
     @Data
     class PropDefine {

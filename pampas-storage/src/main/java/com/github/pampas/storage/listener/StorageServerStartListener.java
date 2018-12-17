@@ -2,12 +2,15 @@ package com.github.pampas.storage.listener;
 
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.DefinableConfig;
+import com.github.pampas.common.discover.ServerContext;
+import com.github.pampas.common.exec.Caller;
 import com.github.pampas.common.exec.Filter;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.extension.Spi;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.loadbalance.LoadBalancer;
+import com.github.pampas.common.route.Selector;
 import com.github.pampas.core.server.PampasServer;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
 import com.github.pampas.storage.config.SpringContextHolder;
@@ -68,7 +71,7 @@ public class StorageServerStartListener implements ServerReadyToStartListener {
                         propDefines);
             }
 
-            List<GatewaySpi> spiList = collectSpi(pampasServer, Worker.class, LoadBalancer.class, Filter.class, ConfigLoader.class);
+            List<GatewaySpi> spiList = collectSpi(pampasServer, Worker.class, ServerContext.class, LoadBalancer.class, Filter.class, ConfigLoader.class, Selector.class);
             GatewaySpiService spiService = SpringContextHolder.getBean(GatewaySpiService.class);
             spiService.saveGatewaySpi(pampasServer.group(), pampasServer.id(), spiList);
             log.info("保存网关SPI列表-<Worker>: {}个", spiList.size());
