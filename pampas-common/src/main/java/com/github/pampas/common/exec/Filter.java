@@ -22,6 +22,7 @@ import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.Scope;
 import com.github.pampas.common.extension.Spi;
+import com.github.pampas.common.route.Locator;
 
 /**
  * worker回调、过滤器
@@ -37,29 +38,31 @@ public interface Filter<Q extends Object, R extends Object> {
 
     /**
      * 请求执行前运行.
-     *
-     * @param req         the req
+     *  @param req         the req
+     * @param locator
      * @param filterChain
      */
-    void before(PampasRequest<Q> req, FilterChain filterChain);
+    void before(PampasRequest<Q> req, Locator locator, FilterChain filterChain);
 
     /**
      * 响应成功时执行
      *
      * @param req         the req
+     * @param locator
      * @param resp        the resp
      * @param filterChain
      * @return the response info
      */
-    void onSuccess(PampasRequest<Q> req, PampasResponse<R> resp, FilterChain filterChain);
+    void onSuccess(PampasRequest<Q> req, Locator locator, PampasResponse<R> resp, FilterChain filterChain);
 
     /**
      * 响应异常时执行
      *
      * @param req         the req
+     * @param locator
      * @param throwable   the throwable
      * @param filterChain
      * @return the response info
      */
-    void onException(PampasRequest<Q> req, Throwable throwable, FilterChain filterChain);
+    void onException(PampasRequest<Q> req, Locator locator, Throwable throwable, FilterChain filterChain);
 }

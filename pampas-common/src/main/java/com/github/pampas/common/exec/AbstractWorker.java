@@ -62,7 +62,7 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
                 for (Filter filter : filterList) {
                     FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
                     if (!filterChain.isFilterChainStop()) {
-                        filter.before(req, filterChain);
+                        filter.before(req, locator, filterChain);
                     } else if (filterChain.getResponse() != null) {
                         // filter终端 并且返回response
                         this.sendPampasResponse(req.channelHandlerContext(), filterChain.getResponse(), req.isKeepalive());
@@ -86,9 +86,9 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
                     FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
                     if (!filterChain.isFilterChainStop()) {
                         if (pampasResponse.success()) {
-                            filter.onSuccess(req, pampasResponse, filterChain);
+                            filter.onSuccess(req, locator, pampasResponse, filterChain);
                         } else if (pampasResponse.exception() != null) {
-                            filter.onException(req, pampasResponse.exception(), filterChain);
+                            filter.onException(req, locator, pampasResponse.exception(), filterChain);
                         }
                     } else if (filterChain.getResponse() != null) {
                         // filter终端 并且返回response
