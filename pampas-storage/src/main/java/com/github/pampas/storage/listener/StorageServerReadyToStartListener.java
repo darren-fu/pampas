@@ -3,12 +3,12 @@ package com.github.pampas.storage.listener;
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.common.discover.ServerContext;
-import com.github.pampas.common.exec.Caller;
 import com.github.pampas.common.exec.Filter;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.extension.Spi;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.extension.SpiMeta;
+import com.github.pampas.common.extension.advance.SpiConfigRefresher;
 import com.github.pampas.common.loadbalance.LoadBalancer;
 import com.github.pampas.common.route.Selector;
 import com.github.pampas.core.server.PampasServer;
@@ -32,15 +32,15 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Description:
  * User: darrenfu
- * Date: 2018-09-17
+ * Date: 2018-12-20
  */
-@SpiMeta
-public class StorageServerStartListener implements ServerReadyToStartListener {
+@SpiMeta(name = "storage-server-ready-to-start-listener")
+public class StorageServerReadyToStartListener implements ServerReadyToStartListener {
 
-    private static final Logger log = LoggerFactory.getLogger(StorageServerStartListener.class);
+    private static final Logger log = LoggerFactory.getLogger(StorageServerReadyToStartListener.class);
 
     @Override
-    public void readyToStart(PampasServer pampasServer) {
+    public void ready(PampasServer pampasServer) {
         log.info("服务器{}准备启动:{}", pampasServer, LocalDateTime.now().toString());
 
         GatewayInstanceService gatewayInstanceService = SpringContextHolder.getBean(GatewayInstanceService.class);
@@ -57,6 +57,12 @@ public class StorageServerStartListener implements ServerReadyToStartListener {
         gatewayInstanceService.save(instance);
         log.info("记录网关服务启动: {}", instance);
 
+        SpiContext<SpiConfigRefresher> refresherSpiContext = SpiContext.getContext(SpiConfigRefresher.class);
+        for (SpiConfigRefresher refresher : refresherSpiContext.getSpiInstances()) {
+            refresher.refreshSpiConfig();
+        }
+
+        // 异步记录网关插件等相关数据到storage
         CompletableFuture.runAsync(() -> {
             SpiContext<DefinableConfig> listableConfigContext = SpiContext.getContext(DefinableConfig.class);
             List<DefinableConfig> spiInstances = listableConfigContext.getSpiInstances();
@@ -77,8 +83,6 @@ public class StorageServerStartListener implements ServerReadyToStartListener {
             log.info("保存网关SPI列表-<Worker>: {}个", spiList.size());
 
         });
-
-
     }
 
     private List<GatewaySpi> collectSpi(PampasServer pampasServer, Class... spiInterfaces) {
@@ -95,8 +99,11 @@ public class StorageServerStartListener implements ServerReadyToStartListener {
                 spi.setSpiInterfaceDesc(desc);
                 spi.setSpiInterface(spiInterface.getName());
                 spi.setSpiClass(clz.getName());
-                spi.setSpiName(SpiContext.getSpiName(clz));
-                spi.setSpiDesc(SpiContext.getSpiDesc(clz));
+                SpiMeta spiMeta = SpiContext.getSpiMeta(clz);
+                spi.setSpiName(spiMeta.name());
+                spi.setOrder(spiMeta.order());
+                spi.setStatus(spiMeta.active());
+                spi.setSpiDesc(spiMeta.desc());
                 spiList.add(spi);
             });
         }

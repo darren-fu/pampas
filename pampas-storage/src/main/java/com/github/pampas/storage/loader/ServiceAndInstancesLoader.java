@@ -2,6 +2,7 @@ package com.github.pampas.storage.loader;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.github.pampas.common.base.PampasConsts;
+import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.discover.ServerInstance;
 import com.github.pampas.common.discover.ServiceAndInstancesConfig;
@@ -43,22 +44,32 @@ public class ServiceAndInstancesLoader extends AbstractConfigLoader<ServiceAndIn
         log.info("加载服务实例列表:{}", ServiceAndInstancesLoader.class.getSimpleName());
 
         Set<String> serviceNameSet = new HashSet<>(64);
-        RouteRuleConfig routeRuleConfig = (RouteRuleConfig) SpiContext.getContext(VersionConfig.class)
-                .getSpiInstanceByName(RouteRuleConfig.SPI_META_NAME);
-        for (RulePackage rulePackage : routeRuleConfig.getRulePackages()) {
-            if (CollectionUtils.isEmpty(rulePackage.getRuleList())) {
+        List<ConfigLoader> routeRuleConfigLoaderList = SpiContext.getContext(ConfigLoader.class)
+                .getSpiInstancesByKey(PampasConsts.ConfigLoaderKey.ROUTE_RULE);
+
+        for (ConfigLoader configLoader : routeRuleConfigLoaderList) {
+            if (configLoader.getClass().getName().equals(RouteRuleConfig.class.getName())) {
                 continue;
             }
-            for (AbstractRule rule : rulePackage.getRuleList()) {
-                if (rule.getHostStrategy() == HostStrategyEnum.AUTO) {
-                    serviceNameSet.add(rule.getService());
+            RouteRuleConfig routeRuleConfig = (RouteRuleConfig) configLoader.loadConfig();
+            for (RulePackage rulePackage : routeRuleConfig.getRulePackages()) {
+                if (CollectionUtils.isEmpty(rulePackage.getRuleList())) {
+                    continue;
+                }
+                for (AbstractRule rule : rulePackage.getRuleList()) {
+                    if (rule.getHostStrategy() == HostStrategyEnum.AUTO) {
+                        serviceNameSet.add(rule.getService());
+                    }
                 }
             }
         }
+
+
         log.info("网关需要获取实例列表的服务:[{}]个,如下:{}", serviceNameSet.size(), serviceNameSet);
 
 
-        ServiceAndInstancesConfig serviceAndInstancesConfig = (ServiceAndInstancesConfig) SpiContext.getContext(VersionConfig.class).getSpiInstanceByName(ServiceAndInstancesConfig.SPI_META_NAME);
+        ServiceAndInstancesConfig serviceAndInstancesConfig = (ServiceAndInstancesConfig) SpiContext.getContext(VersionConfig.class)
+                .getSpiInstanceByName(ServiceAndInstancesConfig.SPI_META_NAME);
 
         // 获取所有服务实例
         if (serviceNameSet != null && serviceNameSet.size() > 0) {

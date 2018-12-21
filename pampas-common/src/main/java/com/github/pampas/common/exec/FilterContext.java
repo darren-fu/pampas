@@ -34,14 +34,14 @@ public class FilterContext {
 
     }
 
-    public FilterChain chain(String currentFilter) {
+    protected FilterChain chain(String currentFilter) {
         FilterChain filterChain = threadLocal.get();
         filterChain.setCurrent(currentFilter);
         filterChain.resetStatus();
         return filterChain;
     }
 
-    public void resetChain() {
+    protected void resetChain() {
         FilterChain filterChain = threadLocal.get();
         filterChain.resetAndClear();
     }

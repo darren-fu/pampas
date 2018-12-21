@@ -9,7 +9,7 @@ import com.github.pampas.core.server.PampasServer;
  * User: darrenfu
  * Date: 2018-09-17
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "网关启动完成监听器")
 public interface ServerStartedListener {
     void started(PampasServer pampasServer);
 }

@@ -23,10 +23,11 @@ import com.github.pampas.common.exception.PampasRequestException;
 import com.github.pampas.common.exec.Filter;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.exec.payload.DefaultPampasRequest;
+import com.github.pampas.common.exec.payload.HttpResponseHelper;
+import com.github.pampas.common.exec.payload.PampasResponse;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
-import com.github.pampas.common.tools.ResponseTools;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -41,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * HTTP请求处理器
@@ -88,7 +90,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
         if (msg == null || !(msg instanceof FullHttpRequest)) {
             result = "非法请求";
-            ResponseTools.sendResp(ctx, HttpResponseStatus.BAD_REQUEST, result);
+            HttpResponse httpResponse = HttpResponseHelper.buildHttpTextResponse("非法请求", HttpResponseStatus.BAD_REQUEST, HttpResponseHelper.TEXT_PLAIN);
+            HttpResponseHelper.sendHttpResponse(ctx, httpResponse, false);
             return;
         }
         FullHttpRequest httpRequest = (FullHttpRequest) msg;
@@ -98,7 +101,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         try {
             if (GatewayRequestRouter.isGatewayRequest(httpRequest.uri())) {
                 HttpResponse httpResponse = GatewayRequestRouter.handleGatewayRequest(httpRequest);
-                ResponseTools.sendResp(ctx, httpResponse, false);
+                HttpResponseHelper.sendHttpResponse(ctx, httpResponse, false);
                 return;
             }
 
@@ -119,12 +122,25 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 throw new PampasRequestException(HttpResponseStatus.NOT_FOUND, "请求没有匹配到合适的路由:" + requestInfo.originUri());
             }
 
+            // 获取处理该请求的worker
             Worker worker = getWorker(locator.getWorker());
+            if (log.isDebugEnabled()) {
+                log.debug("本次请求使用的worker:{}", worker.getClass().getSimpleName());
+            }
+
+            // 获取Filter列表
             List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
-            worker.execute(requestInfo, locator, filterList);
+            if (log.isDebugEnabled()) {
+                log.debug("本次请求使用到的Filter:{}", filterList.stream().map(v -> v.getClass().getSimpleName()).collect(Collectors.toList()));
+            }
+            // worker处理请求，并返回future
+            CompletableFuture<PampasResponse> executeFuture = worker.execute(requestInfo, locator, filterList);
+            // worker处理完成后，发送相应
+            executeFuture.whenComplete((resp, ex) -> HttpResponseHelper.sendHttpResponse(ctx, resp != null ? resp : ex, HttpUtil.isKeepAlive(httpRequest)));
+
         } catch (Exception ex) {
             log.warn("发生错误:{}", ex.getMessage(), ex);
-            ResponseTools.sendResp(ctx, ex, HttpUtil.isKeepAlive(httpRequest));
+            HttpResponseHelper.sendHttpResponse(ctx, ex, HttpUtil.isKeepAlive(httpRequest));
         }
 
     }

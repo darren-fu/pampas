@@ -1073,6 +1073,108 @@ public class GatewaySpiCondition {
             return (Criteria) this;
         }
 
+        public Criteria andOrderIsNull() {
+            addCriterion("`order` is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIsNotNull() {
+            addCriterion("`order` is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderEqualTo(Integer value) {
+            addCriterion("`order` =", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNotEqualTo(Integer value) {
+            addCriterion("`order` <>", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderGreaterThan(Integer value) {
+            addCriterion("`order` >", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("`order` >=", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderLessThan(Integer value) {
+            addCriterion("`order` <", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("`order` <=", value, "order");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andOrderLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("`order` <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIn(List<Integer> values) {
+            addCriterion("`order` in", values, "order");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNotIn(List<Integer> values) {
+            addCriterion("`order` not in", values, "order");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderBetween(Integer value1, Integer value2) {
+            addCriterion("`order` between", value1, value2, "order");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("`order` not between", value1, value2, "order");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("`status` is null");
             return (Criteria) this;
@@ -1172,6 +1274,118 @@ public class GatewaySpiCondition {
 
         public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
             addCriterion("`status` not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIsNull() {
+            addCriterion("push is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIsNotNull() {
+            addCriterion("push is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEqualTo(String value) {
+            addCriterion("push =", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push = ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotEqualTo(String value) {
+            addCriterion("push <>", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushNotEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push <> ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushGreaterThan(String value) {
+            addCriterion("push >", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushGreaterThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push > ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushGreaterThanOrEqualTo(String value) {
+            addCriterion("push >=", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushGreaterThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push >= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLessThan(String value) {
+            addCriterion("push <", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushLessThanColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push < ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLessThanOrEqualTo(String value) {
+            addCriterion("push <=", value, "push");
+            return (Criteria) this;
+        }
+
+        /**
+         */
+        public Criteria andPushLessThanOrEqualToColumn(GatewaySpi.Column column) {
+            addCriterion(new StringBuilder("push <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLike(String value) {
+            addCriterion("push like", value, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotLike(String value) {
+            addCriterion("push not like", value, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIn(List<String> values) {
+            addCriterion("push in", values, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotIn(List<String> values) {
+            addCriterion("push not in", values, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushBetween(String value1, String value2) {
+            addCriterion("push between", value1, value2, "push");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushNotBetween(String value1, String value2) {
+            addCriterion("push not between", value1, value2, "push");
             return (Criteria) this;
         }
 
@@ -1625,6 +1839,11 @@ public class GatewaySpiCondition {
 
         public Criteria andSpiDescLikeInsensitive(String value) {
             addCriterion("upper(spi_desc) like", value.toUpperCase(), "spiDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushLikeInsensitive(String value) {
+            addCriterion("upper(push) like", value.toUpperCase(), "push");
             return (Criteria) this;
         }
 

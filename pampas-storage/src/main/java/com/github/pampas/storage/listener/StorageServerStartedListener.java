@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
  * User: darrenfu
  * Date: 2018-09-18
  */
-@SpiMeta
+@SpiMeta(name = "storage-server-started-listener")
 public class StorageServerStartedListener implements ServerStartedListener {
 
-    private static final Logger log = LoggerFactory.getLogger(StorageServerStartListener.class);
+    private static final Logger log = LoggerFactory.getLogger(StorageServerConfigLoadedListener.class);
 
     @Override
     public void started(PampasServer pampasServer) {

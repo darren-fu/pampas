@@ -16,15 +16,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <opentracing.version>0.21.0</opentracing.version>
+        <resilience4j.version>0.13.2</resilience4j.version>
     </properties>
     <dependencies>
-
         <dependency>
             <groupId>com.github.pampas</groupId>
             <artifactId>pampas-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <!--<dependency>-->
         <!--<groupId>com.github.pampas</groupId>-->
         <!--<artifactId>pampas-asynchttp</artifactId>-->
@@ -69,25 +68,38 @@
             <artifactId>snakeyaml</artifactId>
             <version>1.19</version>
         </dependency>
-
-
-        <!--<dependency>-->
-        <!--<groupId>com.google.auto.value</groupId>-->
-        <!--<artifactId>auto-value</artifactId>-->
-        <!--<scope>1.5.3</scope>-->
-        <!--</dependency>-->
-
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+            <version>0.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-ratelimiter</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-retry</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-bulkhead</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-cache</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-timelimiter</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
     </dependencies>
 
-    <!--<build>-->
-    <!--<extensions>-->
-    <!--<extension>-->
-    <!--<groupId>kr.motd.maven</groupId>-->
-    <!--<artifactId>os-maven-plugin</artifactId>-->
-    <!--<version>1.6.0</version>-->
-    <!--</extension>-->
-    <!--</extensions>-->
-    <!--</build>-->
     <build>
         <resources>
             <resource>

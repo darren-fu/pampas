@@ -26,6 +26,7 @@ import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.Locator;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 /**
@@ -60,7 +61,7 @@ public interface Worker<Q extends Object, R extends Object> {
      * @param filterList the filter
      * @return the future
      */
-    Future<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> filterList);
+    CompletableFuture<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> filterList);
 
 //    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
 }

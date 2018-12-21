@@ -38,31 +38,30 @@ public interface Filter<Q extends Object, R extends Object> {
 
     /**
      * 请求执行前运行.
-     *  @param req         the req
-     * @param locator
-     * @param filterChain
+     *
+     * @param req         请求详情
+     * @param locator     路由结果
+     * @param filterChain 过滤器链-可控制终止后续过滤器，直接返回结果
      */
     void before(PampasRequest<Q> req, Locator locator, FilterChain filterChain);
 
     /**
      * 响应成功时执行
      *
-     * @param req         the req
-     * @param locator
-     * @param resp        the resp
-     * @param filterChain
-     * @return the response info
+     * @param req         请求详情
+     * @param locator     路由结果
+     * @param resp        upstream的响应结果
+     * @param filterChain 过滤器链-可控制终止后续过滤器，直接返回结果
      */
     void onSuccess(PampasRequest<Q> req, Locator locator, PampasResponse<R> resp, FilterChain filterChain);
 
     /**
      * 响应异常时执行
      *
-     * @param req         the req
-     * @param locator
-     * @param throwable   the throwable
-     * @param filterChain
-     * @return the response info
+     * @param req         请求详情
+     * @param locator     路由结果
+     * @param throwable   upstream的响应结果
+     * @param filterChain 过滤器链-可控制终止后续过滤器，直接返回结果
      */
     void onException(PampasRequest<Q> req, Locator locator, Throwable throwable, FilterChain filterChain);
 }

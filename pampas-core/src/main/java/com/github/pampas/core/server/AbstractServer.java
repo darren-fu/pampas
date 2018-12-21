@@ -19,10 +19,12 @@
 package com.github.pampas.core.server;
 
 import com.github.pampas.common.config.ConfigLoader;
+import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.extension.SpiContext;
 import com.github.pampas.common.tools.AssertTools;
 import com.github.pampas.common.tools.InetTools;
 import com.github.pampas.core.base.CoreVersion;
+import com.github.pampas.core.server.listener.ServerConfigLoadedListener;
 import com.github.pampas.core.server.listener.ServerReadyToStartListener;
 import com.github.pampas.core.server.listener.ServerStartedListener;
 import com.google.common.base.MoreObjects;
@@ -47,6 +49,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -146,23 +149,29 @@ public abstract class AbstractServer implements PampasServer {
             throw new IllegalStateException("ServerStartedListener already started");
         }
         log.info("准备启动网关服务器,serverName:{},端口:{},版本:{}", serverName, port, CoreVersion.getVersion());
+        // 调用start监听
+        SpiContext<ServerReadyToStartListener> readyToStartListenerSpiContext = SpiContext.getContext(ServerReadyToStartListener.class);
+        for (ServerReadyToStartListener readyToStartListener : readyToStartListenerSpiContext.getSpiInstances()) {
+            readyToStartListener.ready(this);
+        }
 
         // 启动时优先启动ConfigLoader， 加载所有Config
         List<ConfigLoader> configLoaderList = SpiContext.getContext(ConfigLoader.class).getSpiInstances();
         log.info("待执行的ConfigLoader:{}", configLoaderList);
+        List<VersionConfig> versionConfigList = new ArrayList<>(configLoaderList.size());
         for (ConfigLoader configLoader : configLoaderList) {
             if (!configLoader.lazy()) {
-                configLoader.loadConfig();
+                VersionConfig versionConfig = configLoader.loadConfig();
+                versionConfigList.add(versionConfig);
                 log.info("ConfigLoader加载完成:{}", configLoader.getClass().getSimpleName());
-
             }
         }
         //校验状态
         checkState(ServerState.Starting);
         // 调用start监听
-        SpiContext<ServerReadyToStartListener> readyToStartListenerSpiContext = SpiContext.getContext(ServerReadyToStartListener.class);
-        for (ServerReadyToStartListener readyToStartListener : readyToStartListenerSpiContext.getSpiInstances()) {
-            readyToStartListener.readyToStart(this);
+        SpiContext<ServerConfigLoadedListener> serverConfigLoadedListener = SpiContext.getContext(ServerConfigLoadedListener.class);
+        for (ServerConfigLoadedListener configLoadedListener : serverConfigLoadedListener.getSpiInstances()) {
+            configLoadedListener.configLoaded(this, versionConfigList);
         }
         //校验状态
         checkState(ServerState.Starting);

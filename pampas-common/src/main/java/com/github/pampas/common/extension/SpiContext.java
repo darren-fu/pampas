@@ -23,6 +23,7 @@ import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.Configurable;
 import com.github.pampas.common.config.VersionConfig;
 import com.github.pampas.common.exception.PampasException;
+import com.github.pampas.common.extension.advance.SpiConfig;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -82,6 +83,30 @@ public class SpiContext<T> {
     private static final String PREFIX = "META-INF/services/";
 
     private ClassLoader classLoader;
+
+    public void updateSpiConfig(List<SpiConfig> spiConfigList) {
+        for (SpiConfig spiConfig : spiConfigList) {
+            try {
+                if (spiConfig == null || spiConfig.getSpiName() == null) {
+                    continue;
+                }
+                SpiClass<T> spiClass = spiClassMap.get(spiConfig.getSpiName());
+                if (spiClass != null) {
+                    SpiMeta spiMeta = spiClass.getSpiMeta();
+                    if (spiConfig.getActive() != null && spiConfig.getActive() != spiMeta.active()) {
+                        changeAnnotationValue(spiMeta, "active", spiConfig.getActive());
+                    }
+
+                    if (spiConfig.getOrder() != null && !spiConfig.getOrder().equals(spiMeta.order())) {
+                        changeAnnotationValue(spiMeta, "order", spiConfig.getOrder());
+                    }
+                }
+            } catch (Exception e) {
+                log.error("更新SPI配置:{},{}失败:{}", spiConfig, spiClassMap.get(spiConfig.getSpiName()), e.getMessage(), e);
+            }
+        }
+    }
+
 
     private SpiContext(Class<T> type) {
         this(type, Thread.currentThread().getContextClassLoader());

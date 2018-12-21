@@ -7,10 +7,14 @@ import com.github.pampas.core.server.PampasServer;
 /**
  * Description:
  * User: darrenfu
- * Date: 2018-09-17
+ * Date: 2018-12-20
  */
-@Spi(scope = Scope.SINGLETON)
+@Spi(scope = Scope.SINGLETON, desc = "网关准备启动监听器")
 public interface ServerReadyToStartListener {
-    void readyToStart(PampasServer pampasServer);
-
+    /**
+     * Ready.
+     *
+     * @param pampasServer the pampas server
+     */
+    void ready(PampasServer pampasServer);
 }

@@ -64,11 +64,24 @@ public class GatewaySpi implements Serializable {
     private String spiDesc;
 
     /**
+     * 优先级越小越高
+     *
+     * Corresponding to the database column p_gateway_spi.order
+     */
+    private Integer order;
+
+    /**
      * 状态 1 正常 0 停用
      *
      * Corresponding to the database column p_gateway_spi.status
      */
     private Boolean status;
+
+    /**
+     *
+     * Corresponding to the database column p_gateway_spi.push
+     */
+    private String push;
 
     /**
      * 备注
@@ -304,6 +317,31 @@ public class GatewaySpi implements Serializable {
     }
 
     /**
+     * This method returns the value of the database column p_gateway_spi.order
+     *
+     * @return the value of p_gateway_spi.order
+     */
+    public Integer getOrder() {
+        return order;
+    }
+
+    /**
+     */
+    public GatewaySpi withOrder(Integer order) {
+        this.setOrder(order);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_spi.order
+     *
+     * @param order the value for p_gateway_spi.order
+     */
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    /**
      * This method returns the value of the database column p_gateway_spi.status
      *
      * @return the value of p_gateway_spi.status
@@ -326,6 +364,31 @@ public class GatewaySpi implements Serializable {
      */
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    /**
+     * This method returns the value of the database column p_gateway_spi.push
+     *
+     * @return the value of p_gateway_spi.push
+     */
+    public String getPush() {
+        return push;
+    }
+
+    /**
+     */
+    public GatewaySpi withPush(String push) {
+        this.setPush(push);
+        return this;
+    }
+
+    /**
+     * This method sets the value of the database column p_gateway_spi.push
+     *
+     * @param push the value for p_gateway_spi.push
+     */
+    public void setPush(String push) {
+        this.push = push;
     }
 
     /**
@@ -444,7 +507,9 @@ public class GatewaySpi implements Serializable {
         sb.append(", spiClass=").append(spiClass);
         sb.append(", spiName=").append(spiName);
         sb.append(", spiDesc=").append(spiDesc);
+        sb.append(", order=").append(order);
         sb.append(", status=").append(status);
+        sb.append(", push=").append(push);
         sb.append(", remark=").append(remark);
         sb.append(", insertTime=").append(insertTime);
         sb.append(", updateTime=").append(updateTime);
@@ -475,7 +540,9 @@ public class GatewaySpi implements Serializable {
             && (this.getSpiClass() == null ? other.getSpiClass() == null : this.getSpiClass().equals(other.getSpiClass()))
             && (this.getSpiName() == null ? other.getSpiName() == null : this.getSpiName().equals(other.getSpiName()))
             && (this.getSpiDesc() == null ? other.getSpiDesc() == null : this.getSpiDesc().equals(other.getSpiDesc()))
+            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getPush() == null ? other.getPush() == null : this.getPush().equals(other.getPush()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getInsertTime() == null ? other.getInsertTime() == null : this.getInsertTime().equals(other.getInsertTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -496,7 +563,9 @@ public class GatewaySpi implements Serializable {
         result = prime * result + ((getSpiClass() == null) ? 0 : getSpiClass().hashCode());
         result = prime * result + ((getSpiName() == null) ? 0 : getSpiName().hashCode());
         result = prime * result + ((getSpiDesc() == null) ? 0 : getSpiDesc().hashCode());
+        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getPush() == null) ? 0 : getPush().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getInsertTime() == null) ? 0 : getInsertTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -516,7 +585,9 @@ public class GatewaySpi implements Serializable {
         spiClass("spi_class", "spiClass", "VARCHAR", false),
         spiName("spi_name", "spiName", "VARCHAR", false),
         spiDesc("spi_desc", "spiDesc", "VARCHAR", false),
+        order("order", "order", "INTEGER", true),
         status("status", "status", "BIT", true),
+        push("push", "push", "VARCHAR", false),
         remark("remark", "remark", "VARCHAR", false),
         insertTime("insert_time", "insertTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false),

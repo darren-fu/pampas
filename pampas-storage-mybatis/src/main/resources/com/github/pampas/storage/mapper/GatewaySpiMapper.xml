@@ -10,7 +10,9 @@
     <result column="spi_class" jdbcType="VARCHAR" property="spiClass" />
     <result column="spi_name" jdbcType="VARCHAR" property="spiName" />
     <result column="spi_desc" jdbcType="VARCHAR" property="spiDesc" />
+    <result column="order" jdbcType="INTEGER" property="order" />
     <result column="status" jdbcType="BIT" property="status" />
+    <result column="push" jdbcType="VARCHAR" property="push" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -76,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, gateway_group, gateway_instance_id, spi_interface, spi_interface_desc, spi_class, 
-    spi_name, spi_desc, `status`, remark, insert_time, update_time, is_del
+    spi_name, spi_desc, `order`, `status`, push, remark, insert_time, update_time, is_del
   </sql>
   <select id="selectByExample" parameterType="com.github.pampas.storage.entity.GatewaySpiCondition" resultMap="BaseResultMap">
     select
@@ -122,14 +124,14 @@
     </selectKey>
     insert into `p_gateway_spi` (gateway_group, gateway_instance_id, 
       spi_interface, spi_interface_desc, spi_class, 
-      spi_name, spi_desc, `status`, 
-      remark, insert_time, update_time, 
-      is_del)
+      spi_name, spi_desc, `order`, 
+      `status`, push, remark, insert_time, 
+      update_time, is_del)
     values (#{gatewayGroup,jdbcType=VARCHAR}, #{gatewayInstanceId,jdbcType=VARCHAR}, 
       #{spiInterface,jdbcType=VARCHAR}, #{spiInterfaceDesc,jdbcType=VARCHAR}, #{spiClass,jdbcType=VARCHAR}, 
-      #{spiName,jdbcType=VARCHAR}, #{spiDesc,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
-      #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDel,jdbcType=BIT})
+      #{spiName,jdbcType=VARCHAR}, #{spiDesc,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
+      #{status,jdbcType=BIT}, #{push,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.github.pampas.storage.entity.GatewaySpi">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -158,8 +160,14 @@
       <if test="spiDesc != null">
         spi_desc,
       </if>
+      <if test="order != null">
+        `order`,
+      </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="push != null">
+        push,
       </if>
       <if test="remark != null">
         remark,
@@ -196,8 +204,14 @@
       <if test="spiDesc != null">
         #{spiDesc,jdbcType=VARCHAR},
       </if>
+      <if test="order != null">
+        #{order,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         #{status,jdbcType=BIT},
+      </if>
+      <if test="push != null">
+        #{push,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -246,8 +260,14 @@
       <if test="record.spiDesc != null">
         spi_desc = #{record.spiDesc,jdbcType=VARCHAR},
       </if>
+      <if test="record.order != null">
+        `order` = #{record.order,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.push != null">
+        push = #{record.push,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -276,7 +296,9 @@
       spi_class = #{record.spiClass,jdbcType=VARCHAR},
       spi_name = #{record.spiName,jdbcType=VARCHAR},
       spi_desc = #{record.spiDesc,jdbcType=VARCHAR},
+      `order` = #{record.order,jdbcType=INTEGER},
       `status` = #{record.status,jdbcType=BIT},
+      push = #{record.push,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       insert_time = #{record.insertTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -309,8 +331,14 @@
       <if test="spiDesc != null">
         spi_desc = #{spiDesc,jdbcType=VARCHAR},
       </if>
+      <if test="order != null">
+        `order` = #{order,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         `status` = #{status,jdbcType=BIT},
+      </if>
+      <if test="push != null">
+        push = #{push,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -336,7 +364,9 @@
       spi_class = #{spiClass,jdbcType=VARCHAR},
       spi_name = #{spiName,jdbcType=VARCHAR},
       spi_desc = #{spiDesc,jdbcType=VARCHAR},
+      `order` = #{order,jdbcType=INTEGER},
       `status` = #{status,jdbcType=BIT},
+      push = #{push,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

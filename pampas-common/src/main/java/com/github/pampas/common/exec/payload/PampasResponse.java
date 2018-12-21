@@ -76,14 +76,57 @@ public interface PampasResponse<T> extends Operation {
         }
     }
 
-    class ExceptionPampasResponse implements PampasResponse<String> {
 
-        private String err;
+    @Data
+    class SuccessPampasResponse implements PampasResponse<Object> {
+        private Object responseData;
+
+        public SuccessPampasResponse(Object responseData) {
+            this.responseData = responseData;
+        }
+
+        @Override
+        public long id() {
+            return 0;
+        }
+
+        @Override
+        public boolean success() {
+            return true;
+        }
+
+        @Override
+        public Object responseData() {
+            return responseData;
+        }
+
+        @Override
+        public Throwable exception() {
+            return null;
+        }
+
+        @Override
+        public void cancel() {
+
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + OKPampasResponse.class.getSimpleName() + "]" + this.responseData();
+        }
+    }
+
+    class ExceptionPampasResponse implements PampasResponse<Throwable> {
+
 
         private Throwable throwable;
 
-        public ExceptionPampasResponse(String err, Throwable throwable) {
-            this.err = err;
+        public ExceptionPampasResponse(Throwable throwable) {
             this.throwable = throwable;
         }
 
@@ -99,8 +142,8 @@ public interface PampasResponse<T> extends Operation {
         }
 
         @Override
-        public String responseData() {
-            return null;
+        public Throwable responseData() {
+            return throwable;
         }
 
         @Override

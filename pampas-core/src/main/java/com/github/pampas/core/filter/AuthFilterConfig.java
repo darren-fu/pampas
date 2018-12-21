@@ -30,6 +30,7 @@ public class AuthFilterConfig implements DefinableConfig {
         PropDefine propDefine2 = new PropDefine("reject.http.status", "失败响应HTTP状态", "403");
         PropDefine propDefine3 = new PropDefine("reject.http.content-type", "失败响应类型", "application/json");
         PropDefine propDefine4 = new PropDefine("reject.http.response", "失败响应报文", "{code:\"403\"}");
+        propDefine4.setMulti(true);
         this.propDefineList.add(propDefine);
         this.propDefineList.add(propDefine2);
         this.propDefineList.add(propDefine3);

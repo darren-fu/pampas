@@ -1,6 +1,7 @@
 package com.github.pampas.storage.service;
 
 import com.github.pampas.common.tools.StreamTools;
+import com.github.pampas.common.tools.ext.ObjectUtils;
 import com.github.pampas.storage.entity.GatewaySpi;
 import com.github.pampas.storage.entity.GatewaySpiCondition;
 import com.github.pampas.storage.mapper.GatewaySpiMapper;
@@ -30,14 +31,25 @@ public class GatewaySpiServiceImpl implements GatewaySpiService {
         if (spiList == null || spiList.size() < 1) {
             return;
         }
-        List<GatewaySpi> spiListInGateway = this.getSpiListInGateway(gatewayGroup, gatewayInstanceId);
         spiList.forEach(v -> v.setGatewayInstanceId(gatewayInstanceId));
 
-        Map<String, GatewaySpi> spiMap = StreamTools.toMap(spiListInGateway, GatewaySpi::getSpiClass);
+        List<GatewaySpi> spiListInGateway = this.getSpiListInGateway(gatewayGroup, gatewayInstanceId);
+        Map<String, GatewaySpi> existSpiMap = StreamTools.toMap(spiListInGateway, GatewaySpi::getSpiClass);
         for (GatewaySpi gatewaySpi : spiList) {
-            if (!spiMap.containsKey(gatewaySpi.getSpiClass())) {
+            GatewaySpi existSpi = existSpiMap.get(gatewaySpi.getSpiClass());
+            if (existSpi == null) {
                 gatewaySpiMapper.insertSelective(gatewaySpi);
                 log.info("新增网关SPI:{},{},{}", gatewayGroup, gatewayInstanceId, gatewaySpi);
+            } else {
+                if (!ObjectUtils.nullSafeEquals(existSpi.getSpiInterfaceDesc(), gatewaySpi.getSpiInterfaceDesc())
+                        || !ObjectUtils.nullSafeEquals(existSpi.getSpiDesc(), gatewaySpi.getSpiDesc())) {
+                    GatewaySpi updateSpi = new GatewaySpi();
+                    updateSpi.setId(existSpi.getId());
+                    updateSpi.setSpiDesc(gatewaySpi.getSpiDesc());
+                    updateSpi.setSpiInterfaceDesc(gatewaySpi.getSpiInterfaceDesc());
+                    gatewaySpiMapper.updateByPrimaryKeySelective(updateSpi);
+                    log.info("更新网关SPI:{},{},{}", gatewayGroup, gatewayInstanceId, gatewaySpi);
+                }
             }
         }
     }

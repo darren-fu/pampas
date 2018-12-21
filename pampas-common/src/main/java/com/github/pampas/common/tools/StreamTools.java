@@ -277,4 +277,29 @@ public class StreamTools {
         return IntStream.range(0, list.size()).boxed().filter(t -> t % pageSize == 0).map(t -> list.stream().skip(t).limit(pageSize).collect(Collectors.toList())).collect(Collectors.toList());
     }
 
+
+    /**
+     * 对content进行排序
+     *
+     * @param <F>        参考顺序的类型
+     * @param <V>        需要排序的类型
+     * @param <R>        返回的类型
+     * @param orderRefer 用作参考的顺序列表
+     * @param content    需要排序的对象集合
+     * @param matcher    orderRefer 与 content的匹配函数
+     * @param merger     合并函数,用来重组结果result
+     * @return the list
+     */
+    public static <F, V, R> List<R> order(Collection<F> orderRefer, Collection<V> content,
+                                          BiFunction<F, V, Boolean> matcher, BiFunction<F, V, R> merger) {
+        return orderRefer.stream().map(
+                order -> CollectionUtils.select(content, object -> matcher.apply(order, object))
+                        .stream().map(object -> merger.apply(order, object)).collect(Collectors.toList()))
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                });
+    }
+
+
 }

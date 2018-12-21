@@ -4,8 +4,9 @@ import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.config.ConfigLoader;
 import com.github.pampas.common.config.DefinableConfig;
 import com.github.pampas.common.extension.SpiContext;
+import com.github.pampas.common.extension.advance.SpiConfigRefresher;
 import com.github.pampas.common.tools.AssertTools;
-import com.github.pampas.common.tools.ResponseTools;
+import com.github.pampas.common.exec.payload.HttpResponseHelper;
 import com.github.pampas.common.tools.ext.StringTools;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -63,7 +64,14 @@ public class GatewayRequestRouter {
                 }
             }
 
+        } else if (REFRESH_SPI_META_CONFIG.equals(operation)) {
+            SpiContext<SpiConfigRefresher> refresherSpiContext = SpiContext.getContext(SpiConfigRefresher.class);
+            for (SpiConfigRefresher refresher : refresherSpiContext.getSpiInstances()) {
+                refresher.refreshSpiConfig();
+                log.info("刷新SPI_META完成:{}", refresher.getClass());
+
+            }
         }
-        return ResponseTools.buildResponse("OK");
+        return HttpResponseHelper.buildHttpResponse("OK");
     }
 }

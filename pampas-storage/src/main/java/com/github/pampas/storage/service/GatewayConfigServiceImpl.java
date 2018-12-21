@@ -46,7 +46,8 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
         Map<String, GatewayConfig> configMap = StreamTools.toMap(gatewayConfigList, GatewayConfig::getKey);
 
         for (DefinableConfig.PropDefine config : configList) {
-            if (!configMap.containsKey(config.getKey())) {
+            GatewayConfig existConfig = configMap.get(config.getKey());
+            if (existConfig == null) {
                 GatewayConfig gatewayConfig = new GatewayConfig();
                 gatewayConfig.setGatewayInstanceId(config.getLevel() == DefinableConfig.ConfigLevelEnum.INSTANCE ? gatewayInstanceId : null);
                 gatewayConfig.setGatewayGroup(group);
@@ -62,6 +63,17 @@ public class GatewayConfigServiceImpl implements GatewayConfigService {
                 gatewayConfig.setMulti(config.isMulti());
                 gatewayConfigMapper.insertSelective(gatewayConfig);
                 log.info("新增网关配置项:{}", config);
+            } else {
+                GatewayConfig gatewayConfig = new GatewayConfig();
+                gatewayConfig.setId(existConfig.getId());
+                gatewayConfig.setGatewayInstanceId(config.getLevel() == DefinableConfig.ConfigLevelEnum.INSTANCE ? gatewayInstanceId : null);
+                gatewayConfig.setGatewayGroup(group);
+                gatewayConfig.setLabel(config.getLabel());
+                gatewayConfig.setConfigSpiDesc(spiDesc);
+                gatewayConfig.setPlaceholder(config.getPlaceholder());
+                gatewayConfig.setMulti(config.isMulti());
+                gatewayConfigMapper.updateByPrimaryKeySelective(gatewayConfig);
+                log.info("更新网关配置项:{}", config);
             }
         }
     }
