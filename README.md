@@ -2,7 +2,7 @@
 
 # Mind-Map 
 
-![pampas](https://raw.githubusercontent.com/darren-fu/scrip-paper/master/imgs/pampas_brain.png?token=AIbLTy0jezoiAZFcMyxVA2Ra8-i-YlNWks5clIq-wA%3D%3D)
+![pampas](https://github.com/darren-fu/scrip-paper/blob/master/imgs/pampas_brain.png)
 
 # pampas
 API网关  
