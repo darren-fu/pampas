@@ -54,6 +54,7 @@ public class SpringStorageApp implements ApplicationContextAware {
             log.info("网关存储层启动完成");
             ServerProperties properties = SpringContextHolder.getBean(ServerProperties.class);
             if (listener != null) {
+                log.info("网关加载启动监听");
                 listener.accept(applicationContext, properties);
             }
         });

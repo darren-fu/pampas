@@ -15,13 +15,13 @@ public class AhcTools {
         if(request == null){
             return "";
         }
-        return request.toString().replaceAll("\t", " ");
+        return request.toString().replaceAll("\t|\n", "");
     }
 
     public static String responseToString(Response response){
         if(response == null){
             return "";
         }
-        return response.toString().replaceAll("\n", "");
+        return response.toString().replaceAll("\t|\n", "");
     }
 }

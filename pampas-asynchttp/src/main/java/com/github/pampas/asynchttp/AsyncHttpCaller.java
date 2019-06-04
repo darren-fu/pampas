@@ -23,6 +23,7 @@ import com.github.pampas.common.exec.Caller;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
+import org.apache.commons.lang3.StringUtils;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
 import org.asynchttpclient.ListenableFuture;
@@ -32,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -67,7 +69,13 @@ public class AsyncHttpCaller implements Caller<AsyncHttpRequest, Response> {
                     httpRequest.method().name(), true);
 
             requestBuilder.setUri(Uri.create(serverInstance.toUri() + req.getRequestPath()));
-            requestBuilder.setHeaders(httpRequest.headers());
+            for (Map.Entry<String, String> headerEntry : httpRequest.headers()) {
+                if (StringUtils.isNotEmpty(headerEntry.getKey())
+                        && !"Host".equals(headerEntry.getKey())) {
+                    requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+                }
+
+            }
             requestBuilder.addHeader(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 
             if (httpRequest.content() != null && httpRequest.content().isReadable()) {

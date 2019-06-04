@@ -18,7 +18,6 @@
 
 package com.github.pampas.asynchttp;
 
-import com.github.pampas.asynchttp.tools.AhcTools;
 import com.github.pampas.common.base.PampasConsts;
 import com.github.pampas.common.discover.ServerContext;
 import com.github.pampas.common.discover.ServerInstance;
@@ -43,6 +42,8 @@ import org.asynchttpclient.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -109,7 +110,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);
 
         CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {
-            log.debug("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri(), requestData.content().toString(UTF_8), AhcTools.responseToString(response));
+            log.info("XXXXXX");
             FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.protocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
                     //response.getResponseBodyAsByteBuffer是HeapByteBuf
                     // zero-copy 设置FullHttpResponse的body
@@ -118,9 +119,12 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
             DefaultPampasResponse<FullHttpResponse> defaultResponseInfo = new DefaultPampasResponse();
             defaultResponseInfo.setResponseData(fullHttpResponse);
             defaultResponseInfo.setSuccess(true);
+//            log.info("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri());
+            log.info("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri() + locator.getMappedPath(), requestData.content().toString(UTF_8), response);
+
             return (PampasResponse<FullHttpResponse>) defaultResponseInfo;
         }).exceptionally(ex -> {
-            log.warn("<FAILED>请求URI:{}，路由目标:{}，请求内容：{}，出现异常:{}", requestData.uri(), serverInstance.getUri(), requestData.content().toString(UTF_8), ex.getMessage(), ex);
+            log.warn("<FAILED>请求URI:{}，路由目标:{}，请求内容：{}，出现异常:{}", requestData.uri(), serverInstance.getUri() + locator.getMappedPath(), requestData.content().toString(UTF_8), ex.getMessage(), ex);
             DefaultPampasResponse<FullHttpResponse> defaultResponseInfo = new DefaultPampasResponse();
             defaultResponseInfo.setException(ex);
             defaultResponseInfo.setSuccess(false);
@@ -130,5 +134,15 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         return responseFuture;
     }
 
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+
+        Future<Response> whenResponse = org.asynchttpclient.Dsl.asyncHttpClient().prepareGet("HTTP://java-demo.shein.com:80/demo/test_rpc").execute();
+
+        Response response = whenResponse.get();
+        System.out.println(response);
+
+
+    }
 
 }

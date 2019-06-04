@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 请求执行器抽象类
@@ -49,16 +50,16 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
 
     @Override
     public CompletableFuture<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> execFilterList) {
+        AtomicReference<FilterChain> filterChainReference = new AtomicReference<>();
+        FilterChain filterChain = new FilterChain();
         CompletableFuture<PampasResponse> workerFuture = CompletableFuture.supplyAsync(() -> {
 
             try {
                final List<Filter<Q, R>> filterList = execFilterList;
-                FilterContext.CURRENT.resetChain();
-
                 //执行过滤器before
                 for (Filter filter : filterList) {
-                    FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
                     if (!filterChain.isFilterChainStop()) {
+                        filterChain.setCurrent(filter.getClass().getName());
                         filter.before(req, locator, filterChain);
                     } else if (filterChain.getResponse() != null) {
                         // filter终端 并且返回response
@@ -74,15 +75,17 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
                 future = doExecute(req, locator);
 
                 String threadName = Thread.currentThread().getName();
-                PampasResponse<R> pampasResponse = future.get();
+                PampasResponse<R> pampasResponse = future.join();
+
                 log.debug("获取响应:{}", pampasResponse);
 
                 //反转过滤器顺序
                 //执行过滤器 onSuccess和onException
                 for (int i = filterList.size() - 1; i >= 0; i--) {
                     Filter filter = filterList.get(i);
-                    FilterChain filterChain = FilterContext.CURRENT.chain(filter.getClass().getSimpleName());
                     if (!filterChain.isFilterChainStop()) {
+                        filterChain.setCurrent(filter.getClass().getName());
+
                         if (pampasResponse.success()) {
                             filter.onSuccess(req, locator, pampasResponse, filterChain);
                         } else if (pampasResponse.exception() != null) {

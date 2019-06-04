@@ -22,10 +22,8 @@ import com.github.pampas.core.base.PampasContext;
 import com.github.pampas.core.server.GatewayServer;
 import com.github.pampas.core.server.ServerConfig;
 import com.github.pampas.storage.SpringStorageApp;
-import com.github.pampas.storage.base.ServerProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.beans.BeanCopier;
 
 /**
  * Created by darrenfu on 18-4-13.
@@ -52,14 +50,17 @@ public class Bootstrapper {
         try {
             Long start = System.currentTimeMillis();
             SpringStorageApp.init(args, (ctx, serverProperties) -> {
-                BeanCopier beanCopier = BeanCopier.create(ServerProperties.class, ServerConfig.class, false);
-                ServerConfig serverConfig = new ServerConfig();
-                beanCopier.copy(serverProperties, serverConfig, null);
-                log.info("加载系统配置:{}", serverProperties);
+                log.info("加载系统配置113w21321:{}", serverProperties);
+
+//                ServerConfig serverConfig = new ServerConfig();
+//                serverConfig.setBoss(serverProperties.getBoss());
+//                serverConfig.setWorker(serverProperties.getWorker());
+//                serverConfig.setCoreThread(serverProperties.getPort());
+                log.info("加载系统配置1:{}", serverProperties);
                 GatewayServer gatewayServer = new GatewayServer(serverProperties.getId(),
                         serverProperties.getGroup(),
                         serverProperties.getPort(),
-                        serverConfig);
+                        new ServerConfig());
                 PampasContext.setCurrentServer(gatewayServer);
                 gatewayServer.setStartTimestamp(start);
 
