@@ -78,26 +78,28 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
             }
             for (AbstractRule rule : rulePackage.getRuleList()) {
                 boolean match = rule.isMatch(request);
+                log.trace("匹配路由规则:{},match:{},request:{}", rule, match, request.shotString());
                 if (match) {
                     if (rule instanceof HttpRule) {
                         Locator locator = new Locator();
                         locator.setServiceName(rule.getService());
                         locator.setLoadBalancer(PampasConsts.LoadBalancer.RANDOM);
                         locator.setWorker(PampasConsts.Worker.HTTP);
-
                         if (rule.getMappingStrategy() == MappingStrategyEnum.APPOINT) {
                             locator.setMappedPath(rule.getMappingPath());
                         } else if (rule.getMappingStrategy() == MappingStrategyEnum.STRIP) {
                             if (rule.getMappingPath() != null && rule.getMappingPath().length() > 1) {
                                 String result = StringUtils.substringAfter(request.path(), rule.getMappingPath());
                                 locator.setMappedPath(result);
+                            } else {
+                                locator.setMappedPath(request.path());
                             }
                         }
                         locator.setHostStrategy(rule.getHostStrategy().getValue());
                         if (rule.getHostStrategy() == HostStrategyEnum.APPOINT) {
                             locator.setInstanceList(ObjectUtils.defaultIfNull(rule.getMappingServerInstanceList(), Collections.emptyList()));
                         }
-                        log.debug("匹配路由规则完成，rule:{}, locator:{}", rule, locator);
+                        log.debug("匹配路由规则完成，rule:{}, locator:{},request:{}", rule, locator, request.shotString());
                         return locator;
                     }
                 }

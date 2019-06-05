@@ -87,6 +87,7 @@ public class AsyncHttpCaller implements Caller<AsyncHttpRequest, Response> {
             return listenableFuture.toCompletableFuture();
 
         } catch (Exception ex) {
+            log.warn("执行调用报错:{}", ex);
             CompletableFuture<Response> exceptionFuture = CompletableFuture.completedFuture(null);
             exceptionFuture.completeExceptionally(ex);
             return exceptionFuture;

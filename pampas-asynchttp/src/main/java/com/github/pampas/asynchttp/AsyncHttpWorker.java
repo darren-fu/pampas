@@ -110,7 +110,6 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         CompletableFuture<Response> future = caller.asyncCall(asyncHttpRequest, serverInstance);
 
         CompletableFuture<PampasResponse<FullHttpResponse>> responseFuture = future.thenApply(response -> {
-            log.info("XXXXXX");
             FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(requestData.protocolVersion(), HttpResponseStatus.valueOf(response.getStatusCode()),
                     //response.getResponseBodyAsByteBuffer是HeapByteBuf
                     // zero-copy 设置FullHttpResponse的body
@@ -120,7 +119,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
             defaultResponseInfo.setResponseData(fullHttpResponse);
             defaultResponseInfo.setSuccess(true);
 //            log.info("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri());
-            log.info("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri() + locator.getMappedPath(), requestData.content().toString(UTF_8), response);
+            log.debug("<OK>请求URI:{}，路由目标:{}，请求内容：{}，响应内容:{}", requestData.uri(), serverInstance.getUri() + locator.getMappedPath(), requestData.toString(), response);
 
             return (PampasResponse<FullHttpResponse>) defaultResponseInfo;
         }).exceptionally(ex -> {
