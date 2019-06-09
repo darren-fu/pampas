@@ -133,15 +133,4 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
         return responseFuture;
     }
 
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-
-        Future<Response> whenResponse = org.asynchttpclient.Dsl.asyncHttpClient().prepareGet("HTTP://java-demo.shein.com:80/demo/test_rpc").execute();
-
-        Response response = whenResponse.get();
-        System.out.println(response);
-
-
-    }
-
 }
