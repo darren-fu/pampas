@@ -21,6 +21,7 @@ package com.github.pampas.core.server;
 import com.github.pampas.common.exception.PampasException;
 import com.github.pampas.common.exception.PampasRequestException;
 import com.github.pampas.common.exec.Filter;
+import com.github.pampas.common.exec.FilterChain;
 import com.github.pampas.common.exec.Worker;
 import com.github.pampas.common.exec.payload.DefaultPampasRequest;
 import com.github.pampas.common.exec.payload.HttpResponseHelper;
@@ -99,44 +100,64 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             log.trace("http请求URI:{}，详情:{}", httpRequest.uri(), httpRequest.toString());
         }
         try {
-            if (GatewayRequestRouter.isGatewayRequest(httpRequest.uri())) {
-                HttpResponse httpResponse = GatewayRequestRouter.handleGatewayRequest(httpRequest);
+            if (PampasRequestRouter.isPampasRequest(httpRequest.uri())) {
+                HttpResponse httpResponse = PampasRequestRouter.handlePampasRequest(httpRequest);
                 HttpResponseHelper.sendHttpResponse(ctx, httpResponse, false);
                 return;
             }
 
-            DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
-            ///todo: Selector URI->ServiceName    map serviceName -> worker
-            SpiContext<Selector> selectorSpiContext = SpiContext.getContext(Selector.class);
-            List<Selector> selectors = selectorSpiContext.getSpiInstancesByKey(null);
-            Locator locator = null;
-            for (Selector selector : selectors) {
-                locator = selector.select(requestInfo);
-                if (locator != null) {
-                    log.debug("路由匹配成功,请求路径:{},匹配结果:{}", requestInfo.originUri(), locator);
-                    break;
+            CompletableFuture<PampasResponse> executeFuture = CompletableFuture.supplyAsync(() -> {
+                try {
+                    DefaultPampasRequest requestInfo = new DefaultPampasRequest(ctx, httpRequest);
+
+                    // 获取Filter列表
+                    List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
+                    if (log.isDebugEnabled()) {
+                        log.debug("本次请求使用到的Filter:{}", filterList.stream().map(v -> v.getClass().getSimpleName()).collect(Collectors.toList()));
+                    }
+                    FilterChain filterChain = FilterChain.currentFilterChain();
+                    filterChain.addFilter(filterList);
+
+                    PampasResponse beforeRouteResponse = filterChain.executeBeforeRoute(requestInfo);
+
+                    if (filterChain.isFilterChainStop()) {
+                        return beforeRouteResponse;
+                    }
+
+
+                    ///todo: Selector URI->ServiceName    map serviceName -> worker
+                    List<Selector> selectors = SpiContext.getContext(Selector.class).getSpiInstances();
+                    Locator locator = null;
+                    for (Selector selector : selectors) {
+                        locator = selector.select(requestInfo);
+                        if (locator != null) {
+                            log.debug("路由匹配成功,请求路径:{},匹配结果:{}", requestInfo.originUri(), locator);
+                            break;
+                        }
+                    }
+                    if (locator == null) {
+                        log.warn("请求没有匹配到合适的路由:{}", requestInfo);
+                        throw new PampasRequestException(HttpResponseStatus.NOT_FOUND, "请求没有匹配到合适的路由:" + requestInfo.originUri());
+                    }
+
+                    // 获取处理该请求的worker
+                    Worker worker = getWorker(locator.getWorker());
+                    if (log.isDebugEnabled()) {
+                        log.debug("本次请求使用的worker:{}", worker.getClass().getSimpleName());
+                    }
+
+
+                    // worker处理请求，并返回future
+                    PampasResponse gatewayResponse = worker.execute(requestInfo, locator, filterChain);
+                    return gatewayResponse;
+                } catch (Throwable throwable) {
+                    return new PampasResponse.ExceptionPampasResponse(throwable);
                 }
-            }
-            if (locator == null) {
-                log.warn("请求没有匹配到合适的路由:{}", requestInfo);
-                throw new PampasRequestException(HttpResponseStatus.NOT_FOUND, "请求没有匹配到合适的路由:" + requestInfo.originUri());
-            }
 
-            // 获取处理该请求的worker
-            Worker worker = getWorker(locator.getWorker());
-            if (log.isDebugEnabled()) {
-                log.debug("本次请求使用的worker:{}", worker.getClass().getSimpleName());
-            }
-
-            // 获取Filter列表
-            List<Filter> filterList = SpiContext.getContext(Filter.class).getSpiInstances();
-            if (log.isDebugEnabled()) {
-                log.debug("本次请求使用到的Filter:{}", filterList.stream().map(v -> v.getClass().getSimpleName()).collect(Collectors.toList()));
-            }
-            // worker处理请求，并返回future
-            CompletableFuture<PampasResponse> executeFuture = worker.execute(requestInfo, locator, filterList);
+            });
             // worker处理完成后，发送相应
             executeFuture.whenComplete((resp, ex) -> HttpResponseHelper.sendHttpResponse(ctx, resp != null ? resp : ex, HttpUtil.isKeepAlive(httpRequest)));
+
 
         } catch (Exception ex) {
             log.warn("发生错误:{}", ex.getMessage(), ex);

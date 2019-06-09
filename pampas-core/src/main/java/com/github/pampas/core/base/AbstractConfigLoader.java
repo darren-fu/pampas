@@ -69,23 +69,6 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
         }
     }
 
-//    /**
-//     * 缓存VersionConfig和Configurable的关系
-//     *
-//     * @param configClz    the config clz
-//     * @param configurable the configurable
-//     */
-//    @Override
-//    public void markConfigurable(Class<? extends VersionConfig> configClz, Configurable configurable) {
-//        if (configAndConfigurableMap.contains(configClz)) {
-//            WeakHashMap<Configurable, Byte> instanceMap = configAndConfigurableMap.get(configClz);
-//            instanceMap.put(configurable, ONE);
-//        } else {
-//            WeakHashMap<Configurable, Byte> instanceMap = new WeakHashMap<>();
-//            instanceMap.put(configurable, ONE);
-//            configAndConfigurableMap.putIfAbsent(configClz, instanceMap);
-//        }
-//    }
 
     /**
      * Load config t.
@@ -121,10 +104,8 @@ public abstract class AbstractConfigLoader<T extends VersionConfig> implements C
                 config = t;
                 log.info("完成加载配置<{}>,结果:{}", configClz.getSimpleName(), t);
                 if (t != null && configurableList != null && configurableList.size() > 0) {
-                    T[] arr = (T[]) Array.newInstance(configClz, 1);
-                    arr[0] = t;
                     for (Configurable<T> configurable : configurableList) {
-                        configurable.setupWithConfig((T[]) arr);
+                        configurable.setupWithConfig(t);
                     }
                 }
             }

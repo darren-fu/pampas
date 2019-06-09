@@ -65,7 +65,7 @@ public class GrpcWorker extends AbstractWorker<FullHttpRequest, FullHttpResponse
     private Caller grpcCaller = new GrpcCaller();
 
     @Override
-    protected void doAfter(String threadName) {
+    protected void doAfter() {
 
     }
 

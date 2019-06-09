@@ -20,8 +20,8 @@ package com.github.pampas.common.exec;
 
 import com.github.pampas.common.exec.payload.PampasRequest;
 import com.github.pampas.common.exec.payload.PampasResponse;
-import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.exec.payload.PampasResponseHelper;
+import com.github.pampas.common.route.Locator;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.EventExecutor;
@@ -29,9 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 请求执行器抽象类
@@ -44,75 +42,42 @@ public abstract class AbstractWorker<Q extends HttpRequest, R extends Object> im
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    protected abstract void doAfter(String threadName);
+    protected abstract void doAfter();
 
     public abstract CompletableFuture<PampasResponse<R>> doExecute(PampasRequest<Q> req, Locator locator) throws IOException;
 
-    @Override
-    public CompletableFuture<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> execFilterList) {
-        AtomicReference<FilterChain> filterChainReference = new AtomicReference<>();
-        FilterChain filterChain = new FilterChain();
-        CompletableFuture<PampasResponse> workerFuture = CompletableFuture.supplyAsync(() -> {
+    public PampasResponse execute(PampasRequest<Q> req, Locator locator, FilterChain filterChain) {
+        try {
+            PampasResponse beforeCallResponse = filterChain.executeBeforeCall(req, locator);
 
-            try {
-               final List<Filter<Q, R>> filterList = execFilterList;
-                //执行过滤器before
-                for (Filter filter : filterList) {
-                    if (!filterChain.isFilterChainStop()) {
-                        filterChain.setCurrent(filter.getClass().getName());
-                        filter.before(req, locator, filterChain);
-                    } else if (filterChain.getResponse() != null) {
-                        // filter终端 并且返回response
-                        return filterChain.getResponse();
-                    } else {
-                        log.warn("请求被终止:{}", filter.getClass().getSimpleName());
-                        return PampasResponseHelper.buildFailedResponse(new RuntimeException("没有响应，请求处理被中断"));
-                    }
-                }
-                CompletableFuture<PampasResponse<R>> future = null;
-
-                // 调用具体的worker 处理此request
-                future = doExecute(req, locator);
-
-                String threadName = Thread.currentThread().getName();
-                PampasResponse<R> pampasResponse = future.join();
-
-                log.debug("获取响应:{}", pampasResponse);
-
-                //反转过滤器顺序
-                //执行过滤器 onSuccess和onException
-                for (int i = filterList.size() - 1; i >= 0; i--) {
-                    Filter filter = filterList.get(i);
-                    if (!filterChain.isFilterChainStop()) {
-                        filterChain.setCurrent(filter.getClass().getName());
-
-                        if (pampasResponse.success()) {
-                            filter.onSuccess(req, locator, pampasResponse, filterChain);
-                        } else if (pampasResponse.exception() != null) {
-                            filter.onException(req, locator, pampasResponse.exception(), filterChain);
-                        }
-                    } else if (filterChain.getResponse() != null) {
-                        // filter终端 并且返回response
-                        pampasResponse = filterChain.getResponse();
-                        break;
-                    } else {
-                        // 使用upstream返回的响应
-                    }
-                }
-
-                FilterContext.CURRENT.resetChain();
-                EventExecutor executor = req.channelHandlerContext().executor();
-                executor.submit(() -> doAfter(threadName));
-                return pampasResponse;
-            } catch (Exception ex) {
-                log.error("处理请求发生错误:{}", ex.getMessage(), ex);
-                return PampasResponseHelper.buildFailedResponse(ex);
-            } finally {
-                ReferenceCountUtil.release(req.requestData());
+            if (filterChain.isFilterChainStop()) {
+                return beforeCallResponse;
             }
-        });
-        return workerFuture;
+
+
+            CompletableFuture<PampasResponse<R>> future = null;
+
+            // 调用具体的worker 处理此request
+            future = doExecute(req, locator);
+            PampasResponse<R> gatewayResponse = future.join();
+
+            log.debug("获取响应:{}", gatewayResponse);
+            PampasResponse executeAfterResponse = filterChain.executeAfter(req, locator, gatewayResponse);
+            if(filterChain.isFilterChainStop()){
+                return executeAfterResponse;
+            }
+            EventExecutor executor = req.channelHandlerContext().executor();
+            executor.submit(() -> doAfter());
+            return gatewayResponse;
+        } catch (Exception ex) {
+            log.error("处理请求发生错误:{}", ex.getMessage(), ex);
+            return PampasResponseHelper.buildFailedResponse(ex);
+        } finally {
+            ReferenceCountUtil.release(req.requestData());
+        }
     }
+
+
 
 
 }

@@ -91,12 +91,9 @@ public class WorkerExchanger implements Configurable<SystemConfig> {
     }
 
     @Override
-    public Configurable setupWithConfig(SystemConfig... systemConfig) {
-        if(CommonTools.isEmpty(systemConfig)){
-            return this;
-        }
-        this.defaultWorker = systemConfig[0].getDefaultWorker();
-        log.debug("defaultWorker:{}", systemConfig[0].getDefaultWorker());
+    public Configurable setupWithConfig(SystemConfig systemConfig) {
+        this.defaultWorker = systemConfig.getDefaultWorker();
+        log.debug("defaultWorker:{}", systemConfig.getDefaultWorker());
         return this;
     }
 

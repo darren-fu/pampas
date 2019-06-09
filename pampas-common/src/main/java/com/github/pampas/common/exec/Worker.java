@@ -25,13 +25,9 @@ import com.github.pampas.common.extension.Spi;
 import com.github.pampas.common.extension.SpiMeta;
 import com.github.pampas.common.route.Locator;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-
 /**
  * 工作者
- * 处理Pampas收取的请求
+ * 处理Gateway收取的请求
  * Created by darrenfu on 18-1-24.
  *
  * @param <Q> the type parameter
@@ -45,7 +41,7 @@ public interface Worker<Q extends Object, R extends Object> {
     /**
      * 工作者名称
      *
-     * @return
+     * @return string
      */
     default String name() {
         SpiMeta spiMeta = getClass().getAnnotation(SpiMeta.class);
@@ -56,12 +52,11 @@ public interface Worker<Q extends Object, R extends Object> {
     /**
      * 执行请求和过滤器，返回Future
      *
-     * @param req        the req
-     * @param locator
-     * @param filterList the filter
+     * @param req         the req
+     * @param locator     the locator
+     * @param filterChain the filter chain
      * @return the future
      */
-    CompletableFuture<PampasResponse> execute(PampasRequest<Q> req, Locator locator, List<Filter<Q, R>> filterList);
+    PampasResponse execute(PampasRequest<Q> req, Locator locator, FilterChain filterChain);
 
-//    Future<Rsp> execute(Req req, BiConsumer<Req, Rsp> success, BiConsumer<Req, Throwable> failed);
 }

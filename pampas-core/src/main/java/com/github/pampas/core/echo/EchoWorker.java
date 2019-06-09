@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
 public class EchoWorker extends AbstractWorker<FullHttpRequest, String> {
 
     @Override
-    protected void doAfter(String name) {
+    protected void doAfter() {
         System.out.println("do_after:" + Thread.currentThread().getName());
     }
 

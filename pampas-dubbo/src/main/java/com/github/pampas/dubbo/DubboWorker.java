@@ -26,7 +26,7 @@ public class DubboWorker extends AbstractWorker<FullHttpRequest, FullHttpRespons
     private Caller caller = new DubboCaller();
 
     @Override
-    protected void doAfter(String threadName) {
+    protected void doAfter() {
 
     }
 

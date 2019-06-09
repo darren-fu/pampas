@@ -113,18 +113,16 @@ public class MockServerContext implements ServerContext, Configurable<ServiceAnd
     }
 
     @Override
-    public Configurable setupWithConfig(ServiceAndInstancesConfig... serviceAndInstanceConfigs) {
-        this.serviceAndInstancesConfig = serviceAndInstanceConfigs[0];
+    public Configurable setupWithConfig(ServiceAndInstancesConfig serviceAndInstancesConfig) {
+        this.serviceAndInstancesConfig = serviceAndInstancesConfig;
         ConcurrentHashMap<String, List<ServerInstance>> map = new ConcurrentHashMap<>();
-        for (ServiceAndInstancesConfig serviceAndInstance : serviceAndInstanceConfigs) {
-            for (String serviceName : serviceAndInstance.getServices()) {
-                if (map.containsKey(serviceName) && CollectionUtils.isNotEmpty(map.get(serviceName))) {
-                    map.get(serviceName).removeAll(serviceAndInstance.getInstances(serviceName));
-                    map.get(serviceName).addAll(serviceAndInstance.getInstances(serviceName));
-                } else {
-                    List<ServerInstance> list = new ArrayList<>(serviceAndInstance.getInstances(serviceName));
-                    map.put(serviceName, list);
-                }
+        for (String serviceName : this.serviceAndInstancesConfig.getServices()) {
+            if (map.containsKey(serviceName) && CollectionUtils.isNotEmpty(map.get(serviceName))) {
+                map.get(serviceName).removeAll(this.serviceAndInstancesConfig.getInstances(serviceName));
+                map.get(serviceName).addAll(this.serviceAndInstancesConfig.getInstances(serviceName));
+            } else {
+                List<ServerInstance> list = new ArrayList<>(this.serviceAndInstancesConfig.getInstances(serviceName));
+                map.put(serviceName, list);
             }
         }
         if (CommonTools.isNotEmpty(map)) {

@@ -22,16 +22,16 @@ import static com.github.pampas.common.base.PampasConsts.GatewayOperation.*;
  * User: darrenfu
  * Date: 2018-12-07
  */
-public class GatewayRequestRouter {
+public class PampasRequestRouter {
 
-    private static final Logger log = LoggerFactory.getLogger(GatewayRequestRouter.class);
+    private static final Logger log = LoggerFactory.getLogger(PampasRequestRouter.class);
 
-    public static boolean isGatewayRequest(String path) {
+    public static boolean isPampasRequest(String path) {
         return path.startsWith(PampasConsts.GATEWAY_REQ_PREFIX);
     }
 
 
-    public static HttpResponse handleGatewayRequest(HttpRequest httpRequest) throws ClassNotFoundException {
+    public static HttpResponse handlePampasRequest(HttpRequest httpRequest) throws ClassNotFoundException {
         String requestPath = StringTools.trimLeadingCharacter(httpRequest.uri(), '/');
 
         String[] splits = requestPath.split("/");

@@ -35,6 +35,14 @@ import com.github.pampas.common.route.Locator;
  */
 @Spi(scope = Scope.SINGLETON, desc = "过滤器")
 public interface Filter<Q extends Object, R extends Object> {
+    /**
+     * 路由前执行
+     *
+     * @param req         the req
+     * @param filterChain the filter chain
+     */
+    void beforeRoute(PampasRequest<Q> req, FilterChain filterChain);
+
 
     /**
      * 请求执行前运行.
@@ -43,7 +51,7 @@ public interface Filter<Q extends Object, R extends Object> {
      * @param locator     路由结果
      * @param filterChain 过滤器链-可控制终止后续过滤器，直接返回结果
      */
-    void before(PampasRequest<Q> req, Locator locator, FilterChain filterChain);
+    void beforeCall(PampasRequest<Q> req, Locator locator, FilterChain filterChain);
 
     /**
      * 响应成功时执行
@@ -64,4 +72,5 @@ public interface Filter<Q extends Object, R extends Object> {
      * @param filterChain 过滤器链-可控制终止后续过滤器，直接返回结果
      */
     void onException(PampasRequest<Q> req, Locator locator, Throwable throwable, FilterChain filterChain);
+
 }

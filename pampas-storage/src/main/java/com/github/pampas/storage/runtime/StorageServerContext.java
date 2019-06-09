@@ -40,11 +40,9 @@ public class StorageServerContext implements ServerContext, Configurable<Service
     }
 
     @Override
-    public Configurable setupWithConfig(ServiceAndInstancesConfig... t) {
-        if (t != null && t.length > 0 && t[0] != null) {
-            this.serviceAndInstancesConfig = t[0];
-            this.refreshTimestamp = System.currentTimeMillis();
-        }
+    public Configurable setupWithConfig(ServiceAndInstancesConfig t) {
+        this.serviceAndInstancesConfig = t;
+        this.refreshTimestamp = System.currentTimeMillis();
         return this;
     }
 

@@ -33,16 +33,22 @@ public class AuthFilter implements Filter, Configurable<AuthFilterConfig> {
     }
 
     @Override
-    public Configurable setupWithConfig(AuthFilterConfig... t) {
-        if (t != null && t.length > 0) {
-            this.authFilterConfig = t[0];
-        }
+    public Configurable setupWithConfig(AuthFilterConfig t) {
+        this.authFilterConfig = t;
         return this;
     }
 
+
     @Override
-    public void before(PampasRequest req, Locator locator, FilterChain filterChain) {
+    public void beforeRoute(PampasRequest req, FilterChain filterChain) {
         log.info("执行过滤器:{} before", getClass().getSimpleName());
+
+    }
+
+    @Override
+    public void beforeCall(PampasRequest req, Locator locator, FilterChain filterChain) {
+        log.info("执行过滤器:{} before", getClass().getSimpleName());
+
     }
 
     @Override

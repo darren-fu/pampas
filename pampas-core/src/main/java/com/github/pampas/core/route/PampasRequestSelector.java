@@ -8,7 +8,6 @@ import com.github.pampas.common.route.Locator;
 import com.github.pampas.common.route.Selector;
 import com.github.pampas.common.route.rule.*;
 import com.github.pampas.common.tools.AntPathMatcher;
-import com.github.pampas.common.tools.CommonTools;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,10 +51,8 @@ public class PampasRequestSelector implements Selector<PampasRequest<FullHttpReq
     }
 
     @Override
-    public Configurable setupWithConfig(RouteRuleConfig... routeRuleConfig) {
-        if (CommonTools.isNotEmpty(routeRuleConfig)) {
-            this.config = routeRuleConfig[0];
-        }
+    public Configurable setupWithConfig(RouteRuleConfig routeRuleConfig) {
+        this.config = routeRuleConfig;
         return this;
     }
 

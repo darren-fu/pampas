@@ -261,10 +261,7 @@ public class SpiContext<T> {
                     VersionConfig cast = configClass.cast(versionConfig);
                     log.info("获取Config:{}:{}", versionConfig.getClass(), versionConfig);
                     //使用此config配置对象
-                    VersionConfig[] arr = (VersionConfig[]) Array.newInstance(configClass, 1);
-                    arr[0] = versionConfig;
-                    configurable.setupWithConfig(arr);
-//                    configLoader.markConfigurable(configClass, configurable);
+                    configurable.setupWithConfig(versionConfig);
                 }
             }
         }

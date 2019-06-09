@@ -62,7 +62,7 @@ public class AsyncHttpWorker extends AbstractWorker<FullHttpRequest, FullHttpRes
 
 
     @Override
-    protected void doAfter(String name) {
+    protected void doAfter() {
         System.out.println("AsyncHttpWorker:" + Thread.currentThread().getName());
     }
 
